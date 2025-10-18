@@ -154,38 +154,38 @@
         ];
         // Mock Service Providers with Indian names and realistic Indian pricing
         const providers = [
-            { id: 1, name: 'PowerTech Solutions', categoryId: 'elec', rating: 4.9, price: 550, reviews: 350, bio: 'Certified electricians specializing in residential wiring and fault diagnostics across Mumbai and Pune.' },
-            { id: 2, name: 'Jal Kalyan Plumbing', categoryId: 'plumb', rating: 4.7, price: 400, reviews: 180, bio: 'Fast, reliable plumbing service for leaks, clogs, and installations. 10 years experience.' },
-            { id: 3, name: 'Glamour Gadi', categoryId: 'hair', rating: 5.0, price: 350, reviews: 92, bio: 'Modern and classic haircuts for men and women. Home service available in Bangalore.' },
-            { id: 4, name: 'Swachh Ghar Services', categoryId: 'clean', rating: 4.5, price: 300, reviews: 512, bio: 'Eco-friendly house cleaning services. Weekly, bi-weekly, or deep cleaning options.' },
-            { id: 5, name: 'Keet Niyantran', categoryId: 'pest', rating: 4.8, price: 650, reviews: 145, bio: 'Residential and commercial pest control. Guaranteed removal of all common pests.' },
-            { id: 6, name: 'Lakdi Kaam Experts', categoryId: 'carp', rating: 4.6, price: 450, reviews: 210, bio: 'Custom carpentry, repairs, and furniture assembly. Serving Delhi NCR.' },
-            { id: 7, name: 'Aaram Body Spa', categoryId: 'pain', rating: 4.9, price: 800, reviews: 78, bio: 'Certified therapist offering deep tissue and sports massage for pain relief.' },
-            { id: 8, name: 'Shanti Mind Services', categoryId: 'stress', rating: 5.0, price: 900, reviews: 44, bio: 'Licensed therapist providing guided meditation and stress relief coaching.' },
-            { id: 9, name: 'CoolBreeze AC Experts', categoryId: 'ac', rating: 4.8, price: 600, reviews: 200, bio: 'Specialized AC installation, repair, and maintenance in major cities.' },
-            { id: 10, name: 'ColorCraft Painters', categoryId: 'paint', rating: 4.7, price: 500, reviews: 150, bio: 'Professional interior and exterior painting with eco-friendly paints.' },
-            { id: 11, name: 'FixIt Appliances', categoryId: 'app', rating: 4.9, price: 450, reviews: 300, bio: 'Repair of washing machines, refrigerators, and microwaves at home.' },
+            { id: 1, name: 'Electrical services', categoryId: 'elec', rating: 4.9, price: 300, reviews: 100, bio: 'Certified electricians specializing in residential wiring and fault diagnostics across Mumbai and Pune.' },
+            { id: 2, name: 'Plumber service', categoryId: 'plumb', rating: 4.7, price: 350, reviews: 80, bio: 'Fast, reliable plumbing service for leaks, clogs, and installations. 10 years experience.' },
+            { id: 3, name: 'Haircut', categoryId: 'hair', rating: 5.0, price: 200, reviews: 62, bio: 'Modern and classic haircuts for men and women. Home service available in Rohini Delhi.' },
+            { id: 4, name: 'Cleaning Services', categoryId: 'clean', rating: 4.5, price: 300, reviews: 32, bio: 'Eco-friendly house cleaning services. Weekly, bi-weekly, or deep cleaning options.' },
+            { id: 5, name: 'Pests control', categoryId: 'pest', rating: 4.8, price: 350, reviews: 15, bio: 'Residential and commercial pest control. Guaranteed removal of all common pests.' },
+            { id: 6, name: 'Carpenter service', categoryId: 'carp', rating: 4.6, price: 400, reviews: 50, bio: 'Custom carpentry, repairs, and furniture assembly. Serving Delhi Rohini.' },
+            { id: 7, name: 'Therapy', categoryId: 'pain', rating: 4.9, price: 600, reviews: 78, bio: 'Certified therapist offering deep tissue and sports massage for pain relief.' },
+            { id: 8, name: 'Telief therapy ', categoryId: 'stress', rating: 5.0, price: 600, reviews: 44, bio: 'Licensed therapist providing guided meditation and stress relief coaching.' },
+            { id: 9, name: 'AC Experts', categoryId: 'ac', rating: 4.8, price: 300, reviews: 100, bio: 'Specialized AC installation, repair, and maintenance in major cities.' },
+            { id: 10, name: 'Painting service', categoryId: 'paint', rating: 4.7, price: 500, reviews: 10, bio: 'Professional interior and exterior painting with paints.' },
+            { id: 11, name: 'General mechanics', categoryId: 'app', rating: 4.9, price: 450, reviews: 300, bio: 'Repair of washing machines, refrigerators, and microwaves at home.' },
         ];
         // Mock Bookings Data with Rupee prices
         const mockBookings = [
-            { id: 101, providerName: 'PowerTech Solutions', serviceName: 'Circuit Breaker Repair', date: '2025-10-25', time: '10:00 AM', status: 'Confirmed', price: 1200, rating: 5 },
-            { id: 102, providerName: 'Swachh Ghar Services', serviceName: 'Deep House Cleaning', date: '2025-11-05', time: '02:00 PM', status: 'Pending', price: 2500, rating: null },
-            { id: 103, providerName: 'Jal Kalyan Plumbing', serviceName: 'Faucet Installation', date: '2025-09-15', time: '09:00 AM', status: 'Completed', price: 850, rating: 4 },
+            { id: 101, providerName: 'electrical services', serviceName: 'Circuit Breaker Repair', date: '2025-10-25', time: '10:00 AM', status: 'Confirmed', price: 1200, rating: 5 },
+            { id: 102, providerName: 'cleaning Services', serviceName: 'Deep House Cleaning', date: '2025-11-05', time: '02:00 PM', status: 'Pending', price: 2500, rating: null },
+            { id: 103, providerName: 'Plumber service', serviceName: 'Faucet Installation', date: '2025-09-15', time: '09:00 AM', status: 'Completed', price: 850, rating: 4 },
         ];
         // Mock Testimonials
         const testimonials = [
-            { id: 1, name: 'Ravi Kumar', service: 'Electrical Repair', rating: 5, text: 'PowerTech Solutions fixed our entire home wiring in just one day. Professional and affordable!', location: 'Mumbai', date: '2025-09-10' },
-            { id: 2, name: 'Priya Singh', service: 'Deep House Cleaning', rating: 4.5, text: 'Swachh Ghar team was thorough and left everything spotless. Will book again next month.', location: 'Bangalore', date: '2025-08-25' },
+            { id: 1, name: 'Ravi Kumar', service: 'Electrical Repair', rating: 5, text: 'Electrician fixed our entire home wiring in just one day. Professional and affordable!', location: 'Rohini', date: '2025-09-10' },
+            { id: 2, name: 'Priya Singh', service: 'Deep House Cleaning', rating: 4.5, text: 'Team was thorough and left everything spotless. Will book again next month.', location: 'Rohini sec 15', date: '2025-08-25' },
             { id: 3, name: 'Amit Patel', service: 'Plumbing & Leaks', rating: 5, text: 'Quick response and leak fixed without any mess. Highly recommend Jal Kalyan.', location: 'Delhi', date: '2025-10-05' },
-            { id: 4, name: 'Neha Reddy', service: 'Home Salon (Haircut)', rating: 4.8, text: 'Glamour Gadi stylist came on time and gave a perfect haircut at home. So convenient!', location: 'Chennai', date: '2025-09-20' },
-            { id: 5, name: 'Suresh Menon', service: 'Pest Control', rating: 5, text: 'Keet Niyantran eliminated the termites completely. No more worries!', location: 'Pune', date: '2025-07-15' },
-            { id: 6, name: 'Lata Desai', service: 'Carpentry & Assembly', rating: 4.7, text: 'Lakdi Kaam assembled our new wardrobe perfectly. Skilled craftsmen.', location: 'Hyderabad', date: '2025-10-12' },
-            { id: 7, name: 'Vikram Joshi', service: 'Therapeutic Massage', rating: 5, text: 'Aaram Body Spa therapist was amazing. Felt relaxed after the session.', location: 'Kolkata', date: '2025-08-30' },
-            { id: 8, name: 'Meera Nair', service: 'Counselling & Therapy', rating: 5, text: 'Shanti Mind Services helped me manage stress effectively. Grateful!', location: 'Ahmedabad', date: '2025-09-05' },
-            { id: 9, name: 'Rajesh Gupta', service: 'AC Repair & Service', rating: 4.9, text: 'CoolBreeze fixed our AC in no time during the heatwave. Great service!', location: 'Jaipur', date: '2025-06-20' },
-            { id: 10, name: 'Sunita Bose', service: 'Painting Services', rating: 4.6, text: 'ColorCraft transformed our living room with beautiful colors. Eco-friendly too!', location: 'Lucknow', date: '2025-10-01' },
-            { id: 11, name: 'Karan Malhotra', service: 'Appliance Repair', rating: 5, text: 'FixIt repaired our fridge efficiently. Back to normal in hours.', location: 'Indore', date: '2025-07-28' },
-            { id: 12, name: 'Anita Sharma', service: 'Home Salon (Waxing)', rating: 4.8, text: 'Comfortable and professional waxing service at home. No salon hassle!', location: 'Coimbatore', date: '2025-09-15' },
+            { id: 4, name: 'Neha Reddy', service: 'Home Salon (Haircut)', rating: 4.8, text: 'Barber came on time and gave a perfect haircut at home. So convenient!', location: 'Delhi Rohini', date: '2025-09-20' },
+            { id: 5, name: 'Suresh Menon', service: 'Pest Control', rating: 5, text: 'Team eliminated the termites completely. No more worries!', location: 'Adarsh Nagar', date: '2025-07-15' },
+            { id: 6, name: 'Lata Desai', service: 'Carpentry & Assembly', rating: 4.7, text: 'One serviice Team assembled our new wardrobe perfectly. Skilled craftsmen.', location: 'Rohini sec-18', date: '2025-10-12' },
+            { id: 7, name: 'Vikram Joshi', service: 'Therapeutic Massage', rating: 5, text: 'Therapist was amazing. Felt relaxed after the session.', location: 'Delhi', date: '2025-08-30' },
+            { id: 8, name: 'Meera Nair', service: 'Counselling & Therapy', rating: 5, text: 'Services helped me manage stress effectively. Grateful!', location: 'Delhi', date: '2025-09-05' },
+            { id: 9, name: 'Rajesh Gupta', service: 'AC Repair & Service', rating: 4.9, text: 'Technician fixed our AC in no time during the heatwave. Great service!', location: 'Rohini Delhi', date: '2025-06-20' },
+            { id: 10, name: 'Sunita Bose', service: 'Painting Services', rating: 4.6, text: ' our living room with beautiful colors. Eco-friendly too!', location: 'Delhi Rohini', date: '2025-10-01' },
+            { id: 11, name: 'Karan Malhotra', service: 'Appliance Repair', rating: 5, text: 'Repaired our fridge efficiently. Back to normal in hours.', location: 'Delhi', date: '2025-07-28' },
+            { id: 12, name: 'Anita Sharma', service: 'Home Salon (Waxing)', rating: 4.8, text: 'Comfortable and professional waxing service at home. No salon hassle!', location: 'Delhi', date: '2025-09-15' },
         ];
         // --- Utility Functions ---
         // Simple star rating HTML generator
