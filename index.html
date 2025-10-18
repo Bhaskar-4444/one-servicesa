@@ -161,17 +161,125 @@
         ];
         // Mock Service Providers with Indian names and realistic Indian pricing
         const providers = [
-            { id: 1, name: 'PowerTech Solutions', categoryId: 'elec', rating: 4.9, price: 550, reviews: 350, bio: 'Certified electricians specializing in residential wiring and fault diagnostics across Mumbai and Pune.' },
-            { id: 2, name: 'Jal Kalyan Plumbing', categoryId: 'plumb', rating: 4.7, price: 400, reviews: 180, bio: 'Fast, reliable plumbing service for leaks, clogs, and installations. 10 years experience.' },
-            { id: 3, name: 'Glamour Gadi', categoryId: 'hair', rating: 5.0, price: 350, reviews: 92, bio: 'Modern and classic haircuts for men and women. Home service available in Bangalore.' },
-            { id: 4, name: 'Swachh Ghar Services', categoryId: 'clean', rating: 4.5, price: 300, reviews: 512, bio: 'Eco-friendly house cleaning services. Weekly, bi-weekly, or deep cleaning options.' },
-            { id: 5, name: 'Keet Niyantran', categoryId: 'pest', rating: 4.8, price: 650, reviews: 145, bio: 'Residential and commercial pest control. Guaranteed removal of all common pests.' },
-            { id: 6, name: 'Lakdi Kaam Experts', categoryId: 'carp', rating: 4.6, price: 450, reviews: 210, bio: 'Custom carpentry, repairs, and furniture assembly. Serving Delhi Rohini.' },
-            { id: 7, name: 'Aaram Body Spa', categoryId: 'pain', rating: 4.9, price: 800, reviews: 78, bio: 'Certified therapist offering deep tissue and sports massage for pain relief.' },
-            { id: 8, name: 'Shanti Mind Services', categoryId: 'stress', rating: 5.0, price: 900, reviews: 44, bio: 'Licensed therapist providing guided meditation and stress relief coaching.' },
-            { id: 9, name: 'CoolBreeze AC Experts', categoryId: 'ac', rating: 4.8, price: 600, reviews: 200, bio: 'Specialized AC installation, repair, and maintenance in major cities.' },
-            { id: 10, name: 'ColorCraft Painters', categoryId: 'paint', rating: 4.7, price: 500, reviews: 150, bio: 'Professional interior and exterior painting with eco-friendly paints.' },
-            { id: 11, name: 'FixIt Appliances', categoryId: 'app', rating: 4.9, price: 450, reviews: 300, bio: 'Repair of washing machines, refrigerators, and microwaves at home.' },
+           <script>
+  const providers = [
+    { 
+      id: 1, 
+      name: 'PowerTech Solutions', 
+      categoryId: 'elec', 
+      rating: 4.9, 
+      price: 500, 
+      reviews: 350, 
+      bio: 'Our certified electricians handle all kinds of electrical work — wiring, repairs, fault fixing, and new installations. Safe, quick, and professional service managed by our team.' 
+    },
+    { 
+      id: 2, 
+      name: 'Jal Kalyan Plumbing', 
+      categoryId: 'plumb', 
+      rating: 4.8, 
+      price: 250, 
+      reviews: 180, 
+      bio: 'We provide fast and reliable plumbing services including leak repair, fittings, drainage solutions, and complete bathroom installations. Material cost is separate; service charges are transparent.' 
+    },
+    { 
+      id: 3, 
+      name: 'Glamour Gadi', 
+      categoryId: 'hair', 
+      rating: 5.0, 
+      price: 300, 
+      reviews: 92, 
+      bio: 'Our professional stylists offer modern and classic haircuts for men and women. Home service available for your convenience.' 
+    },
+    { 
+      id: 4, 
+      name: 'Swachh Ghar Services', 
+      categoryId: 'clean', 
+      rating: 4.6, 
+      price: 250, 
+      reviews: 512, 
+      bio: 'Our trained team provides deep and regular house cleaning services using eco-friendly products. Weekly, bi-weekly, and one-time cleaning options available.' 
+    },
+    { 
+      id: 5, 
+      name: 'Keet Niyantran', 
+      categoryId: 'pest', 
+      rating: 4.8, 
+      price: 550, 
+      reviews: 145, 
+      bio: 'We offer professional pest control for residential and commercial spaces. Guaranteed removal of common pests with safe chemicals.' 
+    },
+    { 
+      id: 6, 
+      name: 'Lakdi Kaam Experts', 
+      categoryId: 'carp', 
+      rating: 4.7, 
+      price: 400, 
+      reviews: 210, 
+      bio: 'Our carpentry team specializes in furniture making, repairs, modular installations, and wooden fittings with quality finishing.' 
+    },
+    { 
+      id: 7, 
+      name: 'Aaram Body Spa', 
+      categoryId: 'pain', 
+      rating: 4.9, 
+      price: 700, 
+      reviews: 78, 
+      bio: 'Our certified therapists offer deep tissue, relaxation, and sports massages for pain relief and stress reduction, right at your home.' 
+    },
+    { 
+      id: 8, 
+      name: 'Shanti Mind Services', 
+      categoryId: 'stress', 
+      rating: 5.0, 
+      price: 800, 
+      reviews: 44, 
+      bio: 'Our licensed professionals provide guided meditation and stress management sessions to help improve focus and mental clarity.' 
+    },
+    { 
+      id: 9, 
+      name: 'CoolBreeze AC Experts', 
+      categoryId: 'ac', 
+      rating: 4.8, 
+      price: 500, 
+      reviews: 200, 
+      bio: 'Our AC technicians handle installation, repair, and servicing for all major brands. Quick response and neat finishing guaranteed.' 
+    },
+    { 
+      id: 10, 
+      name: 'ColorCraft Painters', 
+      categoryId: 'paint', 
+      rating: 4.7, 
+      price: 400, 
+      reviews: 150, 
+      bio: 'Our painters deliver smooth and professional finishes using eco-friendly paints for both interiors and exteriors.' 
+    },
+    { 
+      id: 11, 
+      name: 'FixIt Appliances', 
+      categoryId: 'app', 
+      rating: 4.9, 
+      price: 400, 
+      reviews: 300, 
+      bio: 'Our appliance repair experts fix washing machines, refrigerators, and microwaves at your doorstep with reliable service.' 
+    }
+  ];
+
+  // Example display on page
+  const container = document.getElementById('provider-list');
+  providers.forEach(p => {
+    const card = document.createElement('div');
+    card.innerHTML = `
+      <h3>${p.name}</h3>
+      <p>${p.bio}</p>
+      <p><strong>Price:</strong> ₹${p.price} | ⭐ ${p.rating} (${p.reviews} reviews)</p>
+    `;
+    card.style.border = '1px solid #ddd';
+    card.style.padding = '10px';
+    card.style.margin = '10px 0';
+    container.appendChild(card);
+  });
+</script>
+
         ];
         // Mock Bookings Data with Rupee prices
         const mockBookings = [
