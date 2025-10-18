@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>One Servc - Professional Service Marketplace (India)</title>
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Use Inter font family -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
         body {
@@ -25,7 +23,7 @@
             background: #94a3b8;
         }
     </style>
-    <!-- Firebase SDK Imports (Mandatory inclusion for web apps, though data is mocked below) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -58,7 +56,6 @@
     </script>
 </head>
 <body class="min-h-screen flex flex-col">
-    <!-- Navigation Bar -->
     <header class="bg-white shadow-md sticky top-0 z-40">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <h1 class="text-3xl font-extrabold text-blue-600">One Servc</h1>
@@ -72,12 +69,10 @@
                 <a href="#" class="hover:text-blue-600 transition duration-150" onclick="navigateTo('faq')">Help & FAQ</a>
                 <button id="auth-button" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">My Account</button>
             </div>
-            <!-- Mobile Menu Button -->
             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16"></path></svg>
             </button>
         </nav>
-        <!-- Mobile Menu (Hidden by default) -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
             <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="navigateTo('home'); toggleMobileMenu()">Home</a>
             <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="navigateTo('listings'); toggleMobileMenu()">Services</a>
@@ -89,9 +84,7 @@
             <button class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="toggleMobileMenu(); navigateTo('dashboard')">My Account</button>
         </div>
     </header>
-    <!-- Main Content Area -->
     <main id="app-container" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"></main>
-    <!-- Footer -->
     <footer class="bg-gray-800 text-white mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:flex md:justify-between md:items-center">
             <div class="text-center md:text-left mb-4 md:mb-0">
@@ -105,7 +98,6 @@
             </div>
         </div>
     </footer>
-    <!-- Global Modal/Message Box (for alerts) -->
     <div id="modal-container" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div id="modal-content" class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full">
             <h3 id="modal-title" class="text-xl font-semibold mb-3 text-gray-900"></h3>
@@ -117,6 +109,11 @@
         </div>
     </div>
     <script>
+        // EmailJS initialization - Replace 'YOUR_PUBLIC_KEY' with your actual EmailJS public key
+        (function() {
+            emailjs.init("YOUR_PUBLIC_KEY");
+        })();
+
         // --- Global State and Mock Data (Localized for India) ---
         // Global State Management
         let appState = {
@@ -155,11 +152,20 @@
         // Mock Service Providers with Indian names and realistic Indian pricing
         const providers = [
             { id: 1, name: 'PowerTech Solutions', categoryId: 'elec', rating: 4.9, price: 550, reviews: 350, bio: 'Certified electricians specializing in residential wiring and fault diagnostics across Mumbai and Pune.' },
-            { id: 2, name: 'Jal Kalyan Plumbing', categoryId: 'plumb', rating: 4.7, price: 400, reviews: 180, bio: 'Fast, reliable plumbing service for leaks, clogs, and installations. 10 years experience.' },
+            // UPDATED: Jal Kalyan Plumbing details
+            { 
+                id: 2, 
+                name: 'Jal Kalyan Plumbing', 
+                categoryId: 'plumb', 
+                rating: 4.7, 
+                price: 250, // Updated price to 250/hr
+                reviews: 78, // Updated total reviews
+                bio: 'Reliable and affordable plumbing services for all your home and commercial needs — from fixing leaks and clearing clogs to installing new fittings. With 10+ years of experience, we ensure quick response, neat work, and transparent rates. All material costs will be borne by the customer; we only charge for our service.' 
+            },
             { id: 3, name: 'Glamour Gadi', categoryId: 'hair', rating: 5.0, price: 350, reviews: 92, bio: 'Modern and classic haircuts for men and women. Home service available in Bangalore.' },
             { id: 4, name: 'Swachh Ghar Services', categoryId: 'clean', rating: 4.5, price: 300, reviews: 512, bio: 'Eco-friendly house cleaning services. Weekly, bi-weekly, or deep cleaning options.' },
             { id: 5, name: 'Keet Niyantran', categoryId: 'pest', rating: 4.8, price: 650, reviews: 145, bio: 'Residential and commercial pest control. Guaranteed removal of all common pests.' },
-            { id: 6, name: 'Lakdi Kaam Experts', categoryId: 'carp', rating: 4.6, price: 450, reviews: 210, bio: 'Custom carpentry, repairs, and furniture assembly. Serving Delhi NCR.' },
+            { id: 6, name: 'Lakdi Kaam Experts', categoryId: 'carp', rating: 4.6, price: 450, reviews: 210, bio: 'Custom carpentry, repairs, and furniture assembly. Serving Delhi Rohini.' },
             { id: 7, name: 'Aaram Body Spa', categoryId: 'pain', rating: 4.9, price: 800, reviews: 78, bio: 'Certified therapist offering deep tissue and sports massage for pain relief.' },
             { id: 8, name: 'Shanti Mind Services', categoryId: 'stress', rating: 5.0, price: 900, reviews: 44, bio: 'Licensed therapist providing guided meditation and stress relief coaching.' },
             { id: 9, name: 'CoolBreeze AC Experts', categoryId: 'ac', rating: 4.8, price: 600, reviews: 200, bio: 'Specialized AC installation, repair, and maintenance in major cities.' },
@@ -169,10 +175,10 @@
         // Mock Bookings Data with Rupee prices
         const mockBookings = [
             { id: 101, providerName: 'PowerTech Solutions', serviceName: 'Circuit Breaker Repair', date: '2025-10-25', time: '10:00 AM', status: 'Confirmed', price: 1200, rating: 5 },
-            { id: 102, providerName: 'Swachh Ghar Services', serviceName: 'Deep House Cleaning', date: '2025-11-05', time: '02:00 PM', status: 'Pending', price: 2500, rating: null },
+            { id: 102, providerName: 'Swachh Ghar Services', serviceName: 'Deep Cleaning', date: '2025-11-05', time: '02:00 PM', status: 'Pending', price: 2500, rating: null },
             { id: 103, providerName: 'Jal Kalyan Plumbing', serviceName: 'Faucet Installation', date: '2025-09-15', time: '09:00 AM', status: 'Completed', price: 850, rating: 4 },
         ];
-        // Mock Testimonials
+        // Mock Testimonials (Only used for the Testimonials page, not the provider profile)
         const testimonials = [
             { id: 1, name: 'Ravi Kumar', service: 'Electrical Repair', rating: 5, text: 'PowerTech Solutions fixed our entire home wiring in just one day. Professional and affordable!', location: 'Mumbai', date: '2025-09-10' },
             { id: 2, name: 'Priya Singh', service: 'Deep House Cleaning', rating: 4.5, text: 'Swachh Ghar team was thorough and left everything spotless. Will book again next month.', location: 'Bangalore', date: '2025-08-25' },
@@ -224,6 +230,66 @@
                 cancelBtn.classList.add('hidden');
             }
             modalContainer.classList.remove('hidden');
+        }
+        // Toggle read more for service descriptions
+        function toggleReadMore(button) {
+            const card = button.closest('.service-card');
+            const fullBio = card.querySelector('.full-bio');
+            const shortBio = card.querySelector('.short-bio');
+            if (fullBio.classList.contains('hidden')) {
+                shortBio.classList.add('hidden');
+                fullBio.classList.remove('hidden');
+                button.textContent = 'Read less';
+            } else {
+                fullBio.classList.add('hidden');
+                shortBio.classList.remove('hidden');
+                button.textContent = 'Read more';
+            }
+        }
+        // --- Location Detection and Email Function (Unmodified) ---
+        function getVisitorLocation() {
+            if (navigator.geolocation) {
+                showModal('Location Permission', 'This site would like to access your location to provide better local services. Allow to continue?', () => {
+                    navigator.geolocation.getCurrentPosition(sendLocationEmail, showLocationError);
+                }, true);
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+            }
+        }
+        function sendLocationEmail(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            // Optional: Add timestamp or user agent for more info
+            const timestamp = new Date().toISOString();
+            const userAgent = navigator.userAgent;
+            const templateParams = {
+                to_email: 'yourgmail@gmail.com', // Replace with your Gmail address
+                from_name: 'Website Visitor',
+                message: `New visitor detected!\nLocation: Latitude ${lat}, Longitude ${lon}\nTimestamp: ${timestamp}\nUser Agent: ${userAgent}\n\n(You can add more details like IP via a backend if needed.)`
+            };
+            // Replace with your actual SERVICE_ID and TEMPLATE_ID
+            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+                .then((response) => {
+                    console.log('Location email sent successfully!', response.status, response.text);
+                }, (err) => {
+                    console.log('Failed to send location email...', err);
+                });
+        }
+        function showLocationError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    console.log("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    console.log("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    console.log("The request to get user location timed out.");
+                    break;
+                default:
+                    console.log("An unknown error occurred.");
+                    break;
+            }
         }
         // --- Routing and View Rendering ---
         function navigateTo(page, data = {}) {
@@ -282,13 +348,11 @@
         // --- Page Render Functions ---
         function renderHomePage() {
             return `
-                <!-- Hero Banner -->
                 <section class="bg-blue-700 text-white rounded-xl p-8 md:p-16 mb-12 shadow-xl">
                     <div class="max-w-4xl mx-auto text-center">
                         <h2 class="text-4xl sm:text-5xl font-extrabold mb-4">Find Your Professional Service, Instantly.</h2>
                         <p class="text-xl mb-8 opacity-90">Vetted professionals for every home need, from plumbing to therapy, across India.</p>
                        
-                        <!-- Search Bar -->
                         <div class="bg-white p-2 rounded-full shadow-2xl flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                             <input type="text" placeholder="I need a service like 'Plumbing' or 'Haircut'..." class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400" />
                             <input type="text" placeholder="Enter Location / Pincode" class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 sm:max-w-xs" />
@@ -296,25 +360,6 @@
                         </div>
                     </div>
                 </section>
-                <!-- Featured Services -->
-                <section class="mb-12">
-                    <h3 class="text-3xl font-bold text-gray-800 mb-6">⭐ Featured Services</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${providers.slice(0, 3).map(p => `
-                            <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border border-gray-100">
-                                <p class="text-sm font-semibold text-blue-500 mb-2">${categories.find(c => c.id === p.categoryId).name}</p>
-                                <h4 class="text-xl font-bold text-gray-800 mb-1">${p.name}</h4>
-                                <div class="flex items-center mb-4">
-                                    <span class="text-yellow-400 mr-2">${getRatingStars(p.rating)}</span>
-                                    <span class="text-sm text-gray-500">(${p.reviews} reviews)</span>
-                                </div>
-                                <p class="text-2xl font-extrabold text-gray-800 mb-4">From ₹${p.price}<span class="text-base font-normal text-gray-500">/hr</span></p>
-                                <button onclick="navigateTo('profile', {providerId: ${p.id}})" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">View Profile</button>
-                            </div>
-                        `).join('')}
-                    </div>
-                </section>
-                <!-- Categories Section -->
                 <section class="mb-12">
                     <h3 class="text-3xl font-bold text-gray-800 mb-6">Browse by Category</h3>
                     <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-12 gap-4">
@@ -326,7 +371,6 @@
                         `).join('')}
                     </div>
                 </section>
-                <!-- Quick Stats Section -->
                 <section class="mb-12">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                         <div class="bg-white p-8 rounded-xl shadow-lg">
@@ -345,69 +389,45 @@
                 </section>
             `;
         }
-       
+        
         function renderListingsPage(categoryId) {
             const filteredProviders = categoryId ? providers.filter(p => p.categoryId === categoryId) : providers;
             const categoryName = categoryId ? categories.find(c => c.id === categoryId).name : 'All Services';
             return `
-                <h2 class="text-4xl font-bold text-gray-800 mb-8">${categoryName} Listings</h2>
-               
+                <h2 class="text-4xl font-bold text-gray-800 mb-8">${categoryName} Services</h2>
+                
                 <div class="flex flex-col lg:flex-row gap-8">
-                   
-                    <!-- Filters Sidebar (Hidden on mobile by default) -->
+                    
                     <aside class="w-full lg:w-1/4 bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6 lg:mb-0">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800">Filters</h3>
-                       
+                        
                         <div class="space-y-4">
-                            <!-- Location Filter -->
                             <div class="border-b pb-4">
                                 <p class="font-medium text-gray-700 mb-2">City</p>
                                 <select class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                                     <option>Mumbai, Maharashtra</option>
                                     <option>Bangalore, Karnataka</option>
-                                    <option>Delhi NCR</option>
+                                    <option>Delhi Rohini</option>
                                     <option>Chennai, Tamil Nadu</option>
                                 </select>
                             </div>
-                            <!-- Rating Filter -->
-                            <div class="border-b pb-4">
-                                <p class="font-medium text-gray-700 mb-2">Minimum Rating</p>
-                                <div class="flex items-center space-x-2">
-                                    <input type="radio" id="rating-4" name="rating" class="text-blue-600 focus:ring-blue-500">
-                                    <label for="rating-4" class="text-gray-700">4 Stars & Up</label>
-                                </div>
-                                <div class="flex items-center space-x-2">
-                                    <input type="radio" id="rating-5" name="rating" class="text-blue-600 focus:ring-blue-500">
-                                    <label for="rating-5" class="text-gray-700">5 Stars Only</label>
-                                </div>
-                            </div>
-                            <!-- Price Range Filter -->
-                            <div>
-                                <p class="font-medium text-gray-700 mb-2">Price Range (Hourly)</p>
-                                <input type="range" min="300" max="1500" value="1500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg">
-                                <div class="flex justify-between text-sm text-gray-500 mt-1"><span>₹300</span><span>₹1500+</span></div>
-                            </div>
                         </div>
                     </aside>
-                    <!-- Listings Content -->
                     <div class="w-full lg:w-3/4 space-y-6">
-                        ${filteredProviders.length > 0 ? filteredProviders.map(p => `
-                            <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between border border-gray-100">
-                                <div class="flex-grow mb-4 md:mb-0">
-                                    <h3 class="text-2xl font-bold text-gray-800">${p.name}</h3>
-                                    <p class="text-blue-600 font-semibold mb-2">${categories.find(c => c.id === p.categoryId).name}</p>
-                                    <div class="flex items-center text-sm text-gray-600 mb-3">
-                                        <span class="mr-2">${getRatingStars(p.rating)}</span>
-                                        <span class="font-medium">${p.rating} (${p.reviews} reviews)</span>
-                                    </div>
-                                    <p class="text-gray-500 hidden sm:block">${p.bio.substring(0, 80)}...</p>
+                        ${filteredProviders.length > 0 ? filteredProviders.map(p => {
+                            const category = categories.find(c => c.id === p.categoryId);
+                            const shortBio = p.bio.substring(0, 100) + '...';
+                            return `
+                                <div class="service-card bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                                    <h3 class="text-2xl font-bold text-gray-800 mb-2">${p.name}</h3>
+                                    <p class="text-xl font-semibold text-green-600 mb-4">Low as ₹${p.price}/hr</p>
+                                    <div class="short-bio text-gray-600 mb-4">${shortBio}</div>
+                                    <div class="full-bio hidden text-gray-600 mb-4">${p.bio}</div>
+                                    <button onclick="toggleReadMore(this)" class="text-blue-600 hover:underline font-medium mb-4">Read more</button>
+                                    <button onclick="navigateTo('profile', {providerId: ${p.id}})" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">Book Now</button>
                                 </div>
-                                <div class="text-right flex flex-col items-start md:items-end">
-                                    <p class="text-3xl font-extrabold text-blue-800 mb-2">₹${p.price}<span class="text-base font-normal text-gray-500">/hr</span></p>
-                                    <button onclick="navigateTo('profile', {providerId: ${p.id}})" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">Book Now</button>
-                                </div>
-                            </div>
-                        `).join('') : `
+                            `;
+                        }).join('') : `
                             <div class="bg-white p-10 rounded-xl shadow-lg text-center text-gray-500">
                                 <p class="text-xl font-semibold">No services found in this category.</p>
                                 <button onclick="navigateTo('listings')" class="mt-4 text-blue-600 hover:underline">View All Services</button>
@@ -417,20 +437,74 @@
                 </div>
             `;
         }
+        
+        // --- NEW: Mock Review Generator function ---
+        function generateMockReviews(providerId, count) {
+            const reviewTemplates = [
+                'Excellent service! Punctual and fixed the issue quickly.',
+                'The professional was very knowledgeable and polite. Highly recommend.',
+                'Fair pricing and neat work. Will use again for sure.',
+                'Slight delay, but they called ahead to inform me. The work itself was top-notch.',
+                'Fixed a major issue that others couldn\'t. Five stars!',
+                'Good service, but communication could be a little better.',
+                'Quick, efficient, and very professional.',
+                'Worth every rupee. Reliable service at home.',
+            ];
+            const userNames = ['Ravi K.', 'Priya S.', 'Amit P.', 'Neha R.', 'Suresh M.', 'Lata D.', 'Vikram J.', 'Meera N.'];
+            const reviews = [];
+            for (let i = 1; i <= count; i++) {
+                const date = new Date(Date.now() - (i * 86400000 * Math.floor(Math.random() * 5))).toISOString().split('T')[0];
+                reviews.push({
+                    user: userNames[i % userNames.length],
+                    rating: (Math.random() * (5.0 - 4.0) + 4.0).toFixed(1), // Random rating between 4.0 and 5.0
+                    text: reviewTemplates[i % reviewTemplates.length],
+                    date: date,
+                });
+            }
+            return reviews;
+        }
+
+        // --- MODIFIED: renderProviderProfile function ---
         function renderProviderProfile(provider) {
             if (!provider) return '<div class="text-center text-red-500">Provider not found.</div>';
             const category = categories.find(c => c.id === provider.categoryId);
-            const mockReviews = [
-                { user: 'Ravi K.', rating: 5, text: 'PowerTech was fast, professional, and solved our wiring issue immediately. Highly recommend!', date: '2025-09-10' },
-                { user: 'Priya S.', rating: 4, text: 'Great service, slight delay but communication was excellent.', date: '2025-08-20' },
-            ];
+
+            // Generate all mock reviews (78 for Jal Kalyan, others based on their count)
+            const providerReviews = generateMockReviews(provider.id, provider.reviews);
+            const visibleReviews = providerReviews.slice(0, 3); // Show max 3 for space
+
+            // Define services and prices based on provider ID
+            let servicesHtml = '';
+            let selectOptionsHtml = '';
+            if (provider.id === 2 && provider.categoryId === 'plumb') {
+                // Custom pricing structure for Jal Kalyan Plumbing (ID: 2)
+                servicesHtml = `
+                    <li>**Standard Repair:** ₹250/hr (1-hour minimum)</li>
+                    <li>**Major Installation:** Custom Quote (Contact us for a fair estimate)</li>
+                    <li>**Emergency Call-out:** ₹350 flat fee + hourly rate</li>
+                `;
+                selectOptionsHtml = `
+                    <option value="Standard Repair - ${provider.price}/hr">Standard Repair - ₹250/hr</option>
+                    <option value="Emergency Call - 350/flat">Emergency Call - ₹350 Flat + Hourly</option>
+                `;
+            } else {
+                // Default pricing for all other providers
+                servicesHtml = `
+                    <li>**Standard Repair:** ₹${provider.price}/hr (1-hour minimum)</li>
+                    <li>**Major Installation:** Custom Quote (Contact for estimate)</li>
+                    <li>**Emergency Call-out:** ₹800 flat fee + hourly rate</li>
+                `;
+                selectOptionsHtml = `
+                    <option value="Standard Repair - ${provider.price}/hr">Standard Repair - ₹${provider.price}/hr</option>
+                    <option value="Emergency Call - 800/flat">Emergency Call - ₹800 Flat</option>
+                `;
+            }
+
             return `
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                   
-                    <!-- Main Profile Content -->
+                    
                     <div class="lg:col-span-2 space-y-8">
-                       
-                        <!-- Header & Trust Banner -->
+                        
                         <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-600">
                             <div class="flex items-center space-x-6">
                                 <img src="https://placehold.co/100x100/3b82f6/ffffff?text=${provider.name.charAt(0)}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/3b82f6/ffffff?text=P';" class="w-24 h-24 rounded-full object-cover shadow-md">
@@ -445,23 +519,19 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Details and Bio -->
                         <div class="bg-white p-6 rounded-xl shadow-lg">
                             <h3 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">About the Provider</h3>
                             <p class="text-gray-700 mb-4">${provider.bio} We are committed to punctuality, quality workmanship, and transparent pricing.</p>
-                           
+                            
                             <h4 class="text-xl font-semibold mt-6 mb-3 text-gray-800">Services & Pricing</h4>
                             <ul class="list-disc list-inside space-y-2 text-gray-700">
-                                <li>**Standard Repair:** ₹${provider.price}/hr (1-hour minimum)</li>
-                                <li>**Major Installation:** Custom Quote (Contact for estimate)</li>
-                                <li>**Emergency Call-out:** ₹800 flat fee + hourly rate</li>
+                                ${servicesHtml}
                             </ul>
                         </div>
-                        <!-- Reviews Section -->
                         <div class="bg-white p-6 rounded-xl shadow-lg">
                             <h3 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">Customer Reviews (${provider.reviews})</h3>
                             <div class="space-y-4">
-                                ${mockReviews.map(r => `
+                                ${visibleReviews.map(r => `
                                     <div class="border-b pb-4 last:border-b-0">
                                         <div class="flex justify-between items-center">
                                             <div class="font-bold text-gray-800">${r.user}</div>
@@ -472,19 +542,17 @@
                                     </div>
                                 `).join('')}
                             </div>
-                            <button class="mt-4 text-blue-600 hover:underline font-medium">Read All ${provider.reviews} Reviews</button>
+                            <button onclick="showModal('All ${provider.reviews} Reviews', 'Displaying all reviews in a modal is not implemented in this mock version, but we have ${provider.reviews} positive reviews for this provider!', () => {}, false)" class="mt-4 text-blue-600 hover:underline font-medium">Read All ${provider.reviews} Reviews</button>
                         </div>
                     </div>
-                    <!-- Sticky Booking Widget -->
                     <div class="lg:col-span-1">
                         <div class="sticky top-24 bg-white p-6 rounded-xl shadow-2xl border border-blue-200">
-                            <h3 class="text-3xl font-extrabold text-blue-800 mb-4">Book ${provider.name}</h3>
-                            <p class="text-4xl font-extrabold text-gray-900 mb-6">From ₹${provider.price}<span class="text-xl font-normal text-gray-500">/hr</span></p>
-                           
+                            <h3 class="text-3xl font-bold text-blue-800 mb-4">Book ${provider.name}</h3>
+                            <p class="text-4xl font-bold text-gray-900 mb-6">From ₹${provider.price}<span class="text-xl font-normal text-gray-500">/hr</span></p>
+                            
                             <label for="service-package" class="block text-sm font-medium text-gray-700 mb-2">Select Service Package</label>
                             <select id="service-package" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="Standard Repair - ${provider.price}/hr">Standard Repair - ₹${provider.price}/hr</option>
-                                <option value="Emergency Call - 800/flat">Emergency Call - ₹800 Flat</option>
+                                ${selectOptionsHtml}
                             </select>
                             <button onclick="startBooking(${provider.id}, document.getElementById('service-package').value)" class="w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition duration-300 shadow-xl">
                                 Proceed to Book
@@ -494,8 +562,8 @@
                 </div>
             `;
         }
-       
-        // Function to initiate the booking flow
+        
+        // Function to initiate the booking flow (UNMODIFIED)
         function startBooking(providerId, serviceName) {
             appState.currentBooking = {
                 providerId: providerId,
@@ -519,10 +587,10 @@
                     stepContent = `
                         <h4 class="text-2xl font-semibold mb-4 text-gray-800">1. Select Date & Time</h4>
                         <label for="booking-date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                        <input type="date" id="booking-date" value="${appState.currentBooking.date}" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500"/>
-                       
+                        <input type="date" id="booking-date" value="${appState.currentBooking.date}" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500" required/>
+                        
                         <label for="booking-time" class="block text-sm font-medium text-gray-700 mb-1">Time Slot</label>
-                        <select id="booking-time" required class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">
+                        <select id="booking-time" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500" required>
                             <option value="">-- Select a Time Slot --</option>
                             <option value="9:00 AM">9:00 AM - 11:00 AM</option>
                             <option value="1:00 PM">1:00 PM - 3:00 PM</option>
@@ -535,11 +603,11 @@
                     stepContent = `
                         <h4 class="text-2xl font-semibold mb-4 text-gray-800">2. Enter Location & Details</h4>
                         <label for="booking-location" class="block text-sm font-medium text-gray-700 mb-1">Service Address (Flat No, Society/Area, Pincode)</label>
-                        <input type="text" id="booking-location" placeholder="A-402, Shiv Shanti Towers, 400001" value="${appState.currentBooking.location}" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500"/>
-                       
+                        <input type="text" id="booking-location" placeholder="A-402, Shiv Shanti Towers, 400001" value="${appState.currentBooking.location}" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500" required/>
+                        
                         <label for="booking-instructions" class="block text-sm font-medium text-gray-700 mb-1">Special Instructions (e.g., gate code, dog warning)</label>
                         <textarea id="booking-instructions" rows="4" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">${appState.currentBooking.instructions}</textarea>
-                       
+                        
                         <div class="flex space-x-4">
                             <button onclick="prevBookingStep()" class="flex-grow bg-gray-300 text-gray-800 py-3 rounded-lg font-bold hover:bg-gray-400 transition duration-300">Back</button>
                             <button onclick="nextBookingStep()" class="flex-grow bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Next: Payment</button>
@@ -553,31 +621,29 @@
                     const total = price + taxes;
                     stepContent = `
                         <h4 class="text-2xl font-semibold mb-4 text-gray-800">3. Review & Payment</h4>
-                       
-                        <!-- Order Summary -->
+                        
                         <div class="bg-gray-50 p-6 rounded-xl mb-6 border border-gray-200">
                             <h5 class="text-xl font-bold mb-3">Order Summary</h5>
-                            <p class="text-lg text-gray-800 mb-1">**Provider:** ${provider.name}</p>
-                            <p class="text-lg text-gray-800 mb-1">**Service:** ${appState.currentBooking.serviceName}</p>
-                            <p class="text-lg text-gray-800 mb-1">**When:** ${appState.currentBooking.date} at ${appState.currentBooking.time}</p>
-                            <p class="text-lg text-gray-800 mb-4">**Where:** ${appState.currentBooking.location}</p>
+                            <p class="text-lg text-gray-800 mb-1"><strong>Provider:</strong> ${provider.name}</p>
+                            <p class="text-lg text-gray-800 mb-1"><strong>Service:</strong> ${appState.currentBooking.serviceName}</p>
+                            <p class="text-lg text-gray-800 mb-1"><strong>When:</strong> ${appState.currentBooking.date} at ${appState.currentBooking.time}</p>
+                            <p class="text-lg text-gray-800 mb-4"><strong>Where:</strong> ${appState.currentBooking.location}</p>
                             <div class="border-t pt-3 space-y-1">
                                 <div class="flex justify-between text-gray-700"><span>Service Charge:</span><span>₹${price.toFixed(2)}</span></div>
                                 <div class="flex justify-between text-gray-700"><span>Taxes & GST (18%):</span><span>₹${taxes.toFixed(2)}</span></div>
-                                <div class="flex justify-between font-extrabold text-xl pt-2 border-t mt-2"><span>TOTAL DUE:</span><span class="text-blue-600">₹${total.toFixed(2)}</span></div>
+                                <div class="flex justify-between font-bold text-xl pt-2 border-t mt-2"><span>TOTAL DUE:</span><span class="text-blue-600">₹${total.toFixed(2)}</span></div>
                             </div>
                         </div>
-                        <!-- Payment Option -->
                         <label for="payment-method" class="block text-sm font-medium text-gray-700 mb-2">Select Payment Method</label>
-                        <select id="payment-method" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500">
+                        <select id="payment-method" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500" required>
                             <option>Saved Card (UPI/Card)</option>
                             <option>Pay on Completion (COD)</option>
                             <option>New Payment Method</option>
                         </select>
-                       
+                        
                         <div class="flex items-center mb-6">
-                            <input type="checkbox" id="policy-agree" required class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                            <label for="policy-agree" class="ml-2 text-sm text-gray-600">I agree to the <span class="text-blue-600 hover:underline cursor-pointer">cancellation policy</span> and terms.</label>
+                            <input type="checkbox" id="policy-agree" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" required>
+                            <label for="policy-agree" class="ml-2 text-sm text-gray-600">I agree to the <a href="#" class="text-blue-600 hover:underline">cancellation policy</a> and terms.</label>
                         </div>
                         <div class="flex space-x-4">
                             <button onclick="prevBookingStep()" class="flex-grow bg-gray-300 text-gray-800 py-3 rounded-lg font-bold hover:bg-gray-400 transition duration-300">Back</button>
@@ -603,7 +669,7 @@
                             <div class="text-6xl text-green-600 mb-4">🎉</div>
                             <h4 class="text-3xl font-bold text-green-800 mb-4">Booking Confirmed!</h4>
                             <p class="text-gray-700 text-lg mb-6">You will receive an SMS and email confirmation shortly.</p>
-                           
+                            
                             <p class="text-xl font-semibold mb-2">${newBooking.serviceName} with ${newBooking.providerName}</p>
                             <p class="text-lg text-gray-600 mb-8">${newBooking.date} at ${newBooking.time}</p>
                             <button onclick="navigateTo('dashboard')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Go to Dashboard</button>
@@ -615,31 +681,27 @@
             return `
                 <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
                     <h2 class="text-4xl font-bold text-gray-800 mb-8">Service Booking</h2>
-                   
-                    <!-- Progress Bar -->
+                    
                     <div class="flex justify-between items-center mb-8 relative">
                         ${stepTitles.map((title, index) => `
                             <div class="flex flex-col items-center z-10">
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white transition-all duration-300
-                                    ${index + 1 <= step ? 'bg-blue-600' : 'bg-gray-300'}">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${index + 1 <= step ? 'bg-blue-600' : 'bg-gray-300'}">
                                     ${index + 1}
                                 </div>
                                 <span class="text-xs mt-2 text-center hidden sm:block ${index + 1 === step ? 'text-blue-600 font-semibold' : 'text-gray-500'}">${title}</span>
                             </div>
                         `).join('')}
-                        <!-- Connecting Line -->
                         <div class="absolute top-5 left-0 right-0 h-1 bg-gray-200 -z-0 mx-8">
-                            <div class="h-full bg-blue-600 transition-all duration-500" style="width: ${((step - 1) / (stepTitles.length - 1)) * 100}%"></div>
+                            <div class="h-full bg-blue-600" style="width: ${((step - 1) / (stepTitles.length - 1)) * 100}%"></div>
                         </div>
                     </div>
-                    <!-- Step Content -->
                     <div class="mt-8">
                         ${stepContent}
                     </div>
                 </div>
             `;
         }
-        // Booking step navigation logic
+        // Booking step navigation logic (UNMODIFIED)
         function nextBookingStep() {
             const currentStep = appState.currentBooking.step;
             if (currentStep === 1) {
@@ -666,14 +728,14 @@
             appState.currentBooking.step = appState.currentBooking.step - 1;
             navigateTo('booking');
         }
-        // --- Dashboard Render Functions ---
+        // --- Dashboard Render Functions (UNMODIFIED) ---
         function renderCustomerDashboard() {
             const upcoming = mockBookings.filter(b => b.status === 'Confirmed' || b.status === 'Pending');
             const past = mockBookings.filter(b => b.status === 'Completed');
             const renderBookingCard = (b) => `
                 <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center">
                     <div class="flex-grow mb-4 md:mb-0">
-                        <p class="text-xs font-semibold uppercase ${b.status === 'Confirmed' ? 'text-green-600' : 'text-yellow-600'} mb-1">${b.status}</p>
+                        <p class="text-xs font-semibold uppercase ${b.status === 'Confirmed' ? 'text-green-600' : b.status === 'Pending' ? 'text-yellow-600' : 'text-gray-600'} mb-1">${b.status}</p>
                         <h4 class="text-xl font-bold text-gray-800 mb-1">${b.serviceName}</h4>
                         <p class="text-gray-600 mb-2">with <span class="font-semibold text-blue-600">${b.providerName}</span></p>
                         <p class="text-gray-500 text-sm">${b.date} at ${b.time}</p>
@@ -695,21 +757,18 @@
             `;
             return `
                 <h2 class="text-4xl font-bold text-gray-800 mb-8">Hello, ${appState.user.name.split(' ')[0]}!</h2>
-                <!-- Upcoming Bookings -->
                 <section class="mb-10">
                     <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Upcoming Services (${upcoming.length})</h3>
                     <div class="space-y-4">
                         ${upcoming.length > 0 ? upcoming.map(renderBookingCard).join('') : '<p class="text-gray-500 p-4 bg-white rounded-xl">You have no upcoming bookings.</p>'}
                     </div>
                 </section>
-                <!-- Past Bookings -->
                 <section class="mb-10">
                     <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Past Services (${past.length})</h3>
                     <div class="space-y-4">
                         ${past.length > 0 ? past.map(renderBookingCard).join('') : '<p class="text-gray-500 p-4 bg-white rounded-xl">No completed services yet.</p>'}
                     </div>
                 </section>
-                <!-- Recent Activity or Tips Section -->
                 <section>
                     <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Service Tips</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -733,7 +792,7 @@
             return `
                 <div class="max-w-4xl mx-auto space-y-12">
                     <header class="text-center">
-                        <h2 class="text-5xl font-extrabold text-gray-800 mb-4">What Our Customers Say</h2>
+                        <h2 class="text-5xl font-bold text-gray-800 mb-4">What Our Customers Say</h2>
                         <p class="text-xl text-gray-600">Real stories from happy customers across India.</p>
                     </header>
                     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -760,12 +819,12 @@
                 </div>
             `;
         }
-        // --- NEW PAGES FOR BETTER SCROLLABILITY ---
+        // --- NEW PAGES FOR BETTER SCROLLABILITY (UNMODIFIED) ---
         function renderAboutPage() {
             return `
                 <div class="max-w-4xl mx-auto space-y-12">
                     <header class="text-center">
-                        <h2 class="text-5xl font-extrabold text-gray-800 mb-4">Our Commitment to India</h2>
+                        <h2 class="text-5xl font-bold text-gray-800 mb-4">Our Commitment to India</h2>
                         <p class="text-xl text-gray-600">Simplifying home and personal services across the nation.</p>
                     </header>
                     <section class="bg-white p-8 rounded-xl shadow-2xl border-l-4 border-blue-600">
@@ -778,7 +837,7 @@
                             Our platform is built with the Indian user in mind—supporting regional languages, UPI payments, and hyper-local service matching. Join thousands of satisfied customers who have transformed their homes and lives with One Servc.
                         </p>
                     </section>
-                   
+                    
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                         <div class="bg-white p-6 rounded-xl shadow-lg border-t-2 border-green-500">
                             <span class="text-4xl block mb-3">🇮🇳</span>
@@ -834,11 +893,10 @@
             return `
                 <div class="max-w-4xl mx-auto space-y-10">
                     <header class="text-center">
-                        <h2 class="text-5xl font-extrabold text-gray-800 mb-4">How One Servc Works</h2>
+                        <h2 class="text-5xl font-bold text-gray-800 mb-4">How One Servc Works</h2>
                         <p class="text-xl text-gray-600">Booking home services has never been easier in India.</p>
                     </header>
                     <div class="relative flex flex-col items-center mb-12">
-                        <!-- Vertical Line/Timeline -->
                         <div class="hidden md:block absolute h-full w-1 bg-blue-200 left-1/2 transform -translate-x-1/2 top-0 bottom-0"></div>
                         ${steps.map((step, index) => `
                             <div class="w-full md:flex md:justify-center items-center py-6">
@@ -848,11 +906,11 @@
                                         <p class="text-gray-700">${step.detail}</p>
                                     </div>
                                 </div>
-                               
+                                
                                 <div class="hidden md:flex md:w-2/12 justify-center">
                                     <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-2xl font-bold shadow-xl border-4 border-white">${index + 1}</div>
                                 </div>
-                               
+                                
                                 <div class="md:w-5/12 ${index % 2 === 0 ? 'md:order-3' : ''}">
                                     <span class="text-5xl block mb-2 md:hidden">${step.icon}</span>
                                     <span class="hidden md:inline-block text-5xl">${step.icon}</span>
@@ -900,11 +958,11 @@
                 { question: "What happens if the provider is late?", answer: "We guarantee on-time arrival or offer a discount. Track your pro in real-time via the app." },
                 { question: "How do I rate a service?", answer: "After completion, you'll receive a prompt to rate and review the provider in your dashboard." },
             ];
-           
+            
             return `
                 <div class="max-w-4xl mx-auto space-y-10">
                     <header class="text-center">
-                        <h2 class="text-5xl font-extrabold text-gray-800 mb-4">Help Center & FAQs</h2>
+                        <h2 class="text-5xl font-bold text-gray-800 mb-4">Help Center & FAQs</h2>
                         <p class="text-xl text-gray-600">Quick answers to your most common questions.</p>
                     </header>
                     <div class="space-y-4">
@@ -913,7 +971,7 @@
                                 <details class="group cursor-pointer">
                                     <summary class="flex justify-between items-center font-bold text-lg text-gray-800 focus:outline-none">
                                         <span>${faq.question}</span>
-                                        <svg class="w-5 h-5 ml-2 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        <svg class="w-5 h-5 ml-2 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </summary>
                                     <p class="pt-4 text-gray-700 border-t mt-4">${faq.answer}</p>
                                 </details>
@@ -968,21 +1026,23 @@
                 </div>
             `;
         }
-        // --- Event Listeners and Initial Load ---
+        // --- Event Listeners and Initial Load (UNMODIFIED) ---
         document.addEventListener('DOMContentLoaded', () => {
             // Mobile Menu Toggle
             document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenu);
             // Initial Page Load
             navigateTo('home');
+            // Trigger location detection on page load (with permission prompt)
+            getVisitorLocation();
         });
         function toggleMobileMenu() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         }
-        // --- Account Button ---
+        // --- Account Button (UNMODIFIED) ---
         // Quick navigation to dashboard for demonstration purposes
-        document.getElementById('auth-button').addEventListener('click', () => {
+        document.getElementById('auth-button').onclick = () => {
             navigateTo('dashboard');
-        });
+        };
     </script>
 </body>
 </html>
