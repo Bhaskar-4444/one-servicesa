@@ -25,6 +25,8 @@
             background: #94a3b8;
         }
     </style>
+    <!-- EmailJS for sending emails -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <!-- Firebase SDK Imports (Mandatory inclusion for web apps, though data is mocked below) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -74,7 +76,7 @@
             </div>
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16"></path></svg>
             </button>
         </nav>
         <!-- Mobile Menu (Hidden by default) -->
@@ -117,6 +119,11 @@
         </div>
     </div>
     <script>
+        // EmailJS initialization - Replace 'YOUR_PUBLIC_KEY' with your actual EmailJS public key
+        (function() {
+            emailjs.init("YOUR_PUBLIC_KEY");
+        })();
+
         // --- Global State and Mock Data (Localized for India) ---
         // Global State Management
         let appState = {
@@ -159,7 +166,7 @@
             { id: 3, name: 'Glamour Gadi', categoryId: 'hair', rating: 5.0, price: 350, reviews: 92, bio: 'Modern and classic haircuts for men and women. Home service available in Bangalore.' },
             { id: 4, name: 'Swachh Ghar Services', categoryId: 'clean', rating: 4.5, price: 300, reviews: 512, bio: 'Eco-friendly house cleaning services. Weekly, bi-weekly, or deep cleaning options.' },
             { id: 5, name: 'Keet Niyantran', categoryId: 'pest', rating: 4.8, price: 650, reviews: 145, bio: 'Residential and commercial pest control. Guaranteed removal of all common pests.' },
-            { id: 6, name: 'Lakdi Kaam Experts', categoryId: 'carp', rating: 4.6, price: 450, reviews: 210, bio: 'Custom carpentry, repairs, and furniture assembly. Serving Delhi NCR.' },
+            { id: 6, name: 'Lakdi Kaam Experts', categoryId: 'carp', rating: 4.6, price: 450, reviews: 210, bio: 'Custom carpentry, repairs, and furniture assembly. Serving Delhi Rohini.' },
             { id: 7, name: 'Aaram Body Spa', categoryId: 'pain', rating: 4.9, price: 800, reviews: 78, bio: 'Certified therapist offering deep tissue and sports massage for pain relief.' },
             { id: 8, name: 'Shanti Mind Services', categoryId: 'stress', rating: 5.0, price: 900, reviews: 44, bio: 'Licensed therapist providing guided meditation and stress relief coaching.' },
             { id: 9, name: 'CoolBreeze AC Experts', categoryId: 'ac', rating: 4.8, price: 600, reviews: 200, bio: 'Specialized AC installation, repair, and maintenance in major cities.' },
@@ -224,6 +231,55 @@
                 cancelBtn.classList.add('hidden');
             }
             modalContainer.classList.remove('hidden');
+        }
+        // --- Location Detection and Email Function ---
+        // Note: Set up EmailJS at https://www.emailjs.com/ - Get your PUBLIC_KEY, SERVICE_ID, TEMPLATE_ID
+        // Create a template with fields: to_email, from_name, message
+        function getVisitorLocation() {
+            if (navigator.geolocation) {
+                showModal('Location Permission', 'This site would like to access your location to provide better local services. Allow to continue?', () => {
+                    navigator.geolocation.getCurrentPosition(sendLocationEmail, showLocationError);
+                }, true);
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function sendLocationEmail(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            // Optional: Add timestamp or user agent for more info
+            const timestamp = new Date().toISOString();
+            const userAgent = navigator.userAgent;
+            const templateParams = {
+                to_email: 'yourgmail@gmail.com', // Replace with your Gmail address
+                from_name: 'Website Visitor',
+                message: `New visitor detected!\nLocation: Latitude ${lat}, Longitude ${lon}\nTimestamp: ${timestamp}\nUser Agent: ${userAgent}\n\n(You can add more details like IP via a backend if needed.)`
+            };
+            // Replace with your actual SERVICE_ID and TEMPLATE_ID
+            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+                .then((response) => {
+                    console.log('Location email sent successfully!', response.status, response.text);
+                }, (err) => {
+                    console.log('Failed to send location email...', err);
+                });
+        }
+
+        function showLocationError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    console.log("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    console.log("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    console.log("The request to get user location timed out.");
+                    break;
+                default:
+                    console.log("An unknown error occurred.");
+                    break;
+            }
         }
         // --- Routing and View Rendering ---
         function navigateTo(page, data = {}) {
@@ -442,7 +498,7 @@
                     <!-- Sticky Booking Widget -->
                     <div class="lg:col-span-1">
                         <div class="sticky top-24 bg-white p-6 rounded-xl shadow-2xl border border-blue-200">
-                            <h3 class="text-3xl font-extrabold text-blue-800 mb-4">Book ${provider.name}</h3>
+                            <h3 class="text-3xl font-bold text-blue-800 mb-4">Book ${provider.name}</h3>
                             <p class="text-4xl font-extrabold text-gray-900 mb-6">From ₹${provider.price}<span class="text-xl font-normal text-gray-500">/hr</span></p>
                           
                             <label for="service-package" class="block text-sm font-medium text-gray-700 mb-2">Select Service Package</label>
@@ -483,10 +539,10 @@
                     stepContent = `
                         <h4 class="text-2xl font-semibold mb-4 text-gray-800">1. Select Date & Time</h4>
                         <label for="booking-date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                        <input type="date" id="booking-date" value="${appState.currentBooking.date}" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500"/>
+                        <input type="date" id="booking-date" value="${appState.currentBooking.date}" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500" required/>
                       
                         <label for="booking-time" class="block text-sm font-medium text-gray-700 mb-1">Time Slot</label>
-                        <select id="booking-time" required class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">
+                        <select id="booking-time" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500" required>
                             <option value="">-- Select a Time Slot --</option>
                             <option value="9:00 AM">9:00 AM - 11:00 AM</option>
                             <option value="1:00 PM">1:00 PM - 3:00 PM</option>
@@ -499,7 +555,7 @@
                     stepContent = `
                         <h4 class="text-2xl font-semibold mb-4 text-gray-800">2. Enter Location & Details</h4>
                         <label for="booking-location" class="block text-sm font-medium text-gray-700 mb-1">Service Address (Flat No, Society/Area, Pincode)</label>
-                        <input type="text" id="booking-location" placeholder="A-402, Shiv Shanti Towers, 400001" value="${appState.currentBooking.location}" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500"/>
+                        <input type="text" id="booking-location" placeholder="A-402, Shiv Shanti Towers, 400001" value="${appState.currentBooking.location}" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500" required/>
                       
                         <label for="booking-instructions" class="block text-sm font-medium text-gray-700 mb-1">Special Instructions (e.g., gate code, dog warning)</label>
                         <textarea id="booking-instructions" rows="4" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">${appState.currentBooking.instructions}</textarea>
@@ -521,27 +577,27 @@
                         <!-- Order Summary -->
                         <div class="bg-gray-50 p-6 rounded-xl mb-6 border border-gray-200">
                             <h5 class="text-xl font-bold mb-3">Order Summary</h5>
-                            <p class="text-lg text-gray-800 mb-1">**Provider:** ${provider.name}</p>
-                            <p class="text-lg text-gray-800 mb-1">**Service:** ${appState.currentBooking.serviceName}</p>
-                            <p class="text-lg text-gray-800 mb-1">**When:** ${appState.currentBooking.date} at ${appState.currentBooking.time}</p>
-                            <p class="text-lg text-gray-800 mb-4">**Where:** ${appState.currentBooking.location}</p>
+                            <p class="text-lg text-gray-800 mb-1"><strong>Provider:</strong> ${provider.name}</p>
+                            <p class="text-lg text-gray-800 mb-1"><strong>Service:</strong> ${appState.currentBooking.serviceName}</p>
+                            <p class="text-lg text-gray-800 mb-1"><strong>When:</strong> ${appState.currentBooking.date} at ${appState.currentBooking.time}</p>
+                            <p class="text-lg text-gray-800 mb-4"><strong>Where:</strong> ${appState.currentBooking.location}</p>
                             <div class="border-t pt-3 space-y-1">
                                 <div class="flex justify-between text-gray-700"><span>Service Charge:</span><span>₹${price.toFixed(2)}</span></div>
                                 <div class="flex justify-between text-gray-700"><span>Taxes & GST (18%):</span><span>₹${taxes.toFixed(2)}</span></div>
-                                <div class="flex justify-between font-extrabold text-xl pt-2 border-t mt-2"><span>TOTAL DUE:</span><span class="text-blue-600">₹${total.toFixed(2)}</span></div>
+                                <div class="flex justify-between font-bold text-xl pt-2 border-t mt-2"><span>TOTAL DUE:</span><span class="text-blue-600">₹${total.toFixed(2)}</span></div>
                             </div>
                         </div>
                         <!-- Payment Option -->
                         <label for="payment-method" class="block text-sm font-medium text-gray-700 mb-2">Select Payment Method</label>
-                        <select id="payment-method" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500">
+                        <select id="payment-method" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500" required>
                             <option>Saved Card (UPI/Card)</option>
                             <option>Pay on Completion (COD)</option>
                             <option>New Payment Method</option>
                         </select>
                       
                         <div class="flex items-center mb-6">
-                            <input type="checkbox" id="policy-agree" required class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                            <label for="policy-agree" class="ml-2 text-sm text-gray-600">I agree to the <span class="text-blue-600 hover:underline cursor-pointer">cancellation policy</span> and terms.</label>
+                            <input type="checkbox" id="policy-agree" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" required>
+                            <label for="policy-agree" class="ml-2 text-sm text-gray-600">I agree to the <a href="#" class="text-blue-600 hover:underline">cancellation policy</a> and terms.</label>
                         </div>
                         <div class="flex space-x-4">
                             <button onclick="prevBookingStep()" class="flex-grow bg-gray-300 text-gray-800 py-3 rounded-lg font-bold hover:bg-gray-400 transition duration-300">Back</button>
@@ -584,8 +640,7 @@
                     <div class="flex justify-between items-center mb-8 relative">
                         ${stepTitles.map((title, index) => `
                             <div class="flex flex-col items-center z-10">
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white transition-all duration-300
-                                    ${index + 1 <= step ? 'bg-blue-600' : 'bg-gray-300'}">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${index + 1 <= step ? 'bg-blue-600' : 'bg-gray-300'}">
                                     ${index + 1}
                                 </div>
                                 <span class="text-xs mt-2 text-center hidden sm:block ${index + 1 === step ? 'text-blue-600 font-semibold' : 'text-gray-500'}">${title}</span>
@@ -593,7 +648,7 @@
                         `).join('')}
                         <!-- Connecting Line -->
                         <div class="absolute top-5 left-0 right-0 h-1 bg-gray-200 -z-0 mx-8">
-                            <div class="h-full bg-blue-600 transition-all duration-500" style="width: ${((step - 1) / (stepTitles.length - 1)) * 100}%"></div>
+                            <div class="h-full bg-blue-600" style="width: ${((step - 1) / (stepTitles.length - 1)) * 100}%"></div>
                         </div>
                     </div>
                     <!-- Step Content -->
@@ -637,7 +692,7 @@
             const renderBookingCard = (b) => `
                 <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center">
                     <div class="flex-grow mb-4 md:mb-0">
-                        <p class="text-xs font-semibold uppercase ${b.status === 'Confirmed' ? 'text-green-600' : 'text-yellow-600'} mb-1">${b.status}</p>
+                        <p class="text-xs font-semibold uppercase ${b.status === 'Confirmed' ? 'text-green-600' : b.status === 'Pending' ? 'text-yellow-600' : 'text-gray-600'} mb-1">${b.status}</p>
                         <h4 class="text-xl font-bold text-gray-800 mb-1">${b.serviceName}</h4>
                         <p class="text-gray-600 mb-2">with <span class="font-semibold text-blue-600">${b.providerName}</span></p>
                         <p class="text-gray-500 text-sm">${b.date} at ${b.time}</p>
@@ -697,7 +752,7 @@
             return `
                 <div class="max-w-4xl mx-auto space-y-12">
                     <header class="text-center">
-                        <h2 class="text-5xl font-extrabold text-gray-800 mb-4">What Our Customers Say</h2>
+                        <h2 class="text-5xl font-bold text-gray-800 mb-4">What Our Customers Say</h2>
                         <p class="text-xl text-gray-600">Real stories from happy customers across India.</p>
                     </header>
                     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -729,7 +784,7 @@
             return `
                 <div class="max-w-4xl mx-auto space-y-12">
                     <header class="text-center">
-                        <h2 class="text-5xl font-extrabold text-gray-800 mb-4">Our Commitment to India</h2>
+                        <h2 class="text-5xl font-bold text-gray-800 mb-4">Our Commitment to India</h2>
                         <p class="text-xl text-gray-600">Simplifying home and personal services across the nation.</p>
                     </header>
                     <section class="bg-white p-8 rounded-xl shadow-2xl border-l-4 border-blue-600">
@@ -798,7 +853,7 @@
             return `
                 <div class="max-w-4xl mx-auto space-y-10">
                     <header class="text-center">
-                        <h2 class="text-5xl font-extrabold text-gray-800 mb-4">How One Servc Works</h2>
+                        <h2 class="text-5xl font-bold text-gray-800 mb-4">How One Servc Works</h2>
                         <p class="text-xl text-gray-600">Booking home services has never been easier in India.</p>
                     </header>
                     <div class="relative flex flex-col items-center mb-12">
@@ -868,7 +923,7 @@
             return `
                 <div class="max-w-4xl mx-auto space-y-10">
                     <header class="text-center">
-                        <h2 class="text-5xl font-extrabold text-gray-800 mb-4">Help Center & FAQs</h2>
+                        <h2 class="text-5xl font-bold text-gray-800 mb-4">Help Center & FAQs</h2>
                         <p class="text-xl text-gray-600">Quick answers to your most common questions.</p>
                     </header>
                     <div class="space-y-4">
@@ -877,7 +932,7 @@
                                 <details class="group cursor-pointer">
                                     <summary class="flex justify-between items-center font-bold text-lg text-gray-800 focus:outline-none">
                                         <span>${faq.question}</span>
-                                        <svg class="w-5 h-5 ml-2 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        <svg class="w-5 h-5 ml-2 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </summary>
                                     <p class="pt-4 text-gray-700 border-t mt-4">${faq.answer}</p>
                                 </details>
@@ -938,15 +993,17 @@
             document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenu);
             // Initial Page Load
             navigateTo('home');
+            // Trigger location detection on page load (with permission prompt)
+            getVisitorLocation();
         });
         function toggleMobileMenu() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         }
         // --- Account Button ---
         // Quick navigation to dashboard for demonstration purposes
-        document.getElementById('auth-button').addEventListener('click', () => {
+        document.getElementById('auth-button').onclick = () => {
             navigateTo('dashboard');
-        });
+        };
     </script>
 </body>
 </html>
