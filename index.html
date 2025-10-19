@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, indian-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>One Servc - Professional Service Marketplace (India)</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,36 +25,41 @@
             background: #94a3b8;
         }
     </style>
-    <!-- Firebase SDK Imports (Mandatory inclusion for web apps, though data is mocked below) -->
+    <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        // Global variables provided by the environment
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const authToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        if (Object.keys(firebaseConfig).length > 0) {
-            window.firebaseApp = initializeApp(firebaseConfig);
-            window.db = getFirestore(window.firebaseApp);
-            window.auth = getAuth(window.firebaseApp);
-            // Authentication logic
-            async function initializeAuth() {
-                try {
-                    if (authToken) {
-                        await signInWithCustomToken(window.auth, authToken);
-                    } else {
-                        await signInAnonymously(window.auth);
-                    }
-                    console.log("Firebase initialized and user signed in. User ID:", window.auth.currentUser?.uid || 'Anonymous');
-                } catch (error) {
-                    console.error("Firebase Auth Error:", error);
-                }
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAOO9_ql_cl5r3pIT-ljWKMwIzeTAPHZiM",
+            authDomain: "oneserviice-cceb7.firebaseapp.com",
+            projectId: "oneserviice-cceb7",
+            storageBucket: "oneserviice-cceb7.firebasestorage.app",
+            messagingSenderId: "784214000337",
+            appId: "1:784214000337:web:0ace63723d190a2199fbf0",
+            measurementId: "G-SEYP1SPXYW"
+        };
+        window.firebaseApp = initializeApp(firebaseConfig);
+        window.db = getFirestore(window.firebaseApp);
+        window.auth = getAuth(window.firebaseApp);
+        // Auth State Listener
+        onAuthStateChanged(window.auth, (user) => {
+            if (user) {
+                appState.isLoggedIn = true;
+                appState.user = {
+                    uid: user.uid,
+                    name: user.displayName || user.email.split('@')[0],
+                    email: user.email,
+                    role: 'customer'
+                };
+                console.log("User signed in:", appState.user);
+            } else {
+                appState.isLoggedIn = false;
+                appState.user = null;
+                console.log("User signed out");
             }
-            initializeAuth();
-        } else {
-            console.warn("Firebase config not available. Running in mock data mode.");
-        }
+        });
     </script>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -67,10 +72,10 @@
                 <a href="#" class="hover:text-blue-600 transition duration-150" onclick="navigateTo('listings')">Services</a>
                 <a href="#" class="hover:text-blue-600 transition duration-150" onclick="navigateTo('howitworks')">How It Works</a>
                 <a href="#" class="hover:text-blue-600 transition duration-150" onclick="navigateTo('testimonials')">Testimonials</a>
-                <a href="#" class="hover:text-blue-600 transition duration-150" onclick="navigateTo('dashboard')">Dashboard</a>
+                <a href="#" class="hover:text-blue-600 transition duration-150" onclick="handleAuthClick()">Dashboard</a>
                 <a href="#" class="hover:text-blue-600 transition duration-150" onclick="navigateTo('about')">About Us</a>
                 <a href="#" class="hover:text-blue-600 transition duration-150" onclick="navigateTo('faq')">Help & FAQ</a>
-                <button id="auth-button" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">My Account</button>
+                <button id="auth-button" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150" onclick="handleAuthClick()">My Account</button>
             </div>
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100">
@@ -83,10 +88,10 @@
             <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="navigateTo('listings'); toggleMobileMenu()">Services</a>
             <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="navigateTo('howitworks'); toggleMobileMenu()">How It Works</a>
             <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="navigateTo('testimonials'); toggleMobileMenu()">Testimonials</a>
-            <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="navigateTo('dashboard'); toggleMobileMenu()">Dashboard</a>
+            <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="handleAuthClick(); toggleMobileMenu()">Dashboard</a>
             <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="navigateTo('about'); toggleMobileMenu()">About Us</a>
             <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="navigateTo('faq'); toggleMobileMenu()">Help & FAQ</a>
-            <button class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="toggleMobileMenu(); navigateTo('dashboard')">My Account</button>
+            <button class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="toggleMobileMenu(); handleAuthClick()">My Account</button>
         </div>
     </header>
     <!-- Main Content Area -->
@@ -167,7 +172,7 @@
         // --- Global State and Mock Data (Localized for India) ---
         // Global State Management
         let appState = {
-            isLoggedIn: true, // Mocked as logged in for dashboard access
+            isLoggedIn: false, // Now managed by Firebase Auth
             currentPage: 'home',
             currentProvider: null,
             currentBooking: {
@@ -179,10 +184,7 @@
                 location: '',
                 instructions: '',
             },
-            user: {
-                name: "Anjali Sharma",
-                role: 'customer' // 'customer'
-            }
+            user: null // Now populated by Firebase Auth
         };
         // Mock Service Categories
         const categories = [
@@ -221,10 +223,10 @@
         ];
         // Function to generate mock testimonials
         function generateMockTestimonials(count = 120) {
-            const firstNames = ['Ravi', 'Priya', 'Amit', 'Neha', 'Suresh', 'Lata', 'Vikram', 'Meera', 'Rajesh', 'Sunita', 'Karan', 'Anita', 'Arjun', 'Deepa', 'Vikas', 'Shalini', 'Rahul', 'Pooja', 'Sanjay', 'Ritu', 'Harshit', 'Rituraj', 'Suman', 'Anjali', 'Niharika', 'Kamran', 'Kamal', 'Karan', 'Kavya', 'Shruti', Yashika', 'Jasika', 'Nidhi', 'Sonal', 'Sonu', Vishal', 'Monu', 'Hemkant', 'Vijay', 'Mohan', 'Raju', 'Anubhav', 'MAdhu', 'Jyoti', 'Monika', 'Vandana', 'Shivani', 'Babita', 'Gaurav', 'Shweta', 'Abhishek', 'Alok', 'Anam' ,'Anisha', 'Amita', 'Ankit', 'Anushka', 'Avishi', 'Arman', 'Bhumika;, 'Bimal', 'Deepanjali', 'Dolly', 'Geeta', 'Janvi', 'Shivesh', 'Jiya', 'Kajal', 'Karishma', 'Khushi', 'Kishan', 'Lata', Krishangi', 'Lipika', 'Manisha', 'Manju', 'Manpreet', 'Mavi', 'Meenakshi', 'Mayukh', 'Nandini', 'Nayani', 'Neelam', ' Neha', 'Nikita', 'Omaira', 'Payal', 'Pradnya', 'Pratima', 'Prithvi', 'Priyanka', 'Raipriyotam', 'Rakhee', 'Reena', 'Rekha', 'Resham', 'Riya', 'Roshini', 'Ruchi', 'Sadiya', 'Sagar', 'Saloni', 'Sameer', 'Sandhya', 'Satyam', 'Sanjana', 'Shabnoor', 'Shaheen', 'Shilpi', 'Shivam', 'Shreyashree', 'Shyam', 'Smruti', 'Sneha', 'Sonali', 'Sonia', 'Soumya', 'Subhoshree', 'Sumit', 'Swati', 'Tanishka', 'Taniya', 'Vaishnavi', 'Vali', 'Vanshika', 'Vanshita', 'Vihaan', 'Yashi', 'Kirti', 'Razia', 'Heena', 'Kishan', 'Deepak', 'Ansh', 'Aaron', 'Devansh', 'Kushagra', 'Saksham', 'Yash', 'Prabhav', 'Yashaswee', 'Aadarsh', 'Sujal', 'Aadhi', 'Aadvik', 'Aakash', 'Aaryaman', 'Abhinav', 'Abhisth', 'Achyut', 'Aditya', 'Afzal', 'Ahtesham', 'Akansha', 'Aman', 'Ananya', 'Aniket', 'Amrit', 'Anushi', 'Arnav', 'Arpit', 'Ashish', 'Areeb', 'Bhavya', 'Chirag', 'Chirantan', 'Daksh', 'Deepanshu', 'Dhruv'];
-            const lastNames = ['Kumar', 'Singh', 'Patel', 'Reddy', 'Menon', 'Desai', 'Joshi', 'Nair', 'Gupta', 'Bose', 'Malhotra', 'Sharma', 'Verma', 'Yadav', 'Chopra', 'Das', 'Roy', 'Mishra', 'Agarwal', 'Goyal', 'Srivastav', 'Rani', 'Pardhan', 'Thakur', 'Rawat', 'Tiwari', 'Kasotiya', 'Tikoo', 'Raina', 'Jaiswal', 'Khanda', 'Kaur', 'Jangid', 'Kumar', 'Bhati', 'Raghib', 'Rana', 'Garg', 'Bidhuri', 'Tiwari', 'Jain', 'Bhatia', 'Baisla, 'Saha', 'Negi', 'Goyal', 'Rawat', 'Garg', 'Dahima', 'Chaudhary',  'Agarwal', 'Jha', 'Sharma', 'Khandelwal', 'Yadav', 'Gupta', 'Goel', 'Chaurasiya', 'Meena', 'Singh', 'Pant', '];
+            const firstNames = ['Ravi', 'Priya', 'Amit', 'Neha', 'Suresh', 'Lata', 'Vikram', 'Meera', 'Rajesh', 'Sunita', 'Karan', 'Anita', 'Arjun', 'Deepa', 'Vikas', 'Shalini', 'Rahul', 'Pooja', 'Sanjay', 'Ritu'];
+            const lastNames = ['Kumar', 'Singh', 'Patel', 'Reddy', 'Menon', 'Desai', 'Joshi', 'Nair', 'Gupta', 'Bose', 'Malhotra', 'Sharma', 'Verma', 'Yadav', 'Chopra', 'Das', 'Roy', 'Mishra', 'Agarwal', 'Khan'];
             const services = categories.map(c => c.name);
-            const locations = ['Rohini, Delhi', 'Shalimar bagh', 'Uttam Nagar', 'South Extension', 'Alaknanda', 'Govindpuri', 'Adarsh Nagar', 'Rohini', 'Model Town', 'Rohini'];
+            const locations = ['Rohini, Delhi', 'Mumbai', 'Bangalore', 'Chennai', 'Pune', 'Hyderabad', 'Kolkata', 'Ahmedabad', 'Jaipur', 'Lucknow'];
             const textTemplates = [
                 'Amazing service! Fixed everything quickly and efficiently.',
                 'Highly recommend! The professional was punctual and skilled.',
@@ -303,6 +305,56 @@
             }
             modalContainer.classList.remove('hidden');
         }
+        // Authentication Functions
+        window.signInUser = async () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            if (!email || !password) return showModal('Input Required', 'Please enter email and password.');
+            try {
+                await signInWithEmailAndPassword(window.auth, email, password);
+                navigateTo('dashboard');
+            } catch (error) {
+                showModal('Login Failed', error.message);
+            }
+        };
+        window.signUpUser = async () => {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            if (!name || !email || !password || !confirmPassword) return showModal('Input Required', 'Please fill all fields.');
+            if (password !== confirmPassword) return showModal('Error', 'Passwords do not match.');
+            try {
+                const userCredential = await createUserWithEmailAndPassword(window.auth, email, password);
+                await updateProfile(userCredential.user, { displayName: name });
+                navigateTo('dashboard');
+            } catch (error) {
+                showModal('Signup Failed', error.message);
+            }
+        };
+        window.signInAnonymouslyFunc = async () => {
+            try {
+                await signInAnonymously(window.auth);
+                navigateTo('home');
+            } catch (error) {
+                showModal('Error', error.message);
+            }
+        };
+        window.signOutUser = async () => {
+            try {
+                await signOut(window.auth);
+                navigateTo('home');
+            } catch (error) {
+                showModal('Error', error.message);
+            }
+        };
+        function handleAuthClick() {
+            if (appState.isLoggedIn) {
+                navigateTo('dashboard');
+            } else {
+                navigateTo('login');
+            }
+        }
         // --- Routing and View Rendering ---
         function navigateTo(page, data = {}) {
             appState.currentPage = page;
@@ -333,10 +385,24 @@
                     container.innerHTML = renderProviderProfile(appState.currentProvider);
                     break;
                 case 'booking':
+                    if (!appState.isLoggedIn) {
+                        showModal('Login Required', 'Please sign in to book a service.', () => navigateTo('login'));
+                        return;
+                    }
                     container.innerHTML = renderBookingSystem();
                     break;
                 case 'dashboard':
+                    if (!appState.isLoggedIn) {
+                        navigateTo('login');
+                        return;
+                    }
                     container.innerHTML = renderCustomerDashboard();
+                    break;
+                case 'login':
+                    container.innerHTML = renderLoginPage();
+                    break;
+                case 'signup':
+                    container.innerHTML = renderSignupPage();
                     break;
                 case 'about':
                     container.innerHTML = renderAboutPage();
@@ -358,6 +424,67 @@
             }
         }
         // --- Page Render Functions ---
+        function renderLoginPage() {
+            return `
+                <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Welcome Back</h2>
+                    <p class="text-center text-gray-600 mb-8">Sign in to your account</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="login-email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" id="login-email" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="login-password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                            <input type="password" id="login-password" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <button onclick="signInUser()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Sign In</button>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600">Don't have an account? <a href="#" onclick="navigateTo('signup'); return false;" class="text-blue-600 hover:underline">Sign up</a></p>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button onclick="signInAnonymouslyFunc()" class="text-blue-600 hover:underline text-sm">Continue as Guest</button>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <button onclick="navigateTo('home')" class="text-gray-600 hover:underline text-sm">Back to Home</button>
+                    </div>
+                </div>
+            `;
+        }
+        function renderSignupPage() {
+            return `
+                <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Create Account</h2>
+                    <p class="text-center text-gray-600 mb-8">Join One Servc today</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="signup-name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input type="text" id="signup-name" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="signup-email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" id="signup-email" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="signup-password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                            <input type="password" id="signup-password" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="signup-confirm-password" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                            <input type="password" id="signup-confirm-password" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <button onclick="signUpUser()" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition duration-300">Sign Up</button>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600">Already have an account? <a href="#" onclick="navigateTo('login'); return false;" class="text-blue-600 hover:underline">Sign in</a></p>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button onclick="navigateTo('home')" class="text-gray-600 hover:underline text-sm">Back to Home</button>
+                    </div>
+                </div>
+            `;
+        }
         function renderHomePage() {
             // Get 6 random testimonials for home page
             const randomTestimonials = [];
@@ -385,7 +512,7 @@
                     <div class="max-w-4xl mx-auto text-center">
                         <h2 class="text-4xl sm:text-5xl font-extrabold mb-4">Find Your Professional Service, Instantly.</h2>
                         <p class="text-xl mb-8 opacity-90">Vetted professionals for every home need, from plumbing to therapy, across India.</p>
-                     
+                    
                         <!-- Search Bar -->
                         <div class="bg-white p-2 rounded-full shadow-2xl flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                             <input type="text" placeholder="I need a service like 'Plumbing' or 'Haircut'..." class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400" />
@@ -435,19 +562,19 @@
                 </section>
             `;
         }
-     
+    
         function renderListingsPage(categoryId) {
             const filteredProviders = categoryId ? providers.filter(p => p.categoryId === categoryId) : providers;
             const categoryName = categoryId ? categories.find(c => c.id === categoryId).name : 'All Services';
             return `
                 <h2 class="text-4xl font-bold text-gray-800 mb-8">${categoryName} Listings</h2>
-             
+            
                 <div class="flex flex-col lg:flex-row gap-8">
-                 
+                
                     <!-- Filters Sidebar (Hidden on mobile by default) -->
                     <aside class="w-full lg:w-1/4 bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6 lg:mb-0">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800">Filters</h3>
-                     
+                    
                         <div class="space-y-4">
                             <!-- Location Filter -->
                             <div class="border-b pb-4">
@@ -516,10 +643,10 @@
             ];
             return `
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                 
+                
                     <!-- Main Profile Content -->
                     <div class="lg:col-span-2 space-y-8">
-                     
+                    
                         <!-- Header & Trust Banner -->
                         <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-600">
                             <div class="flex items-center space-x-6">
@@ -539,7 +666,7 @@
                         <div class="bg-white p-6 rounded-xl shadow-lg">
                             <h3 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">About the Provider</h3>
                             <p class="text-gray-700 mb-4">${provider.bio} We are committed to punctuality, quality workmanship, and transparent pricing.</p>
-                         
+                        
                             <h4 class="text-xl font-semibold mt-6 mb-3 text-gray-800">Services & Pricing</h4>
                             <ul class="list-disc list-inside space-y-2 text-gray-700">
                                 <li>**Standard Repair:** ₹${provider.price}/hr (1-hour minimum)</li>
@@ -570,7 +697,7 @@
                         <div class="sticky top-24 bg-white p-6 rounded-xl shadow-2xl border border-blue-200">
                             <h3 class="text-3xl font-extrabold text-blue-800 mb-4">Book ${provider.name}</h3>
                             <p class="text-4xl font-extrabold text-gray-900 mb-6">From ₹${provider.price}<span class="text-xl font-normal text-gray-500">/hr</span></p>
-                         
+                        
                             <label for="service-package" class="block text-sm font-medium text-gray-700 mb-2">Select Service Package</label>
                             <select id="service-package" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">
                                 <option value="Standard Repair - ${provider.price}/hr">Standard Repair - ₹${provider.price}/hr</option>
@@ -584,9 +711,13 @@
                 </div>
             `;
         }
-     
+    
         // Function to initiate the booking flow
         function startBooking(providerId, serviceName) {
+            if (!appState.isLoggedIn) {
+                showModal('Login Required', 'Please sign in to book a service.', () => navigateTo('login'));
+                return;
+            }
             appState.currentBooking = {
                 providerId: providerId,
                 serviceName: serviceName,
@@ -610,7 +741,7 @@
                         <h4 class="text-2xl font-semibold mb-4 text-gray-800">1. Select Date & Time</h4>
                         <label for="booking-date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
                         <input type="date" id="booking-date" value="${appState.currentBooking.date}" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500"/>
-                     
+                    
                         <label for="booking-time" class="block text-sm font-medium text-gray-700 mb-1">Time Slot</label>
                         <select id="booking-time" required class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">
                             <option value="">-- Select a Time Slot --</option>
@@ -626,10 +757,10 @@
                         <h4 class="text-2xl font-semibold mb-4 text-gray-800">2. Enter Location & Details</h4>
                         <label for="booking-location" class="block text-sm font-medium text-gray-700 mb-1">Service Address (Flat No, Society/Area, Pincode)</label>
                         <input type="text" id="booking-location" placeholder="A-402, Shiv Shanti Towers, 400001" value="${appState.currentBooking.location}" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500"/>
-                     
+                    
                         <label for="booking-instructions" class="block text-sm font-medium text-gray-700 mb-1">Special Instructions (e.g., gate code, dog warning)</label>
                         <textarea id="booking-instructions" rows="4" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">${appState.currentBooking.instructions}</textarea>
-                     
+                    
                         <div class="flex space-x-4">
                             <button onclick="prevBookingStep()" class="flex-grow bg-gray-300 text-gray-800 py-3 rounded-lg font-bold hover:bg-gray-400 transition duration-300">Back</button>
                             <button onclick="nextBookingStep()" class="flex-grow bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Next: Payment</button>
@@ -643,7 +774,7 @@
                     const total = price + taxes;
                     stepContent = `
                         <h4 class="text-2xl font-semibold mb-4 text-gray-800">3. Review & Payment</h4>
-                     
+                    
                         <!-- Order Summary -->
                         <div class="bg-gray-50 p-6 rounded-xl mb-6 border border-gray-200">
                             <h5 class="text-xl font-bold mb-3">Order Summary</h5>
@@ -664,7 +795,7 @@
                             <option>Pay on Completion (COD)</option>
                             <option>New Payment Method</option>
                         </select>
-                     
+                    
                         <div class="flex items-center mb-6">
                             <input type="checkbox" id="policy-agree" required class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                             <label for="policy-agree" class="ml-2 text-sm text-gray-600">I agree to the <span class="text-blue-600 hover:underline cursor-pointer">cancellation policy</span> and terms.</label>
@@ -693,7 +824,7 @@
                             <div class="text-6xl text-green-600 mb-4">🎉</div>
                             <h4 class="text-3xl font-bold text-green-800 mb-4">Booking Confirmed!</h4>
                             <p class="text-gray-700 text-lg mb-6">You will receive an SMS and email confirmation shortly.</p>
-                         
+                        
                             <p class="text-xl font-semibold mb-2">${newBooking.serviceName} with ${newBooking.providerName}</p>
                             <p class="text-lg text-gray-600 mb-8">${newBooking.date} at ${newBooking.time}</p>
                             <button onclick="navigateTo('dashboard')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Go to Dashboard</button>
@@ -705,7 +836,7 @@
             return `
                 <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
                     <h2 class="text-4xl font-bold text-gray-800 mb-8">Service Booking</h2>
-                 
+                
                     <!-- Progress Bar -->
                     <div class="flex justify-between items-center mb-8 relative">
                         ${stepTitles.map((title, index) => `
@@ -784,7 +915,10 @@
                 </div>
             `;
             return `
-                <h2 class="text-4xl font-bold text-gray-800 mb-8">Hello, ${appState.user.name.split(' ')[0]}!</h2>
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-4xl font-bold text-gray-800">Hello, ${appState.user.name.split(' ')[0]}!</h2>
+                    <button onclick="signOutUser()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">Sign Out</button>
+                </div>
                 <!-- Upcoming Bookings -->
                 <section class="mb-10">
                     <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Upcoming Services (${upcoming.length})</h3>
@@ -868,7 +1002,7 @@
                             Our platform is built with the Indian user in mind—supporting regional languages, UPI payments, and hyper-local service matching. Join thousands of satisfied customers who have transformed their homes and lives with One Servc.
                         </p>
                     </section>
-                 
+                
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                         <div class="bg-white p-6 rounded-xl shadow-lg border-t-2 border-green-500">
                             <span class="text-4xl block mb-3">🇮🇳</span>
@@ -938,11 +1072,11 @@
                                         <p class="text-gray-700">${step.detail}</p>
                                     </div>
                                 </div>
-                             
+                            
                                 <div class="hidden md:flex md:w-2/12 justify-center">
                                     <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-2xl font-bold shadow-xl border-4 border-white">${index + 1}</div>
                                 </div>
-                             
+                            
                                 <div class="md:w-5/12 ${index % 2 === 0 ? 'md:order-3' : ''}">
                                     <span class="text-5xl block mb-2 md:hidden">${step.icon}</span>
                                     <span class="hidden md:inline-block text-5xl">${step.icon}</span>
@@ -990,7 +1124,7 @@
                 { question: "What happens if the provider is late?", answer: "We guarantee on-time arrival or offer a discount. Track your pro in real-time via the app." },
                 { question: "How do I rate a service?", answer: "After completion, you'll receive a prompt to rate and review the provider in your dashboard." },
             ];
-         
+        
             return `
                 <div class="max-w-4xl mx-auto space-y-10">
                     <header class="text-center">
@@ -1068,11 +1202,6 @@
         function toggleMobileMenu() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         }
-        // --- Account Button ---
-        // Quick navigation to dashboard for demonstration purposes
-        document.getElementById('auth-button').addEventListener('click', () => {
-            navigateTo('dashboard');
-        });
     </script>
 </body>
 </html>
