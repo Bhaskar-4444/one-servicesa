@@ -25,6 +25,24 @@
             background: #94a3b8;
         }
     </style>
+    <!-- Define appState early -->
+    <script>
+        let appState = {
+            isLoggedIn: false,
+            currentPage: 'home',
+            currentProvider: null,
+            currentBooking: {
+                providerId: null,
+                serviceName: '',
+                step: 1,
+                date: '',
+                time: '',
+                location: '',
+                instructions: '',
+            },
+            user: null
+        };
+    </script>
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -43,23 +61,14 @@
         window.firebaseApp = initializeApp(firebaseConfig);
         window.db = getFirestore(window.firebaseApp);
         window.auth = getAuth(window.firebaseApp);
-        // Auth State Listener
-        onAuthStateChanged(window.auth, (user) => {
-            if (user) {
-                appState.isLoggedIn = true;
-                appState.user = {
-                    uid: user.uid,
-                    name: user.displayName || user.email.split('@')[0],
-                    email: user.email,
-                    role: 'customer'
-                };
-                console.log("User signed in:", appState.user);
-            } else {
-                appState.isLoggedIn = false;
-                appState.user = null;
-                console.log("User signed out");
-            }
-        });
+        // Expose auth functions to global window for use in non-module scripts
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.signOut = signOut;
+        window.updateProfile = updateProfile;
+        window.signInAnonymously = signInAnonymously;
+        window.onAuthStateChanged = onAuthStateChanged;
+        // Do not set up listener here; will be done in main script after appState is defined
     </script>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -169,23 +178,7 @@
         </div>
     </div>
     <script>
-        // --- Global State and Mock Data (Localized for India) ---
-        // Global State Management
-        let appState = {
-            isLoggedIn: false, // Now managed by Firebase Auth
-            currentPage: 'home',
-            currentProvider: null,
-            currentBooking: {
-                providerId: null,
-                serviceName: '',
-                step: 1,
-                date: '',
-                time: '',
-                location: '',
-                instructions: '',
-            },
-            user: null // Now populated by Firebase Auth
-        };
+        // --- Mock Data (Localized for India) ---
         // Mock Service Categories
         const categories = [
             { id: 'elec', name: 'Electrical Repair', icon: '⚡' },
@@ -311,7 +304,7 @@
             const password = document.getElementById('login-password').value;
             if (!email || !password) return showModal('Input Required', 'Please enter email and password.');
             try {
-                await signInWithEmailAndPassword(window.auth, email, password);
+                await window.signInWithEmailAndPassword(window.auth, email, password);
                 navigateTo('dashboard');
             } catch (error) {
                 showModal('Login Failed', error.message);
@@ -325,8 +318,8 @@
             if (!name || !email || !password || !confirmPassword) return showModal('Input Required', 'Please fill all fields.');
             if (password !== confirmPassword) return showModal('Error', 'Passwords do not match.');
             try {
-                const userCredential = await createUserWithEmailAndPassword(window.auth, email, password);
-                await updateProfile(userCredential.user, { displayName: name });
+                const userCredential = await window.createUserWithEmailAndPassword(window.auth, email, password);
+                await window.updateProfile(userCredential.user, { displayName: name });
                 navigateTo('dashboard');
             } catch (error) {
                 showModal('Signup Failed', error.message);
@@ -334,7 +327,7 @@
         };
         window.signInAnonymouslyFunc = async () => {
             try {
-                await signInAnonymously(window.auth);
+                await window.signInAnonymously(window.auth);
                 navigateTo('home');
             } catch (error) {
                 showModal('Error', error.message);
@@ -342,7 +335,7 @@
         };
         window.signOutUser = async () => {
             try {
-                await signOut(window.auth);
+                await window.signOut(window.auth);
                 navigateTo('home');
             } catch (error) {
                 showModal('Error', error.message);
@@ -354,6 +347,25 @@
             } else {
                 navigateTo('login');
             }
+        }
+        // Set up auth state listener now that appState is defined
+        if (window.onAuthStateChanged && window.auth) {
+            window.onAuthStateChanged(window.auth, (user) => {
+                if (user) {
+                    appState.isLoggedIn = true;
+                    appState.user = {
+                        uid: user.uid,
+                        name: user.displayName || user.email.split('@')[0],
+                        email: user.email,
+                        role: 'customer'
+                    };
+                    console.log("User signed in:", appState.user);
+                } else {
+                    appState.isLoggedIn = false;
+                    appState.user = null;
+                    console.log("User signed out");
+                }
+            });
         }
         // --- Routing and View Rendering ---
         function navigateTo(page, data = {}) {
