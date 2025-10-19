@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, indian-scale=1.0">
     <title>One Servc - Professional Service Marketplace (India)</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -91,64 +91,17 @@
     </header>
     <!-- Main Content Area -->
     <main id="app-container" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"></main>
-    <!-- Enhanced Footer -->
+    <!-- Footer -->
     <footer class="bg-gray-800 text-white mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                <!-- Company Info -->
-                <div class="md:col-span-2">
-                    <h3 class="text-2xl font-bold mb-4 text-blue-400">One Servc</h3>
-                    <p class="text-gray-300 mb-4">Connecting you with the best local professionals across India. From plumbing to therapy, we make home services simple, reliable, and affordable.</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-blue-400"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-blue-400"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-blue-400"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-blue-400"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <!-- Quick Links -->
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" onclick="navigateTo('home')" class="text-gray-300 hover:text-blue-400">Home</a></li>
-                        <li><a href="#" onclick="navigateTo('listings')" class="text-gray-300 hover:text-blue-400">Services</a></li>
-                        <li><a href="#" onclick="navigateTo('howitworks')" class="text-gray-300 hover:text-blue-400">How It Works</a></li>
-                        <li><a href="#" onclick="navigateTo('about')" class="text-gray-300 hover:text-blue-400">About Us</a></li>
-                    </ul>
-                </div>
-                <!-- Support -->
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Support</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" onclick="navigateTo('faq')" class="text-gray-300 hover:text-blue-400">Help & FAQ</a></li>
-                        <li><a href="#" onclick="navigateTo('contact')" class="text-gray-300 hover:text-blue-400">Contact Us</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-blue-400">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-blue-400">Terms of Service</a></li>
-                    </ul>
-                </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:flex md:justify-between md:items-center">
+            <div class="text-center md:text-left mb-4 md:mb-0">
+                <p>&copy; 2024 One Servc. All rights reserved.</p>
+                <p class="text-sm text-gray-400">Connecting you with the best local professionals across India.</p>
             </div>
-            <!-- Contact Info -->
-            <div class="border-t border-gray-700 pt-8 mb-8">
-                <h4 class="text-lg font-semibold mb-4">Get in Touch</h4>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-                    <div>
-                        <p class="text-gray-300 mb-2"><i class="fas fa-phone mr-2"></i> +91 22-1234-5678</p>
-                        <p class="text-gray-300"><i class="fas fa-envelope mr-2"></i> support@oneservc.in</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-300 mb-2"><i class="fas fa-map-marker-alt mr-2"></i> Mumbai, Maharashtra</p>
-                        <p class="text-gray-300">Serving 50+ cities across India</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-300 mb-2">Mon-Sun: 9AM - 9PM IST</p>
-                        <p class="text-gray-300">24/7 Emergency Support</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Copyright -->
-            <div class="text-center border-t border-gray-700 pt-6">
-                <p>&copy; 2025 One Servc. All rights reserved.</p>
-                <p class="text-sm text-gray-400 mt-2">Designed with ❤️ for Indian homes | GSTIN: 27AAFCU1234Q1Z5</p>
+            <div class="flex justify-center md:justify-end space-x-4">
+                <a href="#" class="text-gray-400 hover:text-blue-400 text-sm">Privacy Policy</a>
+                <a href="#" class="text-gray-400 hover:text-blue-400 text-sm">Terms of Service</a>
+                <a href="#" class="text-gray-400 hover:text-blue-400 text-sm" onclick="navigateTo('contact')">Contact Support</a>
             </div>
         </div>
     </footer>
@@ -219,21 +172,52 @@
             { id: 102, providerName: 'cleaning Services', serviceName: 'Deep House Cleaning', date: '2025-11-05', time: '02:00 PM', status: 'Pending', price: 2500, rating: null },
             { id: 103, providerName: 'Plumber service', serviceName: 'Faucet Installation', date: '2025-09-15', time: '09:00 AM', status: 'Completed', price: 850, rating: 4 },
         ];
-        // Mock Testimonials
-        const testimonials = [
-            { id: 1, name: 'Ravi Kumar', service: 'Electrical Repair', rating: 5, text: 'Electrician fixed our entire home wiring in just one day. Professional and affordable!', location: 'Rohini', date: '2025-09-10' },
-            { id: 2, name: 'Priya Singh', service: 'Deep House Cleaning', rating: 4.5, text: 'Team was thorough and left everything spotless. Will book again next month.', location: 'Rohini sec 15', date: '2025-08-25' },
-            { id: 3, name: 'Amit Patel', service: 'Plumbing & Leaks', rating: 5, text: 'Quick response and leak fixed without any mess. Highly recommend Jal Kalyan.', location: 'Delhi', date: '2025-10-05' },
-            { id: 4, name: 'Neha Reddy', service: 'Home Salon (Haircut)', rating: 4.8, text: 'Barber came on time and gave a perfect haircut at home. So convenient!', location: 'Delhi Rohini', date: '2025-09-20' },
-            { id: 5, name: 'Suresh Menon', service: 'Pest Control', rating: 5, text: 'Team eliminated the termites completely. No more worries!', location: 'Adarsh Nagar', date: '2025-07-15' },
-            { id: 6, name: 'Lata Desai', service: 'Carpentry & Assembly', rating: 4.7, text: 'One serviice Team assembled our new wardrobe perfectly. Skilled craftsmen.', location: 'Rohini sec-18', date: '2025-10-12' },
-            { id: 7, name: 'Vikram Joshi', service: 'Therapeutic Massage', rating: 5, text: 'Therapist was amazing. Felt relaxed after the session.', location: 'Delhi', date: '2025-08-30' },
-            { id: 8, name: 'Meera Nair', service: 'Counselling & Therapy', rating: 5, text: 'Services helped me manage stress effectively. Grateful!', location: 'Delhi', date: '2025-09-05' },
-            { id: 9, name: 'Rajesh Gupta', service: 'AC Repair & Service', rating: 4.9, text: 'Technician fixed our AC in no time during the heatwave. Great service!', location: 'Rohini Delhi', date: '2025-06-20' },
-            { id: 10, name: 'Sunita Bose', service: 'Painting Services', rating: 4.6, text: ' our living room with beautiful colors. Eco-friendly too!', location: 'Delhi Rohini', date: '2025-10-01' },
-            { id: 11, name: 'Karan Malhotra', service: 'Appliance Repair', rating: 5, text: 'Repaired our fridge efficiently. Back to normal in hours.', location: 'Delhi', date: '2025-07-28' },
-            { id: 12, name: 'Anita Sharma', service: 'Home Salon (Waxing)', rating: 4.8, text: 'Comfortable and professional waxing service at home. No salon hassle!', location: 'Delhi', date: '2025-09-15' },
-        ];
+        // Function to generate mock testimonials
+        function generateMockTestimonials(count = 120) {
+            const firstNames = ['Ravi', 'Priya', 'Amit', 'Neha', 'Suresh', 'Lata', 'Vikram', 'Meera', 'Rajesh', 'Sunita', 'Karan', 'Anita', 'Arjun', 'Deepa', 'Vikas', 'Shalini', 'Rahul', 'Pooja', 'Sanjay', 'Ritu'];
+            const lastNames = ['Kumar', 'Singh', 'Patel', 'Reddy', 'Menon', 'Desai', 'Joshi', 'Nair', 'Gupta', 'Bose', 'Malhotra', 'Sharma', 'Verma', 'Yadav', 'Chopra', 'Das', 'Roy', 'Mishra', 'Agarwal', 'Khan'];
+            const services = categories.map(c => c.name);
+            const locations = ['Rohini, Delhi', 'Mumbai', 'Bangalore', 'Chennai', 'Pune', 'Hyderabad', 'Kolkata', 'Ahmedabad', 'Jaipur', 'Lucknow'];
+            const textTemplates = [
+                'Amazing service! Fixed everything quickly and efficiently.',
+                'Highly recommend! The professional was punctual and skilled.',
+                'Great experience. Will book again soon.',
+                'Exceeded expectations. Clean and professional.',
+                'Very satisfied with the results. Thank you!',
+                'Prompt response and excellent work.',
+                'Made the process so easy. 5 stars!',
+                'Reliable and affordable. Perfect for home needs.',
+                'Thorough job done. No complaints.',
+                'Professional attitude and quality service.'
+            ];
+            const ratings = [4.5, 5.0, 4.0, 4.8, 4.9, 5.0, 4.7, 4.6, 5.0, 4.2];
+            const dates = [];
+            for (let i = 0; i < count; i++) {
+                const date = new Date(2024 + Math.floor(Math.random() * 2), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1);
+                dates.push(date.toISOString().split('T')[0]);
+            }
+            const testimonials = [];
+            for (let i = 0; i < count; i++) {
+                const name = `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+                const service = services[Math.floor(Math.random() * services.length)];
+                const rating = ratings[Math.floor(Math.random() * ratings.length)];
+                const text = `${textTemplates[Math.floor(Math.random() * textTemplates.length)]} Specifically for ${service.toLowerCase()}.`;
+                const location = locations[Math.floor(Math.random() * locations.length)];
+                const date = dates[i];
+                testimonials.push({
+                    id: i + 1,
+                    name: name,
+                    service: service,
+                    rating: rating,
+                    text: text,
+                    location: location,
+                    date: date
+                });
+            }
+            return testimonials;
+        }
+        // Mock Testimonials - Generate 120 random reviews
+        const testimonials = generateMockTestimonials(120);
         // --- Utility Functions ---
         // Simple star rating HTML generator
         function getRatingStars(rating) {
@@ -328,6 +312,26 @@
         }
         // --- Page Render Functions ---
         function renderHomePage() {
+            // Get 6 random testimonials for home page
+            const randomTestimonials = [];
+            const shuffled = [...testimonials].sort(() => 0.5 - Math.random());
+            for (let i = 0; i < 6; i++) {
+                randomTestimonials.push(shuffled[i]);
+            }
+            const homeReviewsHtml = randomTestimonials.map(t => `
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <span class="text-yellow-400 text-lg mr-2">${getRatingStars(t.rating)}</span>
+                        <span class="text-sm text-gray-500 ml-auto">${t.location}</span>
+                    </div>
+                    <p class="text-gray-700 mb-4 italic">"${t.text}"</p>
+                    <div class="flex items-center">
+                        <h4 class="font-bold text-gray-800">${t.name}</h4>
+                        <p class="text-sm text-gray-500 ml-2">${t.service}</p>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2">${t.date}</p>
+                </div>
+            `).join('');
             return `
                 <!-- Hero Banner -->
                 <section class="bg-blue-700 text-white rounded-xl p-8 md:p-16 mb-12 shadow-xl">
@@ -370,6 +374,16 @@
                             <h4 class="text-4xl font-extrabold text-blue-600 mb-2">5</h4>
                             <p class="text-gray-600">Cities Covered</p>
                         </div>
+                    </div>
+                </section>
+                <!-- Reviews Section on Home -->
+                <section class="mb-12">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-3xl font-bold text-gray-800">Customer Reviews</h3>
+                        <button onclick="navigateTo('testimonials')" class="text-blue-600 hover:underline font-semibold">See All Reviews</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${homeReviewsHtml}
                     </div>
                 </section>
             `;
@@ -760,12 +774,12 @@
         }
         function renderTestimonialsPage() {
             return `
-                <div class="max-w-4xl mx-auto space-y-12">
+                <div class="max-w-7xl mx-auto space-y-12">
                     <header class="text-center">
                         <h2 class="text-5xl font-extrabold text-gray-800 mb-4">What Our Customers Say</h2>
-                        <p class="text-xl text-gray-600">Real stories from happy customers across India.</p>
+                        <p class="text-xl text-gray-600 mb-4">Real stories from happy customers across India. (${testimonials.length} total reviews)</p>
                     </header>
-                    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         ${testimonials.map(t => `
                             <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                                 <div class="flex items-center mb-4">
@@ -782,8 +796,8 @@
                         `).join('')}
                     </section>
                     <div class="text-center">
-                        <button onclick="navigateTo('listings')" class="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition duration-300 shadow-lg">
-                            Find Your Service
+                        <button onclick="navigateTo('home')" class="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition duration-300 shadow-lg">
+                            Back to Home
                         </button>
                     </div>
                 </div>
