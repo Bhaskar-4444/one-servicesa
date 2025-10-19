@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>One Servc - Professional Service Marketplace (India)</title>
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Use Inter font family -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
         body {
@@ -25,29 +24,12 @@
             background: #94a3b8;
         }
     </style>
-    <!-- Define appState early -->
-    <script>
-        let appState = {
-            isLoggedIn: false,
-            currentPage: 'home',
-            currentProvider: null,
-            currentBooking: {
-                providerId: null,
-                serviceName: '',
-                step: 1,
-                date: '',
-                time: '',
-                location: '',
-                instructions: '',
-            },
-            user: null
-        };
-    </script>
-    <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        // Import all required auth functions
         import { getAuth, signInAnonymously, signInWithCustomToken, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAOO9_ql_cl5r3pIT-ljWKMwIzeTAPHZiM",
@@ -58,21 +40,40 @@
             appId: "1:784214000337:web:0ace63723d190a2199fbf0",
             measurementId: "G-SEYP1SPXYW"
         };
+        
         window.firebaseApp = initializeApp(firebaseConfig);
         window.db = getFirestore(window.firebaseApp);
         window.auth = getAuth(window.firebaseApp);
-        // Expose auth functions to global window for use in non-module scripts
-        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+
+        // 🔥 FIX: Expose necessary Firebase auth functions to the global window object.
+        // This resolves the "not defined" error in the globally scoped functions below.
         window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-        window.signOut = signOut;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
         window.updateProfile = updateProfile;
+        window.signOut = signOut;
         window.signInAnonymously = signInAnonymously;
-        window.onAuthStateChanged = onAuthStateChanged;
-        // Do not set up listener here; will be done in main script after appState is defined
+        // 🔥 END FIX
+
+        // Auth State Listener
+        onAuthStateChanged(window.auth, (user) => {
+            if (user) {
+                appState.isLoggedIn = true;
+                appState.user = {
+                    uid: user.uid,
+                    name: user.displayName || user.email.split('@')[0],
+                    email: user.email,
+                    role: 'customer'
+                };
+                console.log("User signed in:", appState.user);
+            } else {
+                appState.isLoggedIn = false;
+                appState.user = null;
+                console.log("User signed out");
+            }
+        });
     </script>
 </head>
 <body class="min-h-screen flex flex-col">
-    <!-- Navigation Bar -->
     <header class="bg-white shadow-md sticky top-0 z-40">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <h1 class="text-3xl font-extrabold text-blue-600">One Servc</h1>
@@ -86,12 +87,10 @@
                 <a href="#" class="hover:text-blue-600 transition duration-150" onclick="navigateTo('faq')">Help & FAQ</a>
                 <button id="auth-button" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150" onclick="handleAuthClick()">My Account</button>
             </div>
-            <!-- Mobile Menu Button -->
             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </nav>
-        <!-- Mobile Menu (Hidden by default) -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
             <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="navigateTo('home'); toggleMobileMenu()">Home</a>
             <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="navigateTo('listings'); toggleMobileMenu()">Services</a>
@@ -103,13 +102,10 @@
             <button class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50" onclick="toggleMobileMenu(); handleAuthClick()">My Account</button>
         </div>
     </header>
-    <!-- Main Content Area -->
     <main id="app-container" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"></main>
-     <!-- Enhanced Footer -->
-    <footer class="bg-gray-800 text-white mt-12">
+     <footer class="bg-gray-800 text-white mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                <!-- Company Info -->
                 <div class="md:col-span-2">
                     <h3 class="text-2xl font-bold mb-4 text-blue-400">One Servc</h3>
                     <p class="text-gray-300 mb-4">Connecting you with the best local professionals across India. From plumbing to therapy, we make home services simple, reliable, and affordable.</p>
@@ -120,7 +116,6 @@
                         <a href="#" class="text-gray-400 hover:text-blue-400"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
-                <!-- Quick Links -->
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-sm">
@@ -130,7 +125,6 @@
                         <li><a href="#" onclick="navigateTo('about')" class="text-gray-300 hover:text-blue-400">About Us</a></li>
                     </ul>
                 </div>
-                <!-- Support -->
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Support</h4>
                     <ul class="space-y-2 text-sm">
@@ -141,7 +135,6 @@
                     </ul>
                 </div>
             </div>
-            <!-- Contact Info -->
             <div class="border-t border-gray-700 pt-8 mb-8">
                 <h4 class="text-lg font-semibold mb-4">Get in Touch</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
@@ -159,14 +152,12 @@
                     </div>
                 </div>
             </div>
-            <!-- Copyright -->
             <div class="text-center border-t border-gray-700 pt-6">
                 <p>&copy; 2025 One Servc. All rights reserved.</p>
                 <p class="text-sm text-gray-400 mt-2">Designed with ❤️ for Indian homes | GSTIN: 27AAFCU1234Q1Z5</p>
             </div>
         </div>
     </footer>
-    <!-- Global Modal/Message Box (for alerts) -->
     <div id="modal-container" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div id="modal-content" class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full">
             <h3 id="modal-title" class="text-xl font-semibold mb-3 text-gray-900"></h3>
@@ -178,7 +169,23 @@
         </div>
     </div>
     <script>
-        // --- Mock Data (Localized for India) ---
+        // --- Global State and Mock Data (Localized for India) ---
+        // Global State Management
+        let appState = {
+            isLoggedIn: false, // Now managed by Firebase Auth
+            currentPage: 'home',
+            currentProvider: null,
+            currentBooking: {
+                providerId: null,
+                serviceName: '',
+                step: 1,
+                date: '',
+                time: '',
+                location: '',
+                instructions: '',
+            },
+            user: null // Now populated by Firebase Auth
+        };
         // Mock Service Categories
         const categories = [
             { id: 'elec', name: 'Electrical Repair', icon: '⚡' },
@@ -304,6 +311,7 @@
             const password = document.getElementById('login-password').value;
             if (!email || !password) return showModal('Input Required', 'Please enter email and password.');
             try {
+                // 🔥 FIX: Use the globally exposed function (window.signInWithEmailAndPassword)
                 await window.signInWithEmailAndPassword(window.auth, email, password);
                 navigateTo('dashboard');
             } catch (error) {
@@ -318,7 +326,9 @@
             if (!name || !email || !password || !confirmPassword) return showModal('Input Required', 'Please fill all fields.');
             if (password !== confirmPassword) return showModal('Error', 'Passwords do not match.');
             try {
+                // 🔥 FIX: Use the globally exposed function (window.createUserWithEmailAndPassword)
                 const userCredential = await window.createUserWithEmailAndPassword(window.auth, email, password);
+                // 🔥 FIX: Use the globally exposed function (window.updateProfile)
                 await window.updateProfile(userCredential.user, { displayName: name });
                 navigateTo('dashboard');
             } catch (error) {
@@ -327,6 +337,7 @@
         };
         window.signInAnonymouslyFunc = async () => {
             try {
+                // 🔥 FIX: Use the globally exposed function (window.signInAnonymously)
                 await window.signInAnonymously(window.auth);
                 navigateTo('home');
             } catch (error) {
@@ -335,6 +346,7 @@
         };
         window.signOutUser = async () => {
             try {
+                // 🔥 FIX: Use the globally exposed function (window.signOut)
                 await window.signOut(window.auth);
                 navigateTo('home');
             } catch (error) {
@@ -347,25 +359,6 @@
             } else {
                 navigateTo('login');
             }
-        }
-        // Set up auth state listener now that appState is defined
-        if (window.onAuthStateChanged && window.auth) {
-            window.onAuthStateChanged(window.auth, (user) => {
-                if (user) {
-                    appState.isLoggedIn = true;
-                    appState.user = {
-                        uid: user.uid,
-                        name: user.displayName || user.email.split('@')[0],
-                        email: user.email,
-                        role: 'customer'
-                    };
-                    console.log("User signed in:", appState.user);
-                } else {
-                    appState.isLoggedIn = false;
-                    appState.user = null;
-                    console.log("User signed out");
-                }
-            });
         }
         // --- Routing and View Rendering ---
         function navigateTo(page, data = {}) {
@@ -519,13 +512,11 @@
                 </div>
             `).join('');
             return `
-                <!-- Hero Banner -->
                 <section class="bg-blue-700 text-white rounded-xl p-8 md:p-16 mb-12 shadow-xl">
                     <div class="max-w-4xl mx-auto text-center">
                         <h2 class="text-4xl sm:text-5xl font-extrabold mb-4">Find Your Professional Service, Instantly.</h2>
                         <p class="text-xl mb-8 opacity-90">Vetted professionals for every home need, from plumbing to therapy, across India.</p>
                     
-                        <!-- Search Bar -->
                         <div class="bg-white p-2 rounded-full shadow-2xl flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                             <input type="text" placeholder="I need a service like 'Plumbing' or 'Haircut'..." class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400" />
                             <input type="text" placeholder="Enter Location / Pincode" class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 sm:max-w-xs" />
@@ -533,7 +524,6 @@
                         </div>
                     </div>
                 </section>
-                <!-- Categories Section -->
                 <section class="mb-12">
                     <h3 class="text-3xl font-bold text-gray-800 mb-6">Browse by Category</h3>
                     <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-12 gap-4">
@@ -545,7 +535,6 @@
                         `).join('')}
                     </div>
                 </section>
-                <!-- Quick Stats Section -->
                 <section class="mb-12">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                         <div class="bg-white p-8 rounded-xl shadow-lg">
@@ -562,7 +551,6 @@
                         </div>
                     </div>
                 </section>
-                <!-- Reviews Section on Home -->
                 <section class="mb-12">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-3xl font-bold text-gray-800">Customer Reviews</h3>
@@ -583,12 +571,10 @@
             
                 <div class="flex flex-col lg:flex-row gap-8">
                 
-                    <!-- Filters Sidebar (Hidden on mobile by default) -->
                     <aside class="w-full lg:w-1/4 bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6 lg:mb-0">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800">Filters</h3>
                     
                         <div class="space-y-4">
-                            <!-- Location Filter -->
                             <div class="border-b pb-4">
                                 <p class="font-medium text-gray-700 mb-2">City</p>
                                 <select class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
@@ -598,7 +584,6 @@
                                     <option>Chennai, Tamil Nadu</option>
                                 </select>
                             </div>
-                            <!-- Rating Filter -->
                             <div class="border-b pb-4">
                                 <p class="font-medium text-gray-700 mb-2">Minimum Rating</p>
                                 <div class="flex items-center space-x-2">
@@ -610,7 +595,6 @@
                                     <label for="rating-5" class="text-gray-700">5 Stars Only</label>
                                 </div>
                             </div>
-                            <!-- Price Range Filter -->
                             <div>
                                 <p class="font-medium text-gray-700 mb-2">Price Range (Hourly)</p>
                                 <input type="range" min="300" max="1500" value="1500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg">
@@ -618,7 +602,6 @@
                             </div>
                         </div>
                     </aside>
-                    <!-- Listings Content -->
                     <div class="w-full lg:w-3/4 space-y-6">
                         ${filteredProviders.length > 0 ? filteredProviders.map(p => `
                             <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between border border-gray-100">
@@ -656,10 +639,8 @@
             return `
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 
-                    <!-- Main Profile Content -->
                     <div class="lg:col-span-2 space-y-8">
                     
-                        <!-- Header & Trust Banner -->
                         <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-600">
                             <div class="flex items-center space-x-6">
                                 <img src="https://placehold.co/100x100/3b82f6/ffffff?text=${provider.name.charAt(0)}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/3b82f6/ffffff?text=P';" class="w-24 h-24 rounded-full object-cover shadow-md">
@@ -674,10 +655,9 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Details and Bio -->
                         <div class="bg-white p-6 rounded-xl shadow-lg">
                             <h3 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">About the Provider</h3>
-                            <p class="text-gray-700 mb-4">${provider.bio} We are committed to punctuality, quality workmanship, and transparent pricing.</p>
+                            <p class="text-gray-700 leading-relaxed mb-4">${provider.bio} We are committed to punctuality, quality workmanship, and transparent pricing.</p>
                         
                             <h4 class="text-xl font-semibold mt-6 mb-3 text-gray-800">Services & Pricing</h4>
                             <ul class="list-disc list-inside space-y-2 text-gray-700">
@@ -686,7 +666,6 @@
                                 <li>**Emergency Call-out:** ₹800 flat fee + hourly rate</li>
                             </ul>
                         </div>
-                        <!-- Reviews Section -->
                         <div class="bg-white p-6 rounded-xl shadow-lg">
                             <h3 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">Customer Reviews (${provider.reviews})</h3>
                             <div class="space-y-4">
@@ -704,7 +683,6 @@
                             <button class="mt-4 text-blue-600 hover:underline font-medium">Read All ${provider.reviews} Reviews</button>
                         </div>
                     </div>
-                    <!-- Sticky Booking Widget -->
                     <div class="lg:col-span-1">
                         <div class="sticky top-24 bg-white p-6 rounded-xl shadow-2xl border border-blue-200">
                             <h3 class="text-3xl font-extrabold text-blue-800 mb-4">Book ${provider.name}</h3>
@@ -787,7 +765,6 @@
                     stepContent = `
                         <h4 class="text-2xl font-semibold mb-4 text-gray-800">3. Review & Payment</h4>
                     
-                        <!-- Order Summary -->
                         <div class="bg-gray-50 p-6 rounded-xl mb-6 border border-gray-200">
                             <h5 class="text-xl font-bold mb-3">Order Summary</h5>
                             <p class="text-lg text-gray-800 mb-1">**Provider:** ${provider.name}</p>
@@ -800,7 +777,6 @@
                                 <div class="flex justify-between font-extrabold text-xl pt-2 border-t mt-2"><span>TOTAL DUE:</span><span class="text-blue-600">₹${total.toFixed(2)}</span></div>
                             </div>
                         </div>
-                        <!-- Payment Option -->
                         <label for="payment-method" class="block text-sm font-medium text-gray-700 mb-2">Select Payment Method</label>
                         <select id="payment-method" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500">
                             <option>Saved Card (UPI/Card)</option>
@@ -849,7 +825,6 @@
                 <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
                     <h2 class="text-4xl font-bold text-gray-800 mb-8">Service Booking</h2>
                 
-                    <!-- Progress Bar -->
                     <div class="flex justify-between items-center mb-8 relative">
                         ${stepTitles.map((title, index) => `
                             <div class="flex flex-col items-center z-10">
@@ -860,12 +835,10 @@
                                 <span class="text-xs mt-2 text-center hidden sm:block ${index + 1 === step ? 'text-blue-600 font-semibold' : 'text-gray-500'}">${title}</span>
                             </div>
                         `).join('')}
-                        <!-- Connecting Line -->
                         <div class="absolute top-5 left-0 right-0 h-1 bg-gray-200 -z-0 mx-8">
                             <div class="h-full bg-blue-600 transition-all duration-500" style="width: ${((step - 1) / (stepTitles.length - 1)) * 100}%"></div>
                         </div>
                     </div>
-                    <!-- Step Content -->
                     <div class="mt-8">
                         ${stepContent}
                     </div>
@@ -931,21 +904,18 @@
                     <h2 class="text-4xl font-bold text-gray-800">Hello, ${appState.user.name.split(' ')[0]}!</h2>
                     <button onclick="signOutUser()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">Sign Out</button>
                 </div>
-                <!-- Upcoming Bookings -->
                 <section class="mb-10">
                     <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Upcoming Services (${upcoming.length})</h3>
                     <div class="space-y-4">
                         ${upcoming.length > 0 ? upcoming.map(renderBookingCard).join('') : '<p class="text-gray-500 p-4 bg-white rounded-xl">You have no upcoming bookings.</p>'}
                     </div>
                 </section>
-                <!-- Past Bookings -->
                 <section class="mb-10">
                     <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Past Services (${past.length})</h3>
                     <div class="space-y-4">
                         ${past.length > 0 ? past.map(renderBookingCard).join('') : '<p class="text-gray-500 p-4 bg-white rounded-xl">No completed services yet.</p>'}
                     </div>
                 </section>
-                <!-- Recent Activity or Tips Section -->
                 <section>
                     <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Service Tips</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1074,7 +1044,6 @@
                         <p class="text-xl text-gray-600">Booking home services has never been easier in India.</p>
                     </header>
                     <div class="relative flex flex-col items-center mb-12">
-                        <!-- Vertical Line/Timeline -->
                         <div class="hidden md:block absolute h-full w-1 bg-blue-200 left-1/2 transform -translate-x-1/2 top-0 bottom-0"></div>
                         ${steps.map((step, index) => `
                             <div class="w-full md:flex md:justify-center items-center py-6">
