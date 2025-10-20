@@ -138,16 +138,16 @@
  },
  user: null
  };
- // Mock Service Categories
+ // Mock Service Categories - Updated with real image URLs from Pexels (free stock photos)
  const categories = [
- { id: 'elec', name: 'Appliance & Electrical Repair', icon: '⚡' },
- { id: 'plumb', name: 'Plumbing & Leaks', icon: '💧' },
- { id: 'hair', name: 'Home Salon (Haircut)& Massage', icon: '💇' },
- { id: 'clean', name: 'Deep House Cleaning', icon: '🧼' },
- { id: 'pest', name: 'Pest Control', icon: '🐜' },
- { id: 'carp', name: 'Carpentry & Assembly', icon: '🔨' },
- { id: 'ac', name: 'AC Repair & Service', icon: '❄️' },
- { id: 'paint', name: 'House Painting', icon: '🎨' },
+ { id: 'elec', name: 'Appliance & Electrical Repair', image: 'https://images.pexels.com/photos/247371/pexels-photo-247371.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop' },
+ { id: 'plumb', name: 'Plumbing & Leaks', image: 'https://images.pexels.com/photos/1595391/pexels-photo-1595391.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop' },
+ { id: 'hair', name: 'Home Salon (Haircut) & Massage', image: 'https://images.pexels.com/photos/774910/pexels-photo-774910.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop' },
+ { id: 'clean', name: 'Deep House Cleaning', image: 'https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop' },
+ { id: 'pest', name: 'Pest Control', image: 'https://images.pexels.com/photos/247851/pexels-photo-247851.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop' },
+ { id: 'carp', name: 'Carpentry & Assembly', image: 'https://images.pexels.com/photos/247598/pexels-photo-247598.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop' },
+ { id: 'ac', name: 'AC Repair & Service', image: 'https://images.pexels.com/photos/247375/pexels-photo-247375.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop' },
+ { id: 'paint', name: 'House Painting', image: 'https://images.pexels.com/photos/1591060/pexels-photo-1591060.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop' },
  ];
  // Mock Service Providers with Indian names and realistic Indian pricing
  const providers = [
@@ -513,12 +513,12 @@
  </div>
  </section>
  <section class="mb-12">
- <h3 class="text-3xl font-bold text-gray-800 mb-6">Browse by Category</h3>
- <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-12 gap-4">
+ <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">Browse by Category</h3>
+ <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
  ${categories.map(c => `
- <div onclick="navigateTo('listings', {categoryId: '${c.id}'})" class="text-center p-4 bg-white rounded-xl shadow-md hover:shadow-lg hover:border-blue-500 border border-gray-100 transition duration-300 cursor-pointer">
- <div class="text-3xl mb-2">${c.icon}</div>
- <p class="text-sm font-medium text-gray-700">${c.name}</p>
+ <div onclick="navigateTo('listings', {categoryId: '${c.id}'})" class="bg-white p-4 rounded-xl shadow-md hover:shadow-xl hover:border-blue-500 transition-all duration-300 cursor-pointer border border-gray-100 text-center group">
+ <img src="${c.image}" alt="${c.name}" class="w-20 h-20 object-cover rounded-lg mb-3 mx-auto group-hover:scale-105 transition-transform duration-300">
+ <p class="text-sm font-semibold text-gray-700 group-hover:text-blue-600">${c.name}</p>
  </div>
  `).join('')}
  </div>
