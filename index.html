@@ -152,8 +152,8 @@
  <p class="text-gray-300"><i class="fas fa-envelope mr-2"></i> support@oneservc.in</p>
  </div>
  <div>
- <p class="text-gray-300 mb-2"><i class="fas fa-map-marker-alt mr-2"></i> Mumbai, Maharashtra</p>
- <p class="text-gray-300">Serving 50+ cities across India</p>
+ <p class="text-gray-300 mb-2"><i class="fas fa-map-marker-alt mr-2"></i> New delhi, delhi</p>
+ <p class="text-gray-300">Serving 5+ cities across India</p>
  </div>
  <div>
  <p class="text-gray-300 mb-2">Mon-Sun: 9AM - 9PM IST</p>
@@ -197,38 +197,25 @@
  };
  // Mock Service Categories
  const categories = [
- { id: 'elec', name: 'Electrical Repair', icon: '⚡' },
+ { id: 'elec', name: 'Appliance & Electrical Repair', icon: '⚡' },
  { id: 'plumb', name: 'Plumbing & Leaks', icon: '💧' },
- { id: 'hair', name: 'Home Salon (Haircut)', icon: '💇' },
+ { id: 'hair', name: 'Home Salon (Haircut)& Massage', icon: '💇' },
  { id: 'clean', name: 'Deep House Cleaning', icon: '🧼' },
  { id: 'pest', name: 'Pest Control', icon: '🐜' },
  { id: 'carp', name: 'Carpentry & Assembly', icon: '🔨' },
- { id: 'wax', name: 'Home Salon (Waxing)', icon: '🧖‍♀️' },
- { id: 'pain', name: 'Therapeutic Massage', icon: '⚕️' },
- { id: 'stress', name: 'Counselling & Therapy', icon: '🧘' },
  { id: 'ac', name: 'AC Repair & Service', icon: '❄️' },
- { id: 'paint', name: 'Painting Services', icon: '🎨' },
- { id: 'app', name: 'Appliance Repair', icon: '🔌' },
+ { id: 'paint', name: 'House Painting', icon: '🎨' },
  ];
  // Mock Service Providers with Indian names and realistic Indian pricing
  const providers = [
- { id: 1, name: 'Electrical services', categoryId: 'elec', rating: 4.9, price: 80, reviews: 100, bio: 'Certified electricians specializing in residential wiring and fault diagnostics across Mumbai and Pune.' },
- { id: 2, name: 'Plumber service', categoryId: 'plumb', rating: 4.7, price: 80, reviews: 80, bio: 'Fast, reliable plumbing service for leaks, clogs, and installations. 10 years experience.' },
- { id: 3, name: 'Haircut', categoryId: 'hair', rating: 5.0, price: 80, reviews: 62, bio: 'Modern and classic haircuts for men and women. Home service available in Rohini Delhi.' },
- { id: 4, name: 'Cleaning Services', categoryId: 'clean', rating: 4.5, price: 80, reviews: 32, bio: 'Eco-friendly house cleaning services. Weekly, bi-weekly, or deep cleaning options.' },
+ { id: 1, name: 'Appliance & Electrical Repair', categoryId: 'elec', rating: 4.9, price: 80, reviews: 100, bio: 'Certified electricians specializing in residential wiring and fault diagnostics across New Delhi and Delhi .' },
+ { id: 2, name: 'Plumbing & Leaks', categoryId: 'plumb', rating: 4.7, price: 80, reviews: 80, bio: 'Fast, reliable plumbing service for leaks, clogs, and installations. 10 years experience.' },
+ { id: 3, name: 'Home Salon (Haircut) & Massage', categoryId: 'hair', rating: 5.0, price: 80, reviews: 62, bio: 'Modern and classic haircuts for men and women. Home service available in Rohini Delhi.' },
+ { id: 4, name: 'Deep House Cleaning', categoryId: 'clean', rating: 4.5, price: 80, reviews: 32, bio: 'Eco-friendly house cleaning services. Weekly, bi-weekly, or deep cleaning options.' },
  { id: 5, name: 'Pests control', categoryId: 'pest', rating: 4.8, price: 80, reviews: 15, bio: 'Residential and commercial pest control. Guaranteed removal of all common pests.' },
- { id: 6, name: 'Carpenter service', categoryId: 'carp', rating: 4.6, price: 80, reviews: 50, bio: 'Custom carpentry, repairs, and furniture assembly. Serving Delhi Rohini.' },
- { id: 7, name: 'Therapy', categoryId: 'pain', rating: 4.9, price: 80, reviews: 78, bio: 'Certified therapist offering deep tissue and sports massage for pain relief.' },
- { id: 8, name: 'Telief therapy ', categoryId: 'stress', rating: 5.0, price: 80, reviews: 44, bio: 'Licensed therapist providing guided meditation and stress relief coaching.' },
- { id: 9, name: 'AC Experts', categoryId: 'ac', rating: 4.8, price: 80, reviews: 100, bio: 'Specialized AC installation, repair, and maintenance in major cities.' },
- { id: 10, name: 'Painting service', categoryId: 'paint', rating: 4.7, price: 80, reviews: 10, bio: 'Professional interior and exterior painting with paints.' },
- { id: 11, name: 'General mechanics', categoryId: 'app', rating: 4.9, price: 80, reviews: 300, bio: 'Repair of washing machines, refrigerators, and microwaves at home.' },
- ];
- // Mock Bookings Data with Rupee prices
- const mockBookings = [
- { id: 101, providerName: 'electrical services', serviceName: 'Circuit Breaker Repair', date: '2025-10-25', time: '10:00 AM', status: 'Confirmed', price: 280, rating: 5 },
- { id: 102, providerName: 'cleaning Services', serviceName: 'Deep House Cleaning', date: '2025-11-05', time: '02:00 PM', status: 'Pending', price: 280, rating: null },
- { id: 103, providerName: 'Plumber service', serviceName: 'Faucet Installation', date: '2025-09-15', time: '09:00 AM', status: 'Completed', price: 280, rating: 4 },
+ { id: 6, name: 'Carpentry & Assembly', categoryId: 'carp', rating: 4.6, price: 80, reviews: 50, bio: 'Custom carpentry, repairs, and furniture assembly. Serving Delhi Rohini.' },
+ { id: 9, name: 'AC Repair & Service', categoryId: 'ac', rating: 4.8, price: 80, reviews: 100, bio: 'Specialized AC installation, repair, and maintenance in major cities.' },
+ { id: 10, name: 'House Painting', categoryId: 'paint', rating: 4.7, price: 80, reviews: 10, bio: 'Professional interior and exterior painting with paints.' },
  ];
  // Function to generate mock testimonials
  function generateMockTestimonials(count = 120) {
@@ -416,7 +403,7 @@
  case 'about':
  container.innerHTML = renderAboutPage();
  break;
- case 'howitworks':
+ case 'Service Flow':
  container.innerHTML = renderHowItWorksPage();
  break;
  case 'faq':
@@ -425,7 +412,7 @@
  case 'contact':
  container.innerHTML = renderContactPage();
  break;
- case 'testimonials':
+ case 'Reviews':
  container.innerHTML = renderTestimonialsPage();
  break;
  default:
@@ -582,10 +569,10 @@
  <div class="border-b pb-4">
  <p class="font-medium text-gray-700 mb-2">City</p>
  <select class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
- <option>Mumbai, Maharashtra</option>
- <option>Bangalore, Karnataka</option>
+ <option>New Delhi, Delhi</option>
+ <option>RohiniSec-17, RohiniSec-18</option>
  <option>Delhi NCR</option>
- <option>Chennai, Tamil Nadu</option>
+ <option>Pitampura, Delhi</option>
  </select>
  </div>
  <div class="border-b pb-4">
@@ -636,10 +623,7 @@
  function renderProviderProfile(provider) {
  if (!provider) return '<div class="text-center text-red-500">Provider not found.</div>';
  const category = categories.find(c => c.id === provider.categoryId);
- const mockReviews = [
- { user: 'Ravi K.', rating: 5, text: 'PowerTech was fast, professional, and solved our wiring issue immediately. Highly recommend!', date: '2025-09-10' },
- { user: 'Priya S.', rating: 4, text: 'Great service, slight delay but communication was excellent.', date: '2025-08-20' },
- ];
+ const mockReviews = 
  return `
  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
  
@@ -667,7 +651,6 @@
  <ul class="list-disc list-inside space-y-2 text-gray-700">
  <li>**Visiting Charge:** ₹${provider.price} + problem based charge</li>
  <li>**Major Installation:** Custom Quote (Contact for estimate)</li>
- <li>**Emergency Call-out:** ₹80 flat fee + problem based charge</li>
  </ul>
  </div>
  <div class="bg-white p-6 rounded-xl shadow-lg">
@@ -695,7 +678,7 @@
  <label for="service-package" class="block text-sm font-medium text-gray-700 mb-2">Select Service Package</label>
  <select id="service-package" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">
  <option value="Visiting Charge - ${provider.price}">Visiting Charge - ₹${provider.price}</option>
- <option value="Emergency Call - 80/flat">Emergency Call - ₹80 Flat</option>
+ <option value="Emergency Call - 80/flat">
  </select>
  <button onclick="startBooking(${provider.id}, document.getElementById('service-package').value)" class="w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition duration-300 shadow-xl">
  Proceed to Book
