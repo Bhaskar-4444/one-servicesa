@@ -197,38 +197,33 @@
  };
  // Mock Service Categories
  const categories = [
- { id: 'elec', name: 'V', icon: '⚡' },
- { id: 'plumb', name: 'V', icon: '💧' },
- { id: 'hair', name: 'V', icon: '💇' },
- { id: 'clean', name: 'V', icon: '🧼' },
- { id: 'pest', name: 'V', icon: '🐜' },
- { id: 'carp', name: 'V', icon: '🔨' },
- { id: 'wax', name: 'V', icon: '🧖‍♀️' },
- { id: 'pain', name: 'V', icon: '⚕️' },
- { id: 'stress', name: 'V', icon: '🧘' },
- { id: 'ac', name: 'V', icon: '❄️' },
- { id: 'paint', name: 'V', icon: '🎨' },
- { id: 'app', name: 'V', icon: '🔌' },
+ { id: 'app_elec', name: 'Appliance & Electrical Repair', icon: '🔌' },
+ { id: 'plumb', name: 'Plumbing & Leaks', icon: '💧' },
+ { id: 'clean', name: 'Deep House Cleaning', icon: '🧼' },
+ { id: 'pest', name: 'Pest Control', icon: '🐜' },
+ { id: 'carp', name: 'Carpentry & Assembly', icon: '🔨' },
+ { id: 'salon_mass', name: 'Home Salon & Massage', icon: '💇' },
+ { id: 'ac', name: 'AC Repair & Service', icon: '❄️' },
+ { id: 'paint', name: 'House Painting', icon: '🎨' },
  ];
  // Mock Service Providers with Indian names and realistic Indian pricing
  const providers = [
- { id: 1, name: 'V', categoryId: 'elec', rating: 4.9, price: 80, reviews: 100, bio: 'Certified electricians specializing in residential wiring and fault diagnostics across Mumbai and Pune.' },
- { id: 2, name: 'V', categoryId: 'plumb', rating: 4.7, price: 80, reviews: 80, bio: 'Fast, reliable plumbing service for leaks, clogs, and installations. 10 years experience.' },
- { id: 3, name: 'V', categoryId: 'hair', rating: 5.0, price: 80, reviews: 62, bio: 'Modern and classic haircuts for men and women. Home service available in Rohini Delhi.' },
- { id: 4, name: 'V', categoryId: 'clean', rating: 4.5, price: 80, reviews: 32, bio: 'Eco-friendly house cleaning services. Weekly, bi-weekly, or deep cleaning options.' },
- { id: 5, name: 'V', categoryId: 'pest', rating: 4.8, price: 80, reviews: 15, bio: 'Residential and commercial pest control. Guaranteed removal of all common pests.' },
- { id: 6, name: 'V', categoryId: 'carp', rating: 4.6, price: 80, reviews: 50, bio: 'Custom carpentry, repairs, and furniture assembly. Serving Delhi Rohini.' },
- { id: 7, name: 'V', categoryId: 'pain', rating: 4.9, price: 80, reviews: 78, bio: 'Certified therapist offering deep tissue and sports massage for pain relief.' },
- { id: 8, name: 'V', categoryId: 'stress', rating: 5.0, price: 80, reviews: 44, bio: 'Licensed therapist providing guided meditation and stress relief coaching.' },
- { id: 9, name: 'V', categoryId: 'ac', rating: 4.8, price: 80, reviews: 100, bio: 'Specialized AC installation, repair, and maintenance in major cities.' },
- { id: 10, name: 'V', categoryId: 'paint', rating: 4.7, price: 80, reviews: 10, bio: 'Professional interior and exterior painting with paints.' },
- { id: 11, name: 'V', categoryId: 'app', rating: 4.9, price: 80, reviews: 300, bio: 'Repair of washing machines, refrigerators, and microwaves at home.' },
+ { id: 1, name: 'Electrical services', categoryId: 'app_elec', rating: 4.9, price: 80, reviews: 100, bio: 'Certified electricians specializing in residential wiring and fault diagnostics across Mumbai and Pune.' },
+ { id: 11, name: 'General mechanics', categoryId: 'app_elec', rating: 4.9, price: 80, reviews: 300, bio: 'Repair of washing machines, refrigerators, and microwaves at home.' },
+ { id: 2, name: 'Plumber service', categoryId: 'plumb', rating: 4.7, price: 80, reviews: 80, bio: 'Fast, reliable plumbing service for leaks, clogs, and installations. 10 years experience.' },
+ { id: 4, name: 'Cleaning Services', categoryId: 'clean', rating: 4.5, price: 80, reviews: 32, bio: 'Eco-friendly house cleaning services. Weekly, bi-weekly, or deep cleaning options.' },
+ { id: 5, name: 'Pests control', categoryId: 'pest', rating: 4.8, price: 80, reviews: 15, bio: 'Residential and commercial pest control. Guaranteed removal of all common pests.' },
+ { id: 6, name: 'Carpenter service', categoryId: 'carp', rating: 4.6, price: 80, reviews: 50, bio: 'Custom carpentry, repairs, and furniture assembly. Serving Delhi Rohini.' },
+ { id: 3, name: 'Haircut', categoryId: 'salon_mass', rating: 5.0, price: 80, reviews: 62, bio: 'Modern and classic haircuts for men and women. Home service available in Rohini Delhi.' },
+ { id: 7, name: 'Therapy', categoryId: 'salon_mass', rating: 4.9, price: 80, reviews: 78, bio: 'Certified therapist offering deep tissue and sports massage for pain relief.' },
+ { id: 9, name: 'AC Experts', categoryId: 'ac', rating: 4.8, price: 80, reviews: 100, bio: 'Specialized AC installation, repair, and maintenance in major cities.' },
+ { id: 10, name: 'Painting service', categoryId: 'paint', rating: 4.7, price: 80, reviews: 10, bio: 'Professional interior and exterior painting with paints.' },
  ];
  // Mock Bookings Data with Rupee prices
  const mockBookings = [
- { id: 101, providerName: 'V', serviceName: 'Circuit Breaker Repair', date: '2025-10-25', time: '10:00 AM', status: 'Confirmed', price: 280, rating: 5 },
- { id: 102, providerName: 'V', serviceName: 'Deep House Cleaning', date: '2025-11-05', time: '02:00 PM', status: 'Pending', price: 280, rating: null },
- { id: 103, providerName: 'V', serviceName: 'Faucet Installation', date: '2025-09-15', time: '09:00 AM', status: 'Completed', price: 280, rating: 4 },
+ { id: 101, providerName: 'Electrical services', serviceName: 'Appliance & Electrical Repair', date: '2025-10-25', time: '10:00 AM', status: 'Confirmed', price: 280, rating: 5 },
+ { id: 102, providerName: 'Cleaning Services', serviceName: 'Deep House Cleaning', date: '2025-11-05', time: '02:00 PM', status: 'Pending', price: 280, rating: null },
+ { id: 103, providerName: 'Plumber service', serviceName: 'Plumbing & Leaks', date: '2025-09-15', time: '09:00 AM', status: 'Completed', price: 280, rating: 4 },
  ];
  // Function to generate mock testimonials
  function generateMockTestimonials(count = 120) {
@@ -522,7 +517,7 @@
  <p class="text-xl mb-8 opacity-90">Vetted professionals for every home need, from plumbing to therapy, across India.</p>
  
  <div class="bg-white p-2 rounded-full shadow-2xl flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
- <input type="text" placeholder="I need a service like 'Plumbing' or 'Haircut'..." class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+ <input type="text" placeholder="I need a service like 'Plumbing' or 'Cleaning'..." class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400" />
  <input type="text" placeholder="Enter Location / Pincode" class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 sm:max-w-xs" />
  <button onclick="navigateTo('listings')" class="bg-blue-500 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-600 transition duration-300 shadow-lg">Search</button>
  </div>
@@ -530,7 +525,7 @@
  </section>
  <section class="mb-12">
  <h3 class="text-3xl font-bold text-gray-800 mb-6">Browse by Category</h3>
- <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-12 gap-4">
+ <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
  ${categories.map(c => `
  <div onclick="navigateTo('listings', {categoryId: '${c.id}'})" class="text-center p-4 bg-white rounded-xl shadow-md hover:shadow-lg hover:border-blue-500 border border-gray-100 transition duration-300 cursor-pointer">
  <div class="text-3xl mb-2">${c.icon}</div>
@@ -637,8 +632,8 @@
  if (!provider) return '<div class="text-center text-red-500">Provider not found.</div>';
  const category = categories.find(c => c.id === provider.categoryId);
  const mockReviews = [
- { user: 'Ravi K.', rating: 5, text: 'PowerTech was fast, professional, and solved our wiring issue immediately. Highly recommend!', date: '2025-09-10' },
- { user: 'Priya S.', rating: 4, text: 'Great service, slight delay but communication was excellent.', date: '2025-08-20' },
+ { user: 'Ravi K.', rating: 5, text: 'Excellent service, professional and efficient. Highly recommend!', date: '2025-09-10' },
+ { user: 'Priya S.', rating: 4, text: 'Great work, communication was excellent.', date: '2025-08-20' },
  ];
  return `
  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
