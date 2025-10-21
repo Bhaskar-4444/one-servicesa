@@ -114,9 +114,9 @@
   let appState = { isLoggedIn: false, currentPage: 'home', currentProvider: null, currentBooking: { providerId: null, serviceName: '', step: 1, date: '', time: '', location: '', instructions: '' }, user: null };
   let database; // Realtime Database instance
   let auth; // Auth instance
-  let providers = []; // Will be populated from DB or mocks
-  let testimonials = []; // Will be populated from DB or mocks
-  let mockBookings = []; // Will be populated from DB or mocks
+  let providers = []; // Will be populated from DB
+  let testimonials = []; // Will be populated from DB
+  let mockBookings = []; // Will be populated from DB for demo
   // Categories (static for now, can move to DB later)
   const categories = [
    { id: 'elec', name: 'Appliance & Electrical Repair', image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300' },
@@ -153,7 +153,7 @@
    } else cancelBtn.classList.add('hidden');
    modalContainer.classList.remove('hidden');
   }
-  // Firebase Initialization with Realtime Database using v12.4.0 - Improved error handling
+  // Firebase Initialization with Realtime Database using v12.4.0
   async function initFirebase() {
    try {
     // Import the functions you need from the SDKs you need
@@ -175,9 +175,7 @@
     const analytics = getAnalytics(app);
     auth = getAuth(app);
     database = getDatabase(app);
-    console.log('Firebase initialized successfully');
-    // Expose functions globally for form submissions
-    window.auth = auth;
+    // Expose functions globally
     window.signInWithEmailAndPassword = signInWithEmailAndPassword;
     window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
     window.updateProfile = updateProfile;
@@ -187,202 +185,127 @@
     window.onValue = onValue;
     window.set = set;
     window.push = push;
-    // Auth State Listener - Improved to handle navigation
+    // Auth State Listener
     onAuthStateChanged(auth, (user) => {
      if (user) {
       appState.isLoggedIn = true;
       appState.user = { uid: user.uid, name: user.displayName || user.email.split('@')[0], email: user.email, role: 'customer' };
       console.log("User signed in:", appState.user);
-      // Force re-render if on auth pages
-      if (appState.currentPage === 'login' || appState.currentPage === 'signup') {
-       setTimeout(() => navigateTo('dashboard'), 500);
-      }
+      if (appState.currentPage === 'login' || appState.currentPage === 'signup') navigateTo('dashboard');
+      // Fetch user-specific data on login
       fetchUserData(user.uid);
      } else {
       appState.isLoggedIn = false;
       appState.user = null;
       console.log("User signed out");
-      if (appState.currentPage === 'dashboard') {
-       setTimeout(() => navigateTo('home'), 500);
-      }
+      if (appState.currentPage === 'dashboard') navigateTo('home');
      }
     });
-    // Fetch global data
+    // Fetch global data on init (providers, testimonials)
     fetchGlobalData();
+    console.log('Firebase + Realtime DB (v12.4.0) initialized successfully');
    } catch (error) {
     console.error('Firebase init failed:', error);
-    showModal('App Notice', 'Firebase unavailable. Using demo mode with mock data. Auth and DB features limited.');
-    // Load mocks immediately
-    loadMocks();
+    showModal('App Error', 'Firebase failed. Running in demo mode with mocks.');
+    // Fallback to mocks
+    providers = [
+     { id: 1, name: 'Appliance & Electrical Repair', categoryId: 'elec', rating: 4.9, price: 80, reviews: 100, bio: 'Certified electricians for wiring and diagnostics in Delhi.' },
+     { id: 2, name: 'Plumbing Services', categoryId: 'plumb', rating: 4.7, price: 120, reviews: 85, bio: 'Expert plumbers fixing leaks and installations.' },
+     { id: 3, name: 'Home Salon', categoryId: 'hair', rating: 4.8, price: 150, reviews: 200, bio: 'Professional haircut and massage at home.' },
+     { id: 4, name: 'Deep Cleaning', categoryId: 'clean', rating: 4.6, price: 200, reviews: 150, bio: 'Thorough house cleaning services.' },
+     { id: 5, name: 'Pest Control', categoryId: 'pest', rating: 4.9, price: 180, reviews: 120, bio: 'Safe and effective pest removal.' },
+     { id: 6, name: 'Carpentry', categoryId: 'carp', rating: 4.5, price: 250, reviews: 90, bio: 'Furniture assembly and repairs.' },
+     { id: 7, name: 'AC Service', categoryId: 'ac', rating: 4.7, price: 300, reviews: 110, bio: 'AC repair and maintenance.' },
+     { id: 8, name: 'Painting', categoryId: 'paint', rating: 4.4, price: 400, reviews: 75, bio: 'Professional house painting.' }
+    ];
+    testimonials = generateMockTestimonials(20); // Fallback mock
    }
-  }
-  // Load mock data for demo mode
-  function loadMocks() {
-   providers = [
-    { id: 1, name: 'Expert Electrical Repair', categoryId: 'elec', rating: 4.9, price: 80, reviews: 100, bio: 'Certified electricians for wiring and diagnostics in Delhi.' },
-    { id: 2, name: 'Pro Plumbing Services', categoryId: 'plumb', rating: 4.7, price: 120, reviews: 85, bio: 'Expert plumbers fixing leaks and installations.' },
-    { id: 3, name: 'Home Salon Special', categoryId: 'hair', rating: 4.8, price: 150, reviews: 200, bio: 'Professional haircut and massage at home.' },
-    { id: 4, name: 'Deep Cleaning Pros', categoryId: 'clean', rating: 4.6, price: 200, reviews: 150, bio: 'Thorough house cleaning services.' },
-    { id: 5, name: 'Pest Control Experts', categoryId: 'pest', rating: 4.9, price: 180, reviews: 120, bio: 'Safe and effective pest removal.' },
-    { id: 6, name: 'Carpentry Masters', categoryId: 'carp', rating: 4.5, price: 250, reviews: 90, bio: 'Furniture assembly and repairs.' },
-    { id: 7, name: 'AC Service Team', categoryId: 'ac', rating: 4.7, price: 300, reviews: 110, bio: 'AC repair and maintenance.' },
-    { id: 8, name: 'Painting Pros', categoryId: 'paint', rating: 4.4, price: 400, reviews: 75, bio: 'Professional house painting.' }
-   ];
-   testimonials = generateMockTestimonials(20);
-   mockBookings = []; // Empty for new users
-   // Re-render current page
-   setTimeout(() => navigateTo(appState.currentPage), 100);
   }
   // Fetch global data from Realtime DB
   function fetchGlobalData() {
-   if (!database) return;
+   // Fetch providers
    const providersRef = ref(database, 'providers');
    onValue(providersRef, (snapshot) => {
     const data = snapshot.val();
-    providers = data ? Object.entries(data).map(([key, value]) => ({ ...value, id: key })) : [];
+    providers = data ? Object.values(data) : [];
     console.log('Providers fetched:', providers.length);
+    // Re-render if on listings page
     if (appState.currentPage === 'listings' || appState.currentPage === 'home') navigateTo(appState.currentPage);
-   }, (error) => {
-    console.error('Error fetching providers:', error);
-    loadMocks(); // Fallback
-   });
+   }, (error) => console.error('Error fetching providers:', error));
+   // Fetch testimonials
    const testimonialsRef = ref(database, 'testimonials');
    onValue(testimonialsRef, (snapshot) => {
     const data = snapshot.val();
-    testimonials = data ? Object.entries(data).map(([key, value]) => ({ ...value, id: key })) : [];
+    testimonials = data ? Object.values(data) : [];
     console.log('Testimonials fetched:', testimonials.length);
+    // Re-render if on testimonials or home
     if (appState.currentPage === 'testimonials' || appState.currentPage === 'home') navigateTo(appState.currentPage);
-   }, (error) => {
-    console.error('Error fetching testimonials:', error);
-    testimonials = generateMockTestimonials(20);
-   });
+   }, (error) => console.error('Error fetching testimonials:', error));
   }
   // Fetch user bookings from DB
   function fetchUserData(uid) {
-   if (!database) {
-    mockBookings = generateMockBookings(3); // Demo bookings
-    if (appState.currentPage === 'dashboard') navigateTo('dashboard');
-    return;
-   }
    const bookingsRef = ref(database, `bookings/${uid}`);
    onValue(bookingsRef, (snapshot) => {
     const data = snapshot.val();
-    mockBookings = data ? Object.entries(data).map(([key, value]) => ({ ...value, id: key })) : [];
+    mockBookings = data ? Object.values(data) : [];
     console.log('User bookings fetched:', mockBookings.length);
     if (appState.currentPage === 'dashboard') navigateTo('dashboard');
-   }, (error) => {
-    console.error('Error fetching bookings:', error);
-    mockBookings = [];
-   });
+   }, (error) => console.error('Error fetching bookings:', error));
   }
-  // Save booking to DB or local mock
+  // Save booking to DB
   async function saveBooking(uid, bookingData) {
-   if (!database) {
-    // Mock save
-    const mockId = Date.now();
-    const mockBooking = { ...bookingData, id: mockId, timestamp: Date.now() };
-    mockBookings.push(mockBooking);
-    console.log('Mock booking saved:', mockBooking);
-    showModal('Success', 'Booking confirmed! (Demo mode)');
-    appState.currentBooking.step = 4;
-    navigateTo('booking');
-    return;
-   }
    try {
     const newBookingRef = push(ref(database, `bookings/${uid}`));
     await set(newBookingRef, { ...bookingData, id: newBookingRef.key, timestamp: Date.now() });
     console.log('Booking saved to DB');
     showModal('Success', 'Booking confirmed and saved!');
-    appState.currentBooking.step = 4;
-    navigateTo('booking');
    } catch (error) {
     console.error('Error saving booking:', error);
     showModal('Error', 'Failed to save booking. Try again.');
    }
   }
-  // Auth Functions - Improved with better error handling and navigation
+  // Auth Functions (updated to use saveBooking in booking flow)
   window.signInUser = async () => {
-   if (!auth) {
-    showModal('Demo Mode', 'Auth unavailable. Continuing as guest.');
-    appState.isLoggedIn = true;
-    appState.user = { uid: 'demo', name: 'Guest User', email: 'guest@demo.com', role: 'customer' };
-    navigateTo('dashboard');
-    return;
-   }
-   const email = document.getElementById('login-email').value.trim();
+   const email = document.getElementById('login-email').value;
    const password = document.getElementById('login-password').value;
    if (!email || !password) return showModal('Input Required', 'Please enter email and password.');
    try {
-    await signInWithEmailAndPassword(auth, email, password);
-    // Navigation handled by listener
+    await window.signInWithEmailAndPassword(auth, email, password);
    } catch (error) {
-    console.error('Login error:', error);
-    showModal('Login Failed', error.message.includes('auth/user-not-found') ? 'User not found. Sign up?' : error.message);
+    showModal('Login Failed', error.message);
    }
   };
   window.signUpUser = async () => {
-   if (!auth) {
-    showModal('Demo Mode', 'Signup unavailable. Using guest login.');
-    appState.isLoggedIn = true;
-    appState.user = { uid: 'demo', name: document.getElementById('signup-name').value || 'Guest', email: 'guest@demo.com', role: 'customer' };
-    navigateTo('dashboard');
-    return;
-   }
-   const name = document.getElementById('signup-name').value.trim();
-   const email = document.getElementById('signup-email').value.trim();
+   const name = document.getElementById('signup-name').value;
+   const email = document.getElementById('signup-email').value;
    const password = document.getElementById('signup-password').value;
    const confirmPassword = document.getElementById('signup-confirm-password').value;
    if (!name || !email || !password || !confirmPassword) return showModal('Input Required', 'Please fill all fields.');
    if (password !== confirmPassword) return showModal('Error', 'Passwords do not match.');
-   if (password.length < 6) return showModal('Error', 'Password must be at least 6 characters.');
    try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    await updateProfile(userCredential.user, { displayName: name });
-    console.log('Signup successful');
-    // Navigation handled by listener
+    const userCredential = await window.createUserWithEmailAndPassword(auth, email, password);
+    await window.updateProfile(userCredential.user, { displayName: name });
    } catch (error) {
-    console.error('Signup error:', error);
-    let msg = 'Signup failed.';
-    if (error.message.includes('auth/email-already-in-use')) msg += ' Email already in use.';
-    else if (error.message.includes('auth/invalid-email')) msg += ' Invalid email.';
-    showModal('Signup Failed', msg);
+    showModal('Signup Failed', error.message);
    }
   };
   window.signInAnonymouslyFunc = async () => {
-   if (!auth) {
-    appState.isLoggedIn = true;
-    appState.user = { uid: 'anon', name: 'Anonymous', email: 'anon@demo.com', role: 'customer' };
-    navigateTo('home');
-    return;
-   }
    try {
-    await signInAnonymously(auth);
+    await window.signInAnonymously(auth);
     navigateTo('home');
    } catch (error) {
-    console.error('Anon login error:', error);
     showModal('Error', error.message);
    }
   };
   window.signOutUser = async () => {
-   if (!auth) {
-    appState.isLoggedIn = false;
-    appState.user = null;
-    navigateTo('home');
-    return;
-   }
    try {
-    await signOut(auth);
-    // Navigation handled by listener
+    await window.signOut(auth);
    } catch (error) {
-    console.error('Signout error:', error);
     showModal('Error', error.message);
    }
   };
-  function handleAuthClick() { 
-   if (appState.isLoggedIn) navigateTo('dashboard'); 
-   else navigateTo('login'); 
-  }
-  // Navigation
+  function handleAuthClick() { if (appState.isLoggedIn) navigateTo('dashboard'); else navigateTo('login'); }
+  // Navigation (updated to use DB data)
   function navigateTo(page, data = {}) {
    appState.currentPage = page;
    if (page !== 'booking') appState.currentBooking = { providerId: null, serviceName: '', step: 1, date: '', time: '', location: '', instructions: '' };
@@ -392,18 +315,9 @@
    switch (page) {
     case 'home': container.innerHTML = renderHomePage(); break;
     case 'listings': container.innerHTML = renderListingsPage(data.categoryId); break;
-    case 'profile': appState.currentProvider = providers.find(p => p.id == data.providerId); container.innerHTML = renderProviderProfile(appState.currentProvider); break;
-    case 'booking': 
-     if (!appState.isLoggedIn) { 
-      showModal('Login Required', 'Sign in to book a service.', () => navigateTo('login')); 
-      return; 
-     } 
-     container.innerHTML = renderBookingSystem(); 
-     break;
-    case 'dashboard': 
-     if (!appState.isLoggedIn) { navigateTo('login'); return; } 
-     container.innerHTML = renderCustomerDashboard(); 
-     break;
+    case 'profile': appState.currentProvider = providers.find(p => p.id === data.providerId); container.innerHTML = renderProviderProfile(appState.currentProvider); break;
+    case 'booking': if (!appState.isLoggedIn) { showModal('Login', 'Sign in to book.', () => navigateTo('login')); return; } container.innerHTML = renderBookingSystem(); break;
+    case 'dashboard': if (!appState.isLoggedIn) { navigateTo('login'); return; } container.innerHTML = renderCustomerDashboard(); break;
     case 'login': container.innerHTML = renderLoginPage(); break;
     case 'signup': container.innerHTML = renderSignupPage(); break;
     case 'about': container.innerHTML = renderAboutPage(); break;
@@ -413,21 +327,15 @@
     case 'testimonials': container.innerHTML = renderTestimonialsPage(); break;
     default: container.innerHTML = '<h2 class="text-center text-gray-500">Page Not Found</h2>';
    }
-   // Update auth button text
-   updateAuthButton();
   }
-  function updateAuthButton() {
-   const btn = document.getElementById('auth-button');
-   if (btn) btn.textContent = appState.isLoggedIn ? 'Dashboard' : 'My Account';
-  }
-  // Render Home Page
+  // Updated renderHomePage to use DB testimonials
   function renderHomePage() {
    const randomTestimonials = testimonials.slice(0, 6);
    const homeReviewsHtml = randomTestimonials.map(t => `
     <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
      <div class="flex items-center mb-4">
       <span class="text-yellow-400 text-lg mr-2">${getRatingStars(t.rating)}</span>
-      <span class="text-sm text-gray-500 ml-auto">${t.location || 'Delhi'}</span>
+      <span class="text-sm text-gray-500 ml-auto">${t.location}</span>
      </div>
      <p class="text-gray-700 mb-4 italic">"${t.text}"</p>
      <div class="flex items-center">
@@ -470,165 +378,110 @@
       <h3 class="text-3xl font-bold text-gray-800">Customer Reviews</h3>
       <button onclick="navigateTo('testimonials')" class="text-blue-600 hover:underline font-semibold">See All Reviews</button>
      </div>
-     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${homeReviewsHtml || '<p class="text-center text-gray-500 col-span-full">Loading reviews...</p>'}</div>
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${homeReviewsHtml}</div>
     </section>
    `;
   }
   function handleHomeSearch() {
    const service = document.getElementById('search-service').value.toLowerCase();
    const location = document.getElementById('search-location').value;
-   if (service || location) {
-    // Mock search by filtering
-    const filtered = providers.filter(p => p.name.toLowerCase().includes(service) || p.bio.toLowerCase().includes(service));
-    navigateTo('listings', { categoryId: 'search', filtered });
-   } else showModal('Search', 'Enter service or location.');
+   if (service || location) navigateTo('listings', { categoryId: 'all' }); else showModal('Search', 'Enter service or location.');
   }
-  // Render Listings Page - Improved filtering
+  // Updated renderListingsPage to use DB providers
   function renderListingsPage(categoryId) {
-   let filteredProviders = providers;
-   if (categoryId && categoryId !== 'all' && categoryId !== 'search') {
-    filteredProviders = providers.filter(p => p.categoryId === categoryId);
-   } else if (categoryId === 'search' && appState.currentPage === 'listings') {
-    // Use passed data if search
-    filteredProviders = data.filtered || providers;
-   }
-   const categoryName = categoryId && categoryId !== 'all' && categoryId !== 'search' ? categories.find(c => c.id === categoryId)?.name || 'All Services' : 'All Services';
+   const filteredProviders = categoryId && categoryId !== 'all' ? providers.filter(p => p.categoryId === categoryId) : providers;
+   const categoryName = categoryId && categoryId !== 'all' ? categories.find(c => c.id === categoryId)?.name || 'All Services' : 'All Services';
    return `
-    <h2 class="text-4xl font-bold text-gray-800 mb-8">${categoryName} (${filteredProviders.length} found)</h2>
+    <h2 class="text-4xl font-bold text-gray-800 mb-8">${categoryName} Listings (from DB: ${providers.length} total)</h2>
     <div class="flex flex-col lg:flex-row gap-8">
      <aside class="w-full lg:w-1/4 bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6 lg:mb-0">
       <h3 class="text-xl font-semibold mb-4 text-gray-800">Filters</h3>
       <div class="space-y-4">
        <div class="border-b pb-4">
         <p class="font-medium text-gray-700 mb-2">City</p>
-        <select id="filter-city" class="w-full p-2 border border-gray-300 rounded-lg" onchange="applyFilters()">
-         <option>All Cities</option><option>New Delhi</option><option>Mumbai</option>
-        </select>
+        <select class="w-full p-2 border border-gray-300 rounded-lg"><option>New Delhi</option><option>Mumbai</option></select>
        </div>
        <div class="border-b pb-4">
         <p class="font-medium text-gray-700 mb-2">Minimum Rating</p>
-        <div class="space-y-1">
-         <label class="flex items-center space-x-2"><input type="radio" name="rating" value="4" class="text-blue-600" onchange="applyFilters()"> 4 Stars & Up</label>
-         <label class="flex items-center space-x-2"><input type="radio" name="rating" value="3" class="text-blue-600" onchange="applyFilters()"> 3 Stars & Up</label>
-        </div>
+        <div class="flex items-center space-x-2"><input type="radio" id="rating-4" name="rating" class="text-blue-600"><label for="rating-4" class="text-gray-700">4 Stars & Up</label></div>
        </div>
        <div>
         <p class="font-medium text-gray-700 mb-2">Price Range</p>
-        <input type="range" id="price-range" min="50" max="500" value="500" class="w-full h-2 bg-gray-200 rounded-lg" onchange="applyFilters()">
-        <div class="flex justify-between text-sm text-gray-500 mt-1"><span>₹50</span><span id="price-max">₹500</span></div>
+        <input type="range" min="80" max="500" value="500" class="w-full h-2 bg-gray-200 rounded-lg">
+        <div class="flex justify-between text-sm text-gray-500 mt-1"><span>₹80</span><span>₹500+</span></div>
        </div>
-       <button onclick="navigateTo('listings', {categoryId: 'all'})" class="w-full bg-gray-200 py-2 rounded-lg">Clear Filters</button>
       </div>
      </aside>
      <div class="w-full lg:w-3/4 space-y-6">
       ${filteredProviders.map(p => `
-       <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between border border-gray-100 hover:shadow-xl transition-shadow">
+       <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between border border-gray-100">
         <div class="flex-grow mb-4 md:mb-0">
          <h3 class="text-2xl font-bold text-gray-800">${p.name}</h3>
-         <p class="text-blue-600 font-semibold mb-2">${categories.find(c => c.id === p.categoryId)?.name || 'General'}</p>
+         <p class="text-blue-600 font-semibold mb-2">${categories.find(c => c.id === p.categoryId)?.name}</p>
          <div class="flex items-center text-sm text-gray-600 mb-3"><span class="mr-2">${getRatingStars(p.rating)}</span><span class="font-medium">${p.rating} (${p.reviews} reviews)</span></div>
-         <p class="text-gray-500">${p.bio || 'Reliable service provider.'}</p>
+         <p class="text-gray-500 hidden sm:block">${p.bio.substring(0, 80)}...</p>
         </div>
-        <div class="text-right flex flex-col items-start md:items-end mt-4 md:mt-0">
-         <p class="text-3xl font-extrabold text-blue-800 mb-2">₹${p.price}<span class="text-base font-normal text-gray-500"> /hr</span></p>
-         <button onclick="startBooking(${p.id}, '${p.name.replace(/'/g, "\\'")}')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">Book Now</button>
+        <div class="text-right flex flex-col items-start md:items-end">
+         <p class="text-3xl font-extrabold text-blue-800 mb-2">₹${p.price}<span class="text-base font-normal text-gray-500"> visiting</span></p>
+         <button onclick="startBooking(${p.id}, '${p.name}')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">Book Now</button>
         </div>
        </div>
-      `).join('') || '<div class="bg-white p-10 rounded-xl shadow-lg text-center text-gray-500"><p class="text-xl font-semibold">No services found.</p><button onclick="navigateTo(\'listings\', {categoryId: \'all\'})" class="mt-4 text-blue-600 hover:underline">View All Services</button></div>'}
+      `).join('') || '<div class="bg-white p-10 rounded-xl shadow-lg text-center text-gray-500"><p class="text-xl font-semibold">No services found in DB.</p><button onclick="navigateTo(\'listings\', {categoryId: \'all\'})" class="mt-4 text-blue-600 hover:underline">View All</button></div>'}
      </div>
     </div>
    `;
   }
-  // Simple filter application (client-side for demo)
-  function applyFilters() {
-   // This would filter the current listings - for simplicity, re-navigate with 'all' and note filters applied
-   console.log('Filters applied - in full app, this would update list dynamically');
-  }
   function startBooking(providerId, serviceName) {
-   if (!appState.isLoggedIn) { 
-    showModal('Login Required', 'Please sign in to book.', () => navigateTo('login')); 
-    return; 
-   }
-   appState.currentBooking = { providerId: parseInt(providerId), serviceName, step: 1, date: '', time: '', location: '', instructions: '' };
+   if (!appState.isLoggedIn) { showModal('Login', 'Sign in to book.', () => navigateTo('login')); return; }
+   appState.currentBooking = { providerId, serviceName, step: 1, date: '', time: '', location: '', instructions: '' };
    navigateTo('booking');
   }
-  // Render Booking System - Improved validation
+  // Updated renderBookingSystem - on confirm, save to DB
   function renderBookingSystem() {
    const step = appState.currentBooking.step;
    const provider = providers.find(p => p.id === appState.currentBooking.providerId);
-   if (!provider) return '<div class="text-center text-red-500 p-8">Provider not found. <button onclick="navigateTo(\'home\')" class="text-blue-600 underline">Go Home</button></div>';
+   if (!provider) return '<div class="text-center text-red-500">Provider not found in DB.</div>';
    let stepContent = '';
-   let isValid = true;
    switch (step) {
     case 1:
      stepContent = `
       <h4 class="text-2xl font-semibold mb-4 text-gray-800">1. Select Date & Time</h4>
-      <input type="date" id="booking-date" class="w-full p-3 border rounded-lg mb-4" min="${new Date().toISOString().split('T')[0]}" value="${appState.currentBooking.date}">
-      <select id="booking-time" class="w-full p-3 border rounded-lg mb-6">
-       <option value="">Select Time</option>
-       <option ${appState.currentBooking.time === '9:00 AM' ? 'selected' : ''}>9:00 AM</option>
-       <option ${appState.currentBooking.time === '1:00 PM' ? 'selected' : ''}>1:00 PM</option>
-       <option>5:00 PM</option>
-      </select>
-      <button onclick="nextBookingStep()" class="w-full bg-blue-600 text-white py-3 rounded-lg ${!appState.currentBooking.date || !appState.currentBooking.time ? 'opacity-50 cursor-not-allowed' : ''}">Next</button>
+      <input type="date" id="booking-date" class="w-full p-3 border rounded-lg mb-4">
+      <select id="booking-time" class="w-full p-3 border rounded-lg mb-6"><option>9:00 AM</option><option>1:00 PM</option></select>
+      <button onclick="nextBookingStep()" class="w-full bg-blue-600 text-white py-3 rounded-lg">Next</button>
      `;
      break;
     case 2:
      stepContent = `
       <h4 class="text-2xl font-semibold mb-4 text-gray-800">2. Location & Details</h4>
-      <input type="text" id="booking-location" placeholder="Full Address (e.g., 123 MG Road, Delhi)" class="w-full p-3 border rounded-lg mb-4" value="${appState.currentBooking.location}">
-      <textarea id="booking-instructions" rows="4" placeholder="Special instructions (optional)" class="w-full p-3 border rounded-lg mb-6">${appState.currentBooking.instructions}</textarea>
-      <div class="flex space-x-4">
-       <button onclick="prevBookingStep()" class="flex-1 bg-gray-300 py-3 rounded-lg">Back</button>
-       <button onclick="nextBookingStep()" class="flex-1 bg-blue-600 text-white py-3 rounded-lg ${!appState.currentBooking.location ? 'opacity-50 cursor-not-allowed' : ''}">Next</button>
-      </div>
+      <input type="text" id="booking-location" placeholder="Address" class="w-full p-3 border rounded-lg mb-4">
+      <textarea id="booking-instructions" rows="4" class="w-full p-3 border rounded-lg mb-6"></textarea>
+      <div class="flex space-x-4"><button onclick="prevBookingStep()" class="flex-1 bg-gray-300 py-3 rounded-lg">Back</button><button onclick="nextBookingStep()" class="flex-1 bg-blue-600 text-white py-3 rounded-lg">Next</button></div>
      `;
      break;
     case 3:
-     const price = provider.price * 2; // Example total
+     const price = 280; // Mock total
      stepContent = `
       <h4 class="text-2xl font-semibold mb-4 text-gray-800">3. Review & Confirm</h4>
-      <div class="bg-gray-50 p-6 rounded-xl mb-6 space-y-2">
-       <p><strong>Service:</strong> ${appState.currentBooking.serviceName}</p>
-       <p><strong>Date & Time:</strong> ${appState.currentBooking.date} at ${appState.currentBooking.time}</p>
-       <p><strong>Location:</strong> ${appState.currentBooking.location}</p>
-       <p><strong>Total:</strong> ₹${price}</p>
-      </div>
-      <select id="payment-method" class="w-full p-3 border rounded-lg mb-4">
-       <option>Cash on Delivery</option>
-       <option>Online Payment</option>
-      </select>
-      <div class="flex space-x-4">
-       <button onclick="prevBookingStep()" class="flex-1 bg-gray-300 py-3 rounded-lg">Back</button>
-       <button onclick="confirmBooking()" class="flex-1 bg-green-600 text-white py-3 rounded-lg">Confirm Booking</button>
-      </div>
+      <div class="bg-gray-50 p-6 rounded-xl mb-6"><p>Total: ₹${price}</p></div>
+      <select id="payment-method" class="w-full p-3 border rounded-lg mb-4"><option>COD</option></select>
+      <div class="flex space-x-4"><button onclick="prevBookingStep()" class="flex-1 bg-gray-300 py-3 rounded-lg">Back</button><button onclick="confirmBooking()" class="flex-1 bg-green-600 text-white py-3 rounded-lg">Confirm & Save to DB</button></div>
      `;
      break;
     case 4:
-     stepContent = `<div class="text-center p-8 bg-green-50 rounded-xl"><h4 class="text-3xl font-bold text-green-800 mb-4">Booking Confirmed!</h4><p>Your booking for ${appState.currentBooking.serviceName} is saved.</p><button onclick="navigateTo('dashboard')" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-4">View Dashboard</button></div>`;
+     stepContent = `<div class="text-center p-8 bg-green-50 rounded-xl"><h4 class="text-3xl font-bold text-green-800 mb-4">Booking Confirmed!</h4><p>Saved to Realtime DB.</p><button onclick="navigateTo('dashboard')" class="bg-blue-600 text-white px-6 py-3 rounded-lg">Dashboard</button></div>`;
      break;
    }
-   return `<div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl"><h2 class="text-4xl font-bold text-gray-800 mb-8">Book ${provider.name}</h2><div class="flex justify-center mb-8"><div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-blue-600 h-2 rounded-full" style="width: ${Math.min(((step)/4)*100, 100)}%"></div></div></div>${stepContent}</div>`;
+   return `<div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl"><h2 class="text-4xl font-bold text-gray-800 mb-8">Book ${provider.name}</h2><div class="flex justify-center mb-8"><div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-blue-600 h-2 rounded-full" style="width: ${((step-1)/3)*100}%"></div></div></div><div>${stepContent}</div></div>`;
   }
   function nextBookingStep() {
    const currentStep = appState.currentBooking.step;
-   let valid = true;
+   // Validate and set data (simplified)
    if (currentStep === 1) {
-    const date = document.getElementById('booking-date').value;
-    const time = document.getElementById('booking-time').value;
-    if (!date || !time) {
-     showModal('Validation', 'Please select date and time.');
-     return;
-    }
-    appState.currentBooking.date = date;
-    appState.currentBooking.time = time;
+    appState.currentBooking.date = document.getElementById('booking-date').value;
+    appState.currentBooking.time = document.getElementById('booking-time').value;
    } else if (currentStep === 2) {
-    const location = document.getElementById('booking-location').value.trim();
-    if (!location) {
-     showModal('Validation', 'Please enter your address.');
-     return;
-    }
-    appState.currentBooking.location = location;
+    appState.currentBooking.location = document.getElementById('booking-location').value;
     appState.currentBooking.instructions = document.getElementById('booking-instructions').value;
    }
    appState.currentBooking.step = currentStep + 1;
@@ -638,277 +491,101 @@
    appState.currentBooking.step = appState.currentBooking.step - 1;
    navigateTo('booking');
   }
+  // Confirm and save to DB
   async function confirmBooking() {
    if (!appState.user) return showModal('Error', 'User not logged in.');
    const uid = appState.user.uid;
    const bookingData = {
-    providerId: appState.currentBooking.providerId,
     providerName: providers.find(p => p.id === appState.currentBooking.providerId)?.name || '',
     serviceName: appState.currentBooking.serviceName,
-    date: appState.currentBooking.date,
-    time: appState.currentBooking.time,
-    location: appState.currentBooking.location,
-    instructions: appState.currentBooking.instructions,
-    price: providers.find(p => p.id === appState.currentBooking.providerId)?.price * 2 || 280,
+    date: document.getElementById('booking-date')?.value || appState.currentBooking.date,
+    time: document.getElementById('booking-time')?.value || appState.currentBooking.time,
+    location: document.getElementById('booking-location')?.value || appState.currentBooking.location,
+    instructions: document.getElementById('booking-instructions')?.value || appState.currentBooking.instructions,
+    price: 280,
     status: 'Confirmed'
    };
    await saveBooking(uid, bookingData);
+   appState.currentBooking.step = 4;
+   navigateTo('booking');
   }
-  // Render Dashboard
   function renderCustomerDashboard() {
-   const renderBookingCard = (b) => `
-    <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-     <h4 class="font-bold text-gray-800 mb-2">${b.serviceName}</h4>
-     <p class="text-gray-600 mb-2">${b.date} at ${b.time}</p>
-     <p class="text-blue-600 font-semibold">₹${b.price}</p>
-     <span class="inline-block px-3 py-1 text-xs bg-green-100 text-green-800 rounded-full mt-2">${b.status}</span>
-    </div>
-   `;
-   const bookingsHtml = mockBookings.map(renderBookingCard).join('') || '<p class="text-center text-gray-500 py-8">No bookings yet. Book your first service!</p>';
-   return `
-    <div class="flex justify-between items-center mb-8">
-     <h2 class="text-4xl font-bold text-gray-800">Welcome, ${appState.user.name}! (${mockBookings.length} Bookings)</h2>
-     <button onclick="signOutUser()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Sign Out</button>
-    </div>
-    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">${bookingsHtml}</section>
-    <div class="text-center">
-     <button onclick="navigateTo('home')" class="bg-blue-600 text-white px-8 py-4 rounded-full">Book New Service</button>
-    </div>
-   `;
+   const renderBookingCard = (b) => `<div class="bg-white p-6 rounded-xl shadow-md border"><p class="font-bold">${b.serviceName}</p><p>${b.date} at ${b.time} - ₹${b.price}</p><span class="text-green-600">${b.status}</span></div>`;
+   return `<div class="flex justify-between items-center mb-8"><h2 class="text-4xl font-bold text-gray-800">Dashboard (${mockBookings.length} Bookings from DB)</h2><button onclick="signOutUser()" class="bg-red-500 text-white px-4 py-2 rounded-lg">Sign Out</button></div><section class="space-y-4">${mockBookings.map(renderBookingCard).join('') || '<p>No bookings yet.</p>'}</section>`;
   }
-  // Render Login Page
+  // Render functions for other pages
   function renderLoginPage() {
    return `
     <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-2xl">
-     <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Welcome Back</h2>
+     <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Login</h2>
      <form onsubmit="event.preventDefault(); signInUser();">
-      <input type="email" id="login-email" placeholder="Email Address" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-      <input type="password" id="login-password" placeholder="Password" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-      <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">Login</button>
+      <input type="email" id="login-email" placeholder="Email" class="w-full p-3 border rounded-lg mb-4" required>
+      <input type="password" id="login-password" placeholder="Password" class="w-full p-3 border rounded-lg mb-6" required>
+      <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg">Login</button>
      </form>
-     <p class="text-center mt-4 text-gray-600">Don't have an account? <a href="#" onclick="navigateTo('signup'); return false;" class="text-blue-600 hover:underline">Sign up here</a></p>
-     <button onclick="signInAnonymouslyFunc()" class="w-full mt-4 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition duration-300">Continue as Guest</button>
+     <p class="text-center mt-4">Don't have an account? <a href="#" onclick="navigateTo('signup')" class="text-blue-600">Sign up</a></p>
+     <button onclick="signInAnonymouslyFunc()" class="w-full mt-4 bg-gray-500 text-white py-3 rounded-lg">Continue as Guest</button>
     </div>
    `;
   }
-  // Render Signup Page
   function renderSignupPage() {
    return `
     <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-2xl">
-     <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Create Account</h2>
+     <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Sign Up</h2>
      <form onsubmit="event.preventDefault(); signUpUser();">
-      <input type="text" id="signup-name" placeholder="Full Name" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-      <input type="email" id="signup-email" placeholder="Email Address" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-      <input type="password" id="signup-password" placeholder="Password (min 6 chars)" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-      <input type="password" id="signup-confirm-password" placeholder="Confirm Password" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-      <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">Sign Up</button>
+      <input type="text" id="signup-name" placeholder="Full Name" class="w-full p-3 border rounded-lg mb-4" required>
+      <input type="email" id="signup-email" placeholder="Email" class="w-full p-3 border rounded-lg mb-4" required>
+      <input type="password" id="signup-password" placeholder="Password" class="w-full p-3 border rounded-lg mb-4" required>
+      <input type="password" id="signup-confirm-password" placeholder="Confirm Password" class="w-full p-3 border rounded-lg mb-6" required>
+      <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg">Sign Up</button>
      </form>
-     <p class="text-center mt-4 text-gray-600">Already have an account? <a href="#" onclick="navigateTo('login'); return false;" class="text-blue-600 hover:underline">Login here</a></p>
+     <p class="text-center mt-4">Already have an account? <a href="#" onclick="navigateTo('login')" class="text-blue-600">Login</a></p>
     </div>
    `;
   }
-  // Other Pages - Full content
   function renderAboutPage() {
-   return `
-    <div class="max-w-4xl mx-auto space-y-8">
-     <h2 class="text-4xl font-bold text-gray-800 mb-4">About One Servc</h2>
-     <p class="text-lg text-gray-700 leading-relaxed">One Servc is India's premier online marketplace connecting homeowners with verified local professionals for a wide range of home services. From emergency plumbing to relaxing home salon sessions, we make it easy to find, book, and enjoy reliable services at affordable prices.</p>
-     <div class="grid md:grid-cols-2 gap-8">
-      <div>
-       <h3 class="text-2xl font-semibold mb-4">Our Mission</h3>
-       <p>To eliminate the hassle of finding trustworthy service providers and empower local experts with more opportunities.</p>
-      </div>
-      <div>
-       <h3 class="text-2xl font-semibold mb-4">Why Choose Us?</h3>
-       <ul class="space-y-2 text-gray-600">
-        <li>✓ Vetted & Background Checked Pros</li>
-        <li>✓ Instant Booking & Real-time Tracking</li>
-        <li>✓ Secure Payments & No Hidden Fees</li>
-        <li>✓ 100% Satisfaction Guarantee</li>
-       </ul>
-      </div>
-     </div>
-     <button onclick="navigateTo('home')" class="bg-blue-600 text-white px-8 py-4 rounded-full font-semibold">Get Started</button>
-    </div>
-   `;
+   return `<div class="max-w-4xl mx-auto"><h2 class="text-4xl font-bold mb-8">About Us</h2><p class="text-lg text-gray-700">One Servc is India's leading marketplace for home services...</p></div>`;
   }
   function renderHowItWorksPage() {
-   return `
-    <div class="max-w-4xl mx-auto space-y-8">
-     <h2 class="text-4xl font-bold text-gray-800 mb-4 text-center">How It Works</h2>
-     <div class="grid md:grid-cols-3 gap-8">
-      <div class="text-center">
-       <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <i class="fas fa-search text-2xl text-blue-600"></i>
-       </div>
-       <h3 class="text-xl font-semibold mb-2">1. Search & Select</h3>
-       <p class="text-gray-600">Browse categories or search for your needed service and choose from top-rated pros.</p>
-      </div>
-      <div class="text-center">
-       <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <i class="fas fa-calendar-check text-2xl text-blue-600"></i>
-       </div>
-       <h3 class="text-xl font-semibold mb-2">2. Book Instantly</h3>
-       <p class="text-gray-600">Pick date, time, and location. Confirm with secure payment options.</p>
-      </div>
-      <div class="text-center">
-       <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <i class="fas fa-thumbs-up text-2xl text-blue-600"></i>
-       </div>
-       <h3 class="text-xl font-semibold mb-2">3. Enjoy Service</h3>
-       <p class="text-gray-600">Your pro arrives on time. Rate and review after to help others.</p>
-      </div>
-     </div>
-     <div class="text-center">
-      <button onclick="navigateTo('listings')" class="bg-blue-600 text-white px-8 py-4 rounded-full font-semibold">Browse Services</button>
-     </div>
-    </div>
-   `;
+   return `<div class="max-w-4xl mx-auto"><h2 class="text-4xl font-bold mb-8">How It Works</h2><ol class="space-y-4"><li>Search for services</li><li>Book a professional</li><li>Enjoy reliable service</li></ol></div>`;
   }
   function renderFAQPage() {
-   return `
-    <div class="max-w-4xl mx-auto space-y-6">
-     <h2 class="text-4xl font-bold text-gray-800 mb-4">Frequently Asked Questions</h2>
-     <div class="space-y-4">
-      <div class="bg-white p-6 rounded-xl shadow-md border">
-       <h3 class="font-semibold text-gray-800 mb-2">How do I book a service?</h3>
-       <p class="text-gray-600">Search for your service, select a pro, choose date/time, and confirm. It's that simple!</p>
-      </div>
-      <div class="bg-white p-6 rounded-xl shadow-md border">
-       <h3 class="font-semibold text-gray-800 mb-2">What payment methods are accepted?</h3>
-       <p class="text-gray-600">We support Cash on Delivery and online payments via UPI, cards, and wallets.</p>
-      </div>
-      <div class="bg-white p-6 rounded-xl shadow-md border">
-       <h3 class="font-semibold text-gray-800 mb-2">Are the professionals verified?</h3>
-       <p class="text-gray-600">Yes, all pros undergo background checks and skill verification.</p>
-      </div>
-      <div class="bg-white p-6 rounded-xl shadow-md border">
-       <h3 class="font-semibold text-gray-800 mb-2">What if I'm not satisfied?</h3>
-       <p class="text-gray-600">We offer refunds or re-service within 24 hours for eligible issues.</p>
-      </div>
-     </div>
-     <div class="text-center">
-      <p class="text-gray-600 mb-4">Still have questions? <a href="#" onclick="navigateTo('contact'); return false;" class="text-blue-600 hover:underline">Contact us</a></p>
-      <button onclick="navigateTo('home')" class="bg-blue-600 text-white px-8 py-4 rounded-full">Home</button>
-     </div>
-    </div>
-   `;
+   return `<div class="max-w-4xl mx-auto"><h2 class="text-4xl font-bold mb-8">FAQ</h2><div class="space-y-4"><div><h3>Q: How do I book?</h3><p>A: Use the search and book now button.</p></div></div></div>`;
   }
   function renderContactPage() {
-   return `
-    <div class="max-w-4xl mx-auto space-y-8">
-     <h2 class="text-4xl font-bold text-gray-800 mb-4">Contact Us</h2>
-     <div class="grid md:grid-cols-2 gap-8">
-      <div>
-       <h3 class="text-2xl font-semibold mb-4">Get in Touch</h3>
-       <p class="text-gray-600 mb-6">Have a question? We'd love to hear from you. Send us a message and we'll respond within 24 hours.</p>
-       <div class="space-y-4">
-        <p><i class="fas fa-phone text-blue-600 mr-2"></i> +91 22-1234-5678</p>
-        <p><i class="fas fa-envelope text-blue-600 mr-2"></i> support@oneservc.in</p>
-        <p><i class="fas fa-map-marker-alt text-blue-600 mr-2"></i> New Delhi, India</p>
-       </div>
-      </div>
-      <div>
-       <form onsubmit="event.preventDefault(); showModal('Success', 'Message sent! We'll reply soon.');">
-        <input type="text" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-        <input type="email" placeholder="Your Email" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-        <textarea rows="5" placeholder="Your Message" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-blue-400" required></textarea>
-        <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">Send Message</button>
-       </form>
-      </div>
-     </div>
-    </div>
-   `;
+   return `<div class="max-w-4xl mx-auto"><h2 class="text-4xl font-bold mb-8">Contact Us</h2><form><input type="text" placeholder="Name" class="w-full p-3 border rounded-lg mb-4"><input type="email" placeholder="Email" class="w-full p-3 border rounded-lg mb-4"><textarea placeholder="Message" class="w-full p-3 border rounded-lg mb-4"></textarea><button class="bg-blue-600 text-white py-3 px-6 rounded-lg">Send</button></form></div>`;
   }
   function renderTestimonialsPage() {
-   const testimonialsHtml = testimonials.map(t => `
-    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-     <div class="flex items-center mb-4">
-      <span class="text-yellow-400 text-lg mr-2">${getRatingStars(t.rating)}</span>
-      <span class="text-sm text-gray-500 ml-auto">${t.location || 'Delhi'}</span>
-     </div>
-     <p class="text-gray-700 mb-4 italic">"${t.text}"</p>
-     <div class="flex items-center">
-      <h4 class="font-bold text-gray-800">${t.name}</h4>
-      <p class="text-sm text-gray-500 ml-2">${t.service}</p>
-     </div>
-     <p class="text-xs text-gray-400 mt-2">${t.date}</p>
-    </div>
-   `).join('');
-   return `
-    <div class="max-w-7xl mx-auto space-y-12">
-     <header class="text-center">
-      <h2 class="text-5xl font-extrabold text-gray-800 mb-4">What Our Customers Say</h2>
-      <p class="text-xl text-gray-600">(${testimonials.length} reviews)</p>
-     </header>
-     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${testimonialsHtml || '<p class="text-center text-gray-500 col-span-full py-8">No testimonials yet. Be the first to review!</p>'}</section>
-     <div class="text-center">
-      <button onclick="navigateTo('home')" class="bg-blue-600 text-white px-8 py-4 rounded-full font-semibold">Home</button>
-     </div>
-    </div>
-   `;
+   return `<div class="max-w-7xl mx-auto space-y-12"><header class="text-center"><h2 class="text-5xl font-extrabold text-gray-800 mb-4">Testimonials (${testimonials.length} from DB)</h2></header><section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${testimonials.map(t => `<div class="bg-white p-6 rounded-xl shadow-lg border"><span class="text-yellow-400">${getRatingStars(t.rating)}</span><p class="italic">"${t.text}"</p><h4 class="font-bold mt-4">${t.name}</h4><p class="text-sm text-gray-500">${t.date} - ${t.service}</p></div>`).join('') || '<p class="text-center text-gray-500">No testimonials yet.</p>'}</section><button onclick="navigateTo('home')" class="bg-blue-600 text-white px-8 py-4 rounded-full">Home</button></div>`;
   }
   function renderProviderProfile(provider) {
-   if (!provider) return '<div class="text-center text-red-500 p-8">Provider not found. <button onclick="navigateTo(\'home\')" class="text-blue-600 underline">Go Home</button></div>';
-   return `
-    <div class="max-w-4xl mx-auto space-y-8">
-     <div class="flex flex-col md:flex-row gap-8">
-      <div class="md:w-1/3">
-       <img src="https://via.placeholder.com/300x300?text=Pro+Photo" alt="${provider.name}" class="w-full rounded-xl">
-      </div>
-      <div class="md:w-2/3 space-y-4">
-       <h2 class="text-4xl font-bold text-gray-800">${provider.name}</h2>
-       <p class="text-blue-600 text-xl">${categories.find(c => c.id === provider.categoryId)?.name}</p>
-       <div class="flex items-center"><span class="text-2xl mr-2">${getRatingStars(provider.rating)}</span><span class="text-lg font-semibold">${provider.rating} (${provider.reviews} reviews)</span></div>
-       <p class="text-gray-700 leading-relaxed">${provider.bio}</p>
-       <p class="text-2xl font-bold text-blue-800">₹${provider.price}/hr</p>
-       <button onclick="startBooking(${provider.id}, '${provider.name.replace(/'/g, "\\'")}')" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700">Book Now</button>
-      </div>
-     </div>
-    </div>
-   `;
+   if (!provider) return '<div class="text-center text-red-500">Provider not found.</div>';
+   return `<div class="max-w-4xl mx-auto"><h2 class="text-4xl font-bold mb-8">${provider.name}</h2><p class="text-lg text-gray-700">${provider.bio}</p><button onclick="startBooking(${provider.id}, '${provider.name}')" class="bg-blue-600 text-white py-3 px-6 rounded-lg">Book Now</button></div>`;
   }
-  // Mock Generators
+  // Fallback mock testimonials if DB fails
   function generateMockTestimonials(count = 20) {
-   const names = ['Rajesh Kumar', 'Priya Singh', 'Amit Sharma', 'Neha Patel', 'Vikram Desai', 'Anita Rao', 'Suresh Gupta'];
-   const services = ['Plumbing', 'Electrical Repair', 'House Cleaning', 'Home Salon', 'Pest Control', 'Carpentry', 'AC Service'];
-   const locations = ['Delhi', 'Mumbai', 'Bangalore', 'Chennai', 'Hyderabad'];
-   const texts = [
-    'Excellent service, on time and professional!',
-    'Highly recommend, fixed everything perfectly.',
-    'Great value for money, will book again.',
-    'Very reliable and friendly pro.',
-    'Quick response and quality work.'
-   ];
-   return Array.from({length: count}, (_, i) => ({
-    name: names[i % names.length],
-    text: texts[Math.floor(Math.random() * texts.length)],
-    rating: (Math.floor(Math.random() * 5) + 3) + (Math.random() > 0.5 ? 0.5 : 0), // 3.0 to 5.0
-    date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    service: services[i % services.length],
-    location: locations[Math.floor(Math.random() * locations.length)]
-   }));
+   const mocks = [];
+   const names = ['Rajesh K', 'Priya S', 'Amit M', 'Neha R', 'Vikram P'];
+   const services = ['Plumbing', 'Electrical', 'Cleaning', 'Salon', 'Pest Control'];
+   for (let i = 0; i < count; i++) {
+    mocks.push({
+     name: names[i % 5],
+     text: 'Great service, highly recommend!',
+     rating: Math.floor(Math.random() * 5) + 1,
+     date: '2025-10-01',
+     service: services[i % 5],
+     location: 'Delhi'
+    });
+   }
+   return mocks;
   }
-  function generateMockBookings(count = 3) {
-   return Array.from({length: count}, (_, i) => ({
-    id: i + 1,
-    serviceName: 'Sample Service',
-    date: '2025-10-25',
-    time: '10:00 AM',
-    price: 250,
-    status: 'Upcoming'
-   }));
-  }
-  // Mobile Menu
-  function toggleMobileMenu() { 
-   document.getElementById('mobile-menu').classList.toggle('hidden'); 
-  }
-  // Init App
+  // Init
   document.addEventListener('DOMContentLoaded', () => {
    document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenu);
    initFirebase();
    navigateTo('home');
   });
+  function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
  </script>
 </body>
 </html>
