@@ -35,7 +35,7 @@
  authDomain: "oneserviice-cceb7.firebaseapp.com",
  projectId: "oneserviice-cceb7",
  storageBucket: "oneserviice-cceb7.firebasestorage.app",
- messagingSenderId: "784214000337",
+ messagingSender ID: "784214000337",
  appId: "1:784214000337:web:0ace63723d190a2199fbf0",
  measurementId: "G-SEYP1SPXYW"
  };
@@ -59,7 +59,7 @@
  role: 'customer'
  };
  console.log("User signed in:", appState.user);
- // 🔥 FIX 2: Navigate to dashboard ONLY if the user is currently on the auth pages.
+ // FIX 2: Navigate to dashboard ONLY if the user is currently on the auth pages.
  if (appState.currentPage === 'login' || appState.currentPage === 'signup') {
  navigateTo('dashboard');
  }
@@ -156,7 +156,7 @@
  </div>
  <div class="text-center border-t border-gray-700 pt-6">
  <p>&copy; 2025 One Servc. All rights reserved.</p>
- <p class="text-sm text-gray-400 mt-2">Designed with ❤️ for Indian homes | GSTIN: 27AAFCU1234Q1Z5</p>
+ <p class="text-sm text-gray-400 mt-2">Designed with love for Indian homes | GSTIN: 27AAFCU1234Q1Z5</p>
  </div>
  </div>
  </footer>
@@ -190,16 +190,25 @@
  };
  // Mock Service Categories
  const categories = [
- { id: 'app_elec', name: 'Appliance & Electrical Repair', icon: '🔌' },
- { id: 'plumb', name: 'Plumbing & Leaks', icon: '💧' },
- { id: 'clean', name: 'Deep House Cleaning', icon: '🧼' },
- { id: 'pest', name: 'Pest Control', icon: '🐜' },
- { id: 'carp', name: 'Carpentry & Assembly', icon: '🔨' },
- { id: 'salon_mass', name: 'Home Salon & Massage', icon: '💇' },
- { id: 'ac', name: 'AC Repair & Service', icon: '❄️' },
- { id: 'paint', name: 'House Painting', icon: '🎨' },
+ { id: 'app_elec', name: 'Appliance & Electrical Repair', icon: 'plug' },
+ { id: 'plumb', name: 'Plumbing & Leaks', icon: 'water' },
+ { id: 'clean', name: 'Deep House Cleaning', icon: 'broom' },
+ { id: 'pest', name: 'Pest Control', icon: 'bug' },
+ { id: 'carp', name: 'Carpentry & Assembly', icon: 'hammer' },
+ { id: 'salon_mass', name: 'Home Salon & Massage', icon: 'haircut' },
+ { id: 'ac', name: 'AC Repair & Service', icon: 'snowflake' },
+ { id: 'paint', name: 'House Painting', icon: 'paint' },
  ];
- const category_images = {'paint': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'carp': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'app_elec': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'clean': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'pest': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'salon_mass': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'ac': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'plumb': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='};
+ const category_images = {
+  'paint':      'https://blog.75services.com/wp-content/uploads/2023/09/residential-painting-in-visakhapatnam.jpg', // UPDATED: Real Painting image
+  'carp':       'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==',
+  'app_elec':   'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==',
+  'clean':      'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==',
+  'pest':       'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==',
+  'salon_mass': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==',
+  'ac':         'https://drive.google.com/uc?export=view&id=1PNREkHjPny466zWHykm4UaOiUPZLdL6u',
+  'plumb':      'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='
+ };
 
  // Mock Service Providers with Indian names and realistic Indian pricing
  const providers = [
@@ -225,7 +234,7 @@
  const firstNames = ['Ravi', 'Priya', 'Amit', 'Neha', 'Suresh', 'Lata', 'Vikram', 'Meera', 'Rajesh', 'Sunita', 'Karan', 'Anita', 'Arjun', 'Deepa', 'Vikas', 'Shalini', 'Rahul', 'Pooja', 'Sanjay', 'Ritu'];
  const lastNames = ['Kumar', 'Singh', 'Patel', 'Reddy', 'Menon', 'Desai', 'Joshi', 'Nair', 'Gupta', 'Bose', 'Malhotra', 'Sharma', 'Verma', 'Yadav', 'Chopra', 'Das', 'Roy', 'Mishra', 'Agarwal', 'Khan'];
  const services = categories.map(c => c.name);
- const locations = ['Rohini, Delhi', 'Mumbai', 'Bangalore', 'Chennai', 'Pune', 'Hyderabad', 'Kolkata', 'Ahmedabad', 'Jaipur', 'Lucknow'];
+ const locations = ['Rohini, Delhi experiencia', 'Mumbai', 'Bangalore', 'Chennai', 'Pune', 'Hyderabad', 'Kolkata', 'Ahmedabad', 'Jaipur', 'Lucknow'];
  const textTemplates = [
  'Amazing service! Fixed everything quickly and efficiently.',
  'Highly recommend! The professional was punctual and skilled.',
@@ -311,7 +320,6 @@
  if (!email || !password) return showModal('Input Required', 'Please enter email and password.');
  try {
  await window.signInWithEmailAndPassword(window.auth, email, password);
- // navigateTo('dashboard'); // REMOVED: Let onAuthStateChanged handle navigation
  } catch (error) {
  showModal('Login Failed', error.message);
  }
@@ -326,7 +334,6 @@
  try {
  const userCredential = await window.createUserWithEmailAndPassword(window.auth, email, password);
  await window.updateProfile(userCredential.user, { displayName: name });
- // navigateTo('dashboard'); // REMOVED: Let onAuthStateChanged handle navigation
  } catch (error) {
  showModal('Signup Failed', error.message);
  }
@@ -342,7 +349,6 @@
  window.signOutUser = async () => {
  try {
  await window.signOut(window.auth);
- // Navigation to 'home' now handled by the onAuthStateChanged listener
  } catch (error) {
  showModal('Error', error.message);
  }
@@ -637,7 +643,7 @@
  <div class="flex items-center mt-2">
  <span class="text-yellow-400 text-lg mr-1">${getRatingStars(provider.rating)}</span>
  <span class="text-gray-700 font-medium">(${provider.reviews} reviews)</span>
- <span class="ml-4 text-sm text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded-full">✓ Verified</span>
+ <span class="ml-4 text-sm text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded-full">Verified</span>
  </div>
  </div>
  </div>
@@ -645,8 +651,14 @@
  <div class="bg-white p-6 rounded-xl shadow-lg">
  <h3 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">About the Provider</h3>
  <p class="text-gray-700 leading-relaxed mb-4">${provider.bio} We are committed to punctuality, quality workmanship, and transparent pricing.</p>
- <h4 class="text-xl font-semibold mt-6 mb-3 text-gray-800">Visiting Charge Policy</h4>
+ <h4 class="text-xl font-semibold mt-6 mb-3 text-gray-800">Services & Pricing</h4>
+ <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+ <li><strong>Visiting Charge:</strong> ₹${provider.price} + problem based charge</li>
+ <li><strong>Major Installation:</strong> Custom Quote (Contact for estimate)</li>
+ <li><strong>Emergency Call-out:</strong> ₹80 flat fee + problem based charge</li>
+ </ul>
  <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
+ <h5 class="font-semibold text-blue-800 mb-2">Visiting Charge Policy</h5>
  <ol class="text-sm text-blue-700 space-y-1 list-decimal list-inside ml-2">
  <li><strong>Visiting Charge – ₹80:</strong><br>A small visiting fee of ₹80 is applicable for every service request. This covers the technician’s inspection and basic consultation at your location.</li>
  <li><strong>Adjusted in Final Bill:</strong><br>If the customer decides to proceed with the service or repair, the ₹80 visiting charge will be fully adjusted in the final service amount — meaning, no extra visit fee will be charged.</li>
@@ -668,7 +680,7 @@
  </div>
  `).join('')}
  </div>
- <button class="mt-4 text-blue-600 hover:underline font-medium">Read All ${provider.reviews} Reviews</button>
+ <button class="mt-4 text-blue-600 hover:underline font-medium">Read, Read All ${provider.reviews} Reviews</button>
  </div>
  </div>
  <div class="lg:col-span-1">
@@ -741,11 +753,10 @@
  `;
  break;
  case 3:
- // Mock Price Calculation - Visiting 80 + problem based (mock 200 additional)
  const visitingCharge = 80;
- const problemCharge = 200; // Mock problem-based charge
+ const problemCharge = 200;
  const price = visitingCharge + problemCharge;
- const taxes = price * 0.18; // Mock 18% GST/Taxes
+ const taxes = price * 0.18;
  const total = price + taxes;
  stepContent = `
  <h4 class="text-2xl font-semibold mb-4 text-gray-800">3. Review & Payment</h4>
@@ -779,7 +790,6 @@
  `;
  break;
  case 4:
- // Simulate successful booking and adding to mock data
  const newBooking = {
  id: mockBookings.length + 101,
  providerName: provider.name,
@@ -787,13 +797,13 @@
  date: appState.currentBooking.date,
  time: appState.currentBooking.time,
  status: 'Confirmed',
- price: 280, // Updated mock price: 80 visiting + 200 problem
+ price: 280,
  rating: null
  };
  mockBookings.push(newBooking);
  stepContent = `
  <div class="text-center p-8 bg-green-50 rounded-xl border border-green-300">
- <div class="text-6xl text-green-600 mb-4">🎉</div>
+ <div class="text-6xl text-green-600 mb-4">Success</div>
  <h4 class="text-3xl font-bold text-green-800 mb-4">Booking Confirmed!</h4>
  <p class="text-gray-700 text-lg mb-6">You will receive an SMS and email confirmation shortly.</p>
  <p class="text-xl font-semibold mb-2">${newBooking.serviceName} with ${newBooking.providerName}</p>
@@ -803,7 +813,6 @@
  `;
  break;
  }
- // Booking Flow Container HTML
  return `
  <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
  <h2 class="text-4xl font-bold text-gray-800 mb-8">Service Booking</h2>
@@ -827,7 +836,6 @@
  </div>
  `;
  }
- // Booking step navigation logic
  function nextBookingStep() {
  const currentStep = appState.currentBooking.step;
  if (currentStep === 1) {
@@ -845,7 +853,6 @@
  } else if (currentStep === 3) {
  const agreed = document.getElementById('policy-agree').checked;
  if (!agreed) return showModal('Action Required', 'You must agree to the cancellation policy and terms to proceed.');
- // Payment simulation successful
  }
  appState.currentBooking.step = currentStep + 1;
  navigateTo('booking');
@@ -854,7 +861,6 @@
  appState.currentBooking.step = appState.currentBooking.step - 1;
  navigateTo('booking');
  }
- // --- Dashboard Render Functions ---
  function renderCustomerDashboard() {
  const upcoming = mockBookings.filter(b => b.status === 'Confirmed' || b.status === 'Pending');
  const past = mockBookings.filter(b => b.status === 'Completed');
@@ -948,7 +954,6 @@
  </div>
  `;
  }
- // --- NEW PAGES FOR BETTER SCROLLABILITY ---
  function renderAboutPage() {
  return `
  <div class="max-w-4xl mx-auto space-y-12">
@@ -968,17 +973,17 @@
  </section>
  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
  <div class="bg-white p-6 rounded-xl shadow-lg border-t-2 border-green-500">
- <span class="text-4xl block mb-3">🇮🇳</span>
+ <span class="text-4xl block mb-3">India</span>
  <h4 class="font-bold text-xl mb-2">Local Focus</h4>
  <p class="text-gray-600 text-sm">Dedicated services and fair pricing structured for the Indian economy and local markets.</p>
  </div>
  <div class="bg-white p-6 rounded-xl shadow-lg border-t-2 border-yellow-500">
- <span class="text-4xl block mb-3">✅</span>
+ <span class="text-4xl block mb-3">Check</span>
  <h4 class="font-bold text-xl mb-2">Verified Talent</h4>
  <p class="text-gray-600 text-sm">Every professional is background-checked, licensed, and performance-rated by customers.</p>
  </div>
  <div class="bg-white p-6 rounded-xl shadow-lg border-t-2 border-red-500">
- <span class="text-4xl block mb-3">📞</span>
+ <span class="text-4xl block mb-3">Phone</span>
  <h4 class="font-bold text-xl mb-2">24/7 Support</h4>
  <p class="text-gray-600 text-sm">Reliable support team available to assist with bookings, conflicts, or emergencies.</p>
  </div>
@@ -1014,9 +1019,9 @@
  }
  function renderHowItWorksPage() {
  const steps = [
- { icon: '🔎', title: 'Search & Select', detail: 'Enter your service need and Pincode. Browse profiles, check ratings, and select the professional that fits your requirements and budget.' },
- { icon: '📅', title: 'Schedule & Detail', detail: 'Choose your preferred date and time slot. Provide your exact service location and any specific instructions for the professional.' },
- { icon: '✅', title: 'Confirm & Relax', detail: 'Review the total cost (in ₹), choose your payment method (UPI, Card, or COD), and confirm your booking. Your pro will arrive on time!' }
+ { icon: 'Search', title: 'Search & Select', detail: 'Enter your service need and Pincode. Browse profiles, check ratings, and select the professional that fits your requirements and budget.' },
+ { icon: 'Calendar', title: 'Schedule & Detail', detail: 'Choose your preferred date and time slot. Provide your exact service location and any specific instructions for the professional.' },
+ { icon: 'Check', title: 'Confirm & Relax', detail: 'Review the total cost (in ₹), choose your payment method (UPI, Card, or COD), and confirm your booking. Your pro will arrive on time!' }
  ];
  return `
  <div class="max-w-4xl mx-auto space-y-10">
@@ -1153,9 +1158,7 @@
  }
  // --- Event Listeners and Initial Load ---
  document.addEventListener('DOMContentLoaded', () => {
- // Mobile Menu Toggle
  document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenu);
- // Initial Page Load
  navigateTo('home');
  });
  function toggleMobileMenu() {
