@@ -525,15 +525,22 @@
  </section>
  <section class="mb-12">
  <h3 class="text-3xl font-bold text-gray-800 mb-6">Browse by Category</h3>
- <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
- ${categories.map(c => `
- <div onclick="navigateTo('listings', {categoryId: '${c.id}'})" class="text-center p-4 bg-white rounded-xl shadow-md hover:shadow-lg hover:border-blue-500 border border-gray-100 transition duration-300 cursor-pointer">
- <img src="${category_images[c.id]}" class="w-16 h-16 mx-auto mb-2 object-cover rounded-lg" alt="${c.name}" />
- <p class="text-sm font-medium text-gray-700">${c.name}</p>
+ <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+   ${categories.map(c => `
+   <div onclick="navigateTo('listings', {categoryId: '${c.id}'})" class="text-center p-5 bg-white rounded-2xl shadow-lg hover:shadow-xl hover:border-blue-500 border-2 border-transparent transition-all duration-300 cursor-pointer group transform hover:-translate-y-1">
+     <div class="w-32 h-32 mx-auto mb-4 overflow-hidden rounded-2xl shadow-md">
+       <img 
+         src="${category_images[c.id]}" 
+         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" 
+         alt="${c.name}" 
+         onerror="this.src='https://via.placeholder.com/96?text=${c.name.slice(0,2).toUpperCase()}'; this.onerror=null;"
+       >
+     </div>
+     <p class="text-base font-semibold text-gray-800 leading-tight">${c.name}</p>
+   </div>
+   `).join('')}
  </div>
- `).join('')}
- </div>
- </section>
+</section>
  <section class="mb-12">
  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
  <div class="bg-white p-8 rounded-xl shadow-lg">
