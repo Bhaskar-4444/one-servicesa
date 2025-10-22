@@ -29,7 +29,6 @@
  // Import all required auth functions
  import { getAuth, signInAnonymously, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
  import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
- 
  // Firebase Configuration
  const firebaseConfig = {
  apiKey: "AIzaSyAOO9_ql_cl5r3pIT-ljWKMwIzeTAPHZiM",
@@ -40,18 +39,15 @@
  appId: "1:784214000337:web:0ace63723d190a2199fbf0",
  measurementId: "G-SEYP1SPXYW"
  };
- 
  window.firebaseApp = initializeApp(firebaseConfig);
  window.db = getFirestore(window.firebaseApp);
  window.auth = getAuth(window.firebaseApp);
-
  // FIX 1: Expose necessary Firebase auth functions to the global window object.
  window.signInWithEmailAndPassword = signInWithEmailAndPassword;
  window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
  window.updateProfile = updateProfile;
  window.signOut = signOut;
  window.signInAnonymously = signInAnonymously;
-
  // Auth State Listener
  onAuthStateChanged(window.auth, (user) => {
  if (user) {
@@ -63,17 +59,14 @@
  role: 'customer'
  };
  console.log("User signed in:", appState.user);
-
  // 🔥 FIX 2: Navigate to dashboard ONLY if the user is currently on the auth pages.
  if (appState.currentPage === 'login' || appState.currentPage === 'signup') {
  navigateTo('dashboard');
  }
-
  } else {
  appState.isLoggedIn = false;
  appState.user = null;
  console.log("User signed out");
-
  // If the user logs out from the dashboard, redirect them to home/login.
  if (appState.currentPage === 'dashboard') {
  navigateTo('home');
@@ -206,6 +199,8 @@
  { id: 'ac', name: 'AC Repair & Service', icon: '❄️' },
  { id: 'paint', name: 'House Painting', icon: '🎨' },
  ];
+ const category_images = {'paint': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'carp': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'app_elec': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'clean': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'pest': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'salon_mass': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'ac': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==', 'plumb': 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='};
+
  // Mock Service Providers with Indian names and realistic Indian pricing
  const providers = [
  { id: 1, name: 'Electrical services', categoryId: 'app_elec', rating: 4.9, price: 80, reviews: 100, bio: 'Certified electricians specializing in residential wiring and fault diagnostics across Mumbai and Pune.' },
@@ -515,7 +510,6 @@
  <div class="max-w-4xl mx-auto text-center">
  <h2 class="text-4xl sm:text-5xl font-extrabold mb-4">Find Your Professional Service, Instantly.</h2>
  <p class="text-xl mb-8 opacity-90">Vetted professionals for every home need, from plumbing to therapy, across India.</p>
- 
  <div class="bg-white p-2 rounded-full shadow-2xl flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
  <input type="text" placeholder="I need a service like 'Plumbing' or 'Cleaning'..." class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400" />
  <input type="text" placeholder="Enter Location / Pincode" class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 sm:max-w-xs" />
@@ -528,7 +522,7 @@
  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
  ${categories.map(c => `
  <div onclick="navigateTo('listings', {categoryId: '${c.id}'})" class="text-center p-4 bg-white rounded-xl shadow-md hover:shadow-lg hover:border-blue-500 border border-gray-100 transition duration-300 cursor-pointer">
- <div class="text-3xl mb-2">${c.icon}</div>
+ <img src="${category_images[c.id]}" class="w-16 h-16 mx-auto mb-2 object-cover rounded-lg" alt="${c.name}" />
  <p class="text-sm font-medium text-gray-700">${c.name}</p>
  </div>
  `).join('')}
@@ -561,18 +555,14 @@
  </section>
  `;
  }
- 
  function renderListingsPage(categoryId) {
  const filteredProviders = categoryId ? providers.filter(p => p.categoryId === categoryId) : providers;
  const categoryName = categoryId ? categories.find(c => c.id === categoryId).name : 'All Services';
  return `
  <h2 class="text-4xl font-bold text-gray-800 mb-8">${categoryName} Listings</h2>
- 
  <div class="flex flex-col lg:flex-row gap-8">
- 
  <aside class="w-full lg:w-1/4 bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6 lg:mb-0">
  <h3 class="text-xl font-semibold mb-4 text-gray-800">Filters</h3>
- 
  <div class="space-y-4">
  <div class="border-b pb-4">
  <p class="font-medium text-gray-700 mb-2">City</p>
@@ -637,9 +627,7 @@
  ];
  return `
  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
- 
  <div class="lg:col-span-2 space-y-8">
- 
  <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-600">
  <div class="flex items-center space-x-6">
  <img src="https://placehold.co/100x100/3b82f6/ffffff?text=${provider.name.charAt(0)}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/3b82f6/ffffff?text=P';" class="w-24 h-24 rounded-full object-cover shadow-md">
@@ -657,13 +645,20 @@
  <div class="bg-white p-6 rounded-xl shadow-lg">
  <h3 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">About the Provider</h3>
  <p class="text-gray-700 leading-relaxed mb-4">${provider.bio} We are committed to punctuality, quality workmanship, and transparent pricing.</p>
- 
  <h4 class="text-xl font-semibold mt-6 mb-3 text-gray-800">Services & Pricing</h4>
- <ul class="list-disc list-inside space-y-2 text-gray-700">
- <li>**Visiting Charge:** ₹${provider.price} + problem based charge</li>
- <li>**Major Installation:** Custom Quote (Contact for estimate)</li>
- <li>**Emergency Call-out:** ₹80 flat fee + problem based charge</li>
+ <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+ <li><strong>Visiting Charge:</strong> ₹${provider.price} + problem based charge</li>
+ <li><strong>Major Installation:</strong> Custom Quote (Contact for estimate)</li>
+ <li><strong>Emergency Call-out:</strong> ₹80 flat fee + problem based charge</li>
  </ul>
+ <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
+ <h5 class="font-semibold text-blue-800 mb-2">Visiting Charge Policy</h5>
+ <ol class="text-sm text-blue-700 space-y-1 list-decimal list-inside ml-2">
+ <li><strong>Visiting Charge – ₹80:</strong><br>A small visiting fee of ₹80 is applicable for every service request. This covers the technician’s inspection and basic consultation at your location.</li>
+ <li><strong>Adjusted in Final Bill:</strong><br>If the customer decides to proceed with the service or repair, the ₹80 visiting charge will be fully adjusted in the final service amount — meaning, no extra visit fee will be charged.</li>
+ <li><strong>Applicable Only if Work Not Done:</strong><br>If the customer chooses not to continue with the service after inspection, only the ₹80 visiting charge will be applicable as a minimal inspection fee.</li>
+ </ol>
+ </div>
  </div>
  <div class="bg-white p-6 rounded-xl shadow-lg">
  <h3 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">Customer Reviews (${provider.reviews})</h3>
@@ -686,7 +681,6 @@
  <div class="sticky top-24 bg-white p-6 rounded-xl shadow-2xl border border-blue-200">
  <h3 class="text-3xl font-extrabold text-blue-800 mb-4">Book ${provider.name}</h3>
  <p class="text-4xl font-extrabold text-gray-900 mb-6">From ₹${provider.price}<span class="text-xl font-normal text-gray-500"> visiting</span></p>
- 
  <label for="service-package" class="block text-sm font-medium text-gray-700 mb-2">Select Service Package</label>
  <select id="service-package" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">
  <option value="Visiting Charge - ${provider.price}">Visiting Charge - ₹${provider.price}</option>
@@ -700,7 +694,6 @@
  </div>
  `;
  }
- 
  // Function to initiate the booking flow
  function startBooking(providerId, serviceName) {
  if (!appState.isLoggedIn) {
@@ -730,7 +723,6 @@
  <h4 class="text-2xl font-semibold mb-4 text-gray-800">1. Select Date & Time</h4>
  <label for="booking-date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
  <input type="date" id="booking-date" value="${appState.currentBooking.date}" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500"/>
- 
  <label for="booking-time" class="block text-sm font-medium text-gray-700 mb-1">Time Slot</label>
  <select id="booking-time" required class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">
  <option value="">-- Select a Time Slot --</option>
@@ -746,10 +738,8 @@
  <h4 class="text-2xl font-semibold mb-4 text-gray-800">2. Enter Location & Details</h4>
  <label for="booking-location" class="block text-sm font-medium text-gray-700 mb-1">Service Address (Flat No, Society/Area, Pincode)</label>
  <input type="text" id="booking-location" placeholder="A-402, Shiv Shanti Towers, 400001" value="${appState.currentBooking.location}" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500"/>
- 
  <label for="booking-instructions" class="block text-sm font-medium text-gray-700 mb-1">Special Instructions (e.g., gate code, dog warning)</label>
  <textarea id="booking-instructions" rows="4" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">${appState.currentBooking.instructions}</textarea>
- 
  <div class="flex space-x-4">
  <button onclick="prevBookingStep()" class="flex-grow bg-gray-300 text-gray-800 py-3 rounded-lg font-bold hover:bg-gray-400 transition duration-300">Back</button>
  <button onclick="nextBookingStep()" class="flex-grow bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Next: Payment</button>
@@ -765,7 +755,6 @@
  const total = price + taxes;
  stepContent = `
  <h4 class="text-2xl font-semibold mb-4 text-gray-800">3. Review & Payment</h4>
- 
  <div class="bg-gray-50 p-6 rounded-xl mb-6 border border-gray-200">
  <h5 class="text-xl font-bold mb-3">Order Summary</h5>
  <p class="text-lg text-gray-800 mb-1">**Provider:** ${provider.name}</p>
@@ -785,7 +774,6 @@
  <option>Pay on Completion (COD)</option>
  <option>New Payment Method</option>
  </select>
- 
  <div class="flex items-center mb-6">
  <input type="checkbox" id="policy-agree" required class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
  <label for="policy-agree" class="ml-2 text-sm text-gray-600">I agree to the <span class="text-blue-600 hover:underline cursor-pointer">cancellation policy</span> and terms.</label>
@@ -814,7 +802,6 @@
  <div class="text-6xl text-green-600 mb-4">🎉</div>
  <h4 class="text-3xl font-bold text-green-800 mb-4">Booking Confirmed!</h4>
  <p class="text-gray-700 text-lg mb-6">You will receive an SMS and email confirmation shortly.</p>
- 
  <p class="text-xl font-semibold mb-2">${newBooking.serviceName} with ${newBooking.providerName}</p>
  <p class="text-lg text-gray-600 mb-8">${newBooking.date} at ${newBooking.time}</p>
  <button onclick="navigateTo('dashboard')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Go to Dashboard</button>
@@ -826,7 +813,6 @@
  return `
  <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
  <h2 class="text-4xl font-bold text-gray-800 mb-8">Service Booking</h2>
- 
  <div class="flex justify-between items-center mb-8 relative">
  ${stepTitles.map((title, index) => `
  <div class="flex flex-col items-center z-10">
@@ -982,12 +968,10 @@
  We founded One Servc to address the complexity of finding reliable, skilled, and fairly-priced local professionals in India. Our mission is to bridge the trust gap between customers and service providers.
  From the bustling lanes of **Mumbai** to the tech hubs of **Bangalore** and the heritage cities of **Delhi**, we ensure that high-quality, trustworthy help is just a tap away. We are proud to support local Indian businesses and create opportunities for skilled individuals.
  </p>
- 
  <p class="text-gray-700 leading-relaxed">
  Our platform is built with the Indian user in mind—supporting regional languages, UPI payments, and hyper-local service matching. Join thousands of satisfied customers who have transformed their homes and lives with One Servc.
  </p>
  </section>
- 
  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
  <div class="bg-white p-6 rounded-xl shadow-lg border-t-2 border-green-500">
  <span class="text-4xl block mb-3">🇮🇳</span>
@@ -1056,11 +1040,9 @@
  <p class="text-gray-700">${step.detail}</p>
  </div>
  </div>
- 
  <div class="hidden md:flex md:w-2/12 justify-center">
  <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-2xl font-bold shadow-xl border-4 border-white">${index + 1}</div>
  </div>
- 
  <div class="md:w-5/12 ${index % 2 === 0 ? 'md:order-3' : ''}">
  <span class="text-5xl block mb-2 md:hidden">${step.icon}</span>
  <span class="hidden md:inline-block text-5xl">${step.icon}</span>
@@ -1108,7 +1090,6 @@
  { question: "What happens if the provider is late?", answer: "We guarantee on-time arrival or offer a discount. Track your pro in real-time via the app." },
  { question: "How do I rate a service?", answer: "After completion, you'll receive a prompt to rate and review the provider in your dashboard." },
  ];
- 
  return `
  <div class="max-w-4xl mx-auto space-y-10">
  <header class="text-center">
