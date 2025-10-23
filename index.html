@@ -252,12 +252,8 @@
  { id: 9, name: 'AC Experts', categoryId: 'ac', price: 80, bio: 'Specialized AC installation, repair, and maintenance in major cities.' },
  { id: 10, name: 'Painting service', categoryId: 'paint', price: 80, bio: 'Professional interior and exterior painting with paints.' },
  ];
- // Mock Bookings Data with Rupee prices
- const mockBookings = [
- { id: 101, providerName: 'Electrical services', serviceName: 'Appliance & Electrical Repair', date: '2025-10-25', time: '10:00 AM', status: 'Confirmed', price: 280, rating: 5 },
- { id: 102, providerName: 'Cleaning Services', serviceName: 'Deep House Cleaning', date: '2025-11-05', time: '02:00 PM', status: 'Pending', price: 280, rating: null },
- { id: 103, providerName: 'Plumber service', serviceName: 'Plumbing & Leaks', date: '2025-09-15', time: '09:00 AM', status: 'Completed', price: 280, rating: 4 },
- ];
+ // Mock Bookings Data with Rupee prices - Now empty, only user bookings
+ let mockBookings = [];
  // Function to generate mock testimonials
  function generateMockTestimonials(count = 120) {
  const firstNames = ['Ravi', 'Priya', 'Amit', 'Neha', 'Suresh', 'Lata', 'Vikram', 'Meera', 'Rajesh', 'Sunita', 'Karan', 'Anita', 'Arjun', 'Deepa', 'Vikas', 'Shalini', 'Rahul', 'Pooja', 'Sanjay', 'Ritu'];
@@ -388,6 +384,14 @@
  } else {
  navigateTo('login');
  }
+ }
+ // Booking management functions
+ function cancelBooking(id) {
+ mockBookings = mockBookings.map(b => b.id === id ? {...b, status: 'Cancelled'} : b);
+ showModal('Cancelled', 'Booking cancelled successfully. No fees applied.', () => navigateTo('dashboard'));
+ }
+ function rescheduleBooking(id) {
+ showModal('Rescheduled', 'Booking rescheduled successfully without any fees. Provider will confirm the new time.', () => navigateTo('dashboard'));
  }
  // --- Routing and View Rendering ---
  function navigateTo(page, data = {}) {
@@ -900,27 +904,27 @@
  navigateTo('booking');
  }
  function renderCustomerDashboard() {
- const upcoming = mockBookings.filter(b => b.status === 'Confirmed' || b.status === 'Pending');
- const past = mockBookings.filter(b => b.status === 'Completed');
+ const upcoming = mockBookings.filter(b => ['Confirmed', 'Pending'].includes(b.status));
+ const past = mockBookings.filter(b => ['Completed', 'Cancelled'].includes(b.status));
  const renderBookingCard = (b) => `
  <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center professional-card fade-in">
  <div class="flex-grow mb-4 md:mb-0">
- <p class="text-xs font-semibold uppercase ${b.status === 'Confirmed' ? 'text-green-600' : 'text-yellow-600'} mb-1">${b.status}</p>
+ <p class="text-xs font-semibold uppercase ${b.status === 'Confirmed' ? 'text-green-600' : b.status === 'Pending' ? 'text-yellow-600' : b.status === 'Cancelled' ? 'text-red-600' : 'text-gray-600'} mb-1">${b.status}</p>
  <h4 class="text-xl font-bold text-gray-800 mb-1">${b.serviceName}</h4>
  <p class="text-gray-600 mb-2">with <span class="font-semibold text-blue-600">${b.providerName}</span></p>
  <p class="text-gray-500 text-sm">${b.date} at ${b.time}</p>
  </div>
  <div class="flex flex-col items-start md:items-end space-y-2">
  <p class="text-2xl font-bold text-gray-800">₹${b.price.toFixed(2)}</p>
- ${b.status !== 'Completed' ? `
+ ${['Confirmed', 'Pending'].includes(b.status) ? `
  <div class="flex space-x-2">
- <button onclick="showModal('Cancel Booking', 'Are you sure you want to cancel booking #${b.id}? Cancellation fees (max ₹800) may apply.', () => console.log('Booking Cancelled'), true)" class="text-red-500 hover:text-red-700 text-sm font-medium">Cancel</button>
- <button onclick="showModal('Reschedule Booking', 'Rescheduling booking #${b.id} requires provider approval.', () => {}, false)" class="text-blue-500 hover:text-blue-700 text-sm font-medium">Reschedule</button>
+ <button onclick="cancelBooking(${b.id})" class="text-red-500 hover:text-red-700 text-sm font-medium">Cancel (Free)</button>
+ <button onclick="rescheduleBooking(${b.id})" class="text-blue-500 hover:text-blue-700 text-sm font-medium">Reschedule (Free)</button>
  </div>
- ` : (b.rating ? `
- <div class="flex items-center text-sm text-gray-600">Your Rating: ${getRatingStars(b.rating)}</div>
- ` : `
+ ` : (b.status === 'Completed' && !b.rating ? `
  <button onclick="showModal('Rate Service', 'Thank you for your business! Give ${b.providerName} a 5-star rating.', () => console.log('Rated Service'), false)" class="bg-yellow-400 text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-500 transition duration-300">Rate Service</button>
+ ` : `
+ <div class="flex items-center text-sm text-gray-600">Status: ${b.status}</div>
  `)}
  </div>
  </div>
@@ -939,7 +943,7 @@
  <section class="mb-10">
  <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Past Services (${past.length})</h3>
  <div class="space-y-4">
- ${past.length > 0 ? past.map(renderBookingCard).join('') : '<p class="text-gray-500 p-4 bg-white rounded-xl">No completed services yet.</p>'}
+ ${past.length > 0 ? past.map(renderBookingCard).join('') : '<p class="text-gray-500 p-4 bg-white rounded-xl">No completed or cancelled services yet.</p>'}
  </div>
  </section>
  <section>
