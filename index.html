@@ -46,13 +46,13 @@
  // Import all required auth functions
  import { getAuth, signInAnonymously, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
  import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
- // Firebase Configuration
+ // Firebase Configuration - FIXED: Removed space in messagingSenderId
  const firebaseConfig = {
  apiKey: "AIzaSyAOO9_ql_cl5r3pIT-ljWKMwIzeTAPHZiM",
  authDomain: "oneserviice-cceb7.firebaseapp.com",
  projectId: "oneserviice-cceb7",
  storageBucket: "oneserviice-cceb7.firebasestorage.app",
- messagingSender ID: "784214000337",
+ messagingSenderId: "784214000337",
  appId: "1:784214000337:web:0ace63723d190a2199fbf0",
  measurementId: "G-SEYP1SPXYW"
  };
