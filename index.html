@@ -97,13 +97,13 @@
  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
  <h1 class="text-3xl font-extrabold text-blue-600">One Servc</h1>
  <div class="hidden md:flex space-x-8 text-gray-700 font-medium">
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('home')">Home</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('listings')">Services</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('howitworks')">How It Works</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('testimonials')">Testimonials</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="handleAuthClick()">Dashboard</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('about')">About Us</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('faq')">Help & FAQ</a>
+ <a href="#home" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('home'); return false;">Home</a>
+ <a href="#listings" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('listings'); return false;">Services</a>
+ <a href="#howitworks" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('howitworks'); return false;">How It Works</a>
+ <a href="#testimonials" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('testimonials'); return false;">Testimonials</a>
+ <a href="#dashboard" class="hover:text-blue-600 transition duration-150 text-lg" onclick="handleAuthClick(); return false;">Dashboard</a>
+ <a href="#about" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('about'); return false;">About Us</a>
+ <a href="#faq" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('faq'); return false;">Help & FAQ</a>
  <button id="auth-button" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-150 font-semibold text-lg" onclick="handleAuthClick()">My Account</button>
  </div>
  <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100">
@@ -111,13 +111,13 @@
  </button>
  </nav>
  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('home'); toggleMobileMenu()">Home</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('listings'); toggleMobileMenu()">Services</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('howitworks'); toggleMobileMenu()">How It Works</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('testimonials'); toggleMobileMenu()">Testimonials</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="handleAuthClick(); toggleMobileMenu()">Dashboard</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('about'); toggleMobileMenu()">About Us</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('faq'); toggleMobileMenu()">Help & FAQ</a>
+ <a href="#home" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('home'); toggleMobileMenu(); return false;">Home</a>
+ <a href="#listings" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('listings'); toggleMobileMenu(); return false;">Services</a>
+ <a href="#howitworks" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('howitworks'); toggleMobileMenu(); return false;">How It Works</a>
+ <a href="#testimonials" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('testimonials'); toggleMobileMenu(); return false;">Testimonials</a>
+ <a href="#dashboard" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="handleAuthClick(); toggleMobileMenu(); return false;">Dashboard</a>
+ <a href="#about" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('about'); toggleMobileMenu(); return false;">About Us</a>
+ <a href="#faq" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('faq'); toggleMobileMenu(); return false;">Help & FAQ</a>
  <button class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="toggleMobileMenu(); handleAuthClick()">My Account</button>
  </div>
  </header>
@@ -138,17 +138,17 @@
  <div>
  <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
  <ul class="space-y-2 text-sm">
- <li><a href="#" onclick="navigateTo('home')" class="text-gray-300 hover:text-blue-400 transition duration-150">Home</a></li>
- <li><a href="#" onclick="navigateTo('listings')" class="text-gray-300 hover:text-blue-400 transition duration-150">Services</a></li>
- <li><a href="#" onclick="navigateTo('howitworks')" class="text-gray-300 hover:text-blue-400 transition duration-150">How It Works</a></li>
- <li><a href="#" onclick="navigateTo('about')" class="text-gray-300 hover:text-blue-400 transition duration-150">About Us</a></li>
+ <li><a href="#home" onclick="navigateTo('home'); return false;" class="text-gray-300 hover:text-blue-400 transition duration-150">Home</a></li>
+ <li><a href="#listings" onclick="navigateTo('listings'); return false;" class="text-gray-300 hover:text-blue-400 transition duration-150">Services</a></li>
+ <li><a href="#howitworks" onclick="navigateTo('howitworks'); return false;" class="text-gray-300 hover:text-blue-400 transition duration-150">How It Works</a></li>
+ <li><a href="#about" onclick="navigateTo('about'); return false;" class="text-gray-300 hover:text-blue-400 transition duration-150">About Us</a></li>
  </ul>
  </div>
  <div>
  <h4 class="text-lg font-semibold mb-4">Support</h4>
  <ul class="space-y-2 text-sm">
- <li><a href="#" onclick="navigateTo('faq')" class="text-gray-300 hover:text-blue-400 transition duration-150">Help & FAQ</a></li>
- <li><a href="#" onclick="navigateTo('contact')" class="text-gray-300 hover:text-blue-400 transition duration-150">Contact Us</a></li>
+ <li><a href="#faq" onclick="navigateTo('faq'); return false;" class="text-gray-300 hover:text-blue-400 transition duration-150">Help & FAQ</a></li>
+ <li><a href="#contact" onclick="navigateTo('contact'); return false;" class="text-gray-300 hover:text-blue-400 transition duration-150">Contact Us</a></li>
  <li><a href="#" class="text-gray-300 hover:text-blue-400 transition duration-150">Privacy Policy</a></li>
  <li><a href="#" class="text-gray-300 hover:text-blue-400 transition duration-150">Terms of Service</a></li>
  </ul>
@@ -379,6 +379,11 @@
  }
  // --- Routing and View Rendering ---
  function navigateTo(page, data = {}) {
+ // FIXED: Hash-based routing for back button support
+ if (page !== appState.currentPage) {
+ location.hash = page;
+ return; // Let hashchange handle the rest
+ }
  appState.currentPage = page;
  // Reset booking flow on non-booking pages
  if (page !== 'booking') {
@@ -447,6 +452,13 @@
  // Add fade-in animation to new content
  container.classList.add('fade-in');
  }
+ // FIXED: Hashchange listener for back/forward button support
+ window.addEventListener('hashchange', function() {
+   const page = location.hash.substring(1) || 'home';
+   if (page !== appState.currentPage) {
+     navigateTo(page, {}); // Pass empty data object
+   }
+ });
  // --- Page Render Functions ---
  function renderLoginPage() {
  return `
@@ -465,7 +477,7 @@
  <button onclick="signInUser()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Sign In</button>
  </div>
  <div class="mt-6 text-center">
- <p class="text-gray-600">Don't have an account? <a href="#" onclick="navigateTo('signup'); return false;" class="text-blue-600 hover:underline">Sign up</a></p>
+ <p class="text-gray-600">Don't have an account? <a href="#signup" onclick="navigateTo('signup'); return false;" class="text-blue-600 hover:underline">Sign up</a></p>
  </div>
  <div class="mt-4 text-center">
  <button onclick="signInAnonymouslyFunc()" class="text-blue-600 hover:underline text-sm">Continue as Guest</button>
@@ -501,7 +513,7 @@
  <button onclick="signUpUser()" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition duration-300">Sign Up</button>
  </div>
  <div class="mt-6 text-center">
- <p class="text-gray-600">Already have an account? <a href="#" onclick="navigateTo('login'); return false;" class="text-blue-600 hover:underline">Sign in</a></p>
+ <p class="text-gray-600">Already have an account? <a href="#login" onclick="navigateTo('login'); return false;" class="text-blue-600 hover:underline">Sign in</a></p>
  </div>
  <div class="mt-4 text-center">
  <button onclick="navigateTo('home')" class="text-gray-600 hover:underline text-sm">Back to Home</button>
@@ -1185,7 +1197,9 @@
  // --- Event Listeners and Initial Load ---
  document.addEventListener('DOMContentLoaded', () => {
  document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenu);
- navigateTo('home');
+ // FIXED: Initial load from hash or default to home
+ const initialPage = location.hash.substring(1) || 'home';
+ navigateTo(initialPage);
  });
  function toggleMobileMenu() {
  document.getElementById('mobile-menu').classList.toggle('hidden');
