@@ -33,6 +33,18 @@
  .gradient-bg {
    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
  }
+ /* New: Hero section background image similar to provided (cozy room with plants and chair) */
+ .hero-bg {
+   background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80');
+   background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+ }
+ /* New: Search bar overlay with subtle background for inputs */
+ .search-overlay {
+   background: rgba(255, 255, 255, 0.95);
+   backdrop-filter: blur(10px);
+ }
  .fade-in {
    animation: fadeIn 0.6s ease-out;
  }
@@ -531,11 +543,12 @@
  </div>
  `).join('');
  return `
- <section class="gradient-bg text-white rounded-xl p-8 md:p-16 mb-12 shadow-xl professional-card">
- <div class="max-w-4xl mx-auto text-center">
+ <section class="hero-bg text-white rounded-xl p-8 md:p-16 mb-12 shadow-xl professional-card relative overflow-hidden">
+ <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+ <div class="max-w-4xl mx-auto text-center relative z-10">
  <h2 class="text-4xl sm:text-5xl font-extrabold mb-4">Find Your Professional Service, Instantly.</h2>
  <p class="text-xl mb-8 opacity-90">Vetted professionals for every home need, from plumbing to therapy, across India.</p>
- <div class="bg-white p-2 rounded-full shadow-2xl flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+ <div class="bg-white p-2 rounded-full shadow-2xl flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 search-overlay">
  <input type="text" placeholder="I need a service like 'Plumbing' or 'Cleaning'..." class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400" />
  <input type="text" placeholder="Enter Location / Pincode" class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 sm:max-w-xs" />
  <button onclick="navigateTo('listings')" class="bg-blue-500 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-600 transition duration-300 shadow-lg">Search</button>
