@@ -590,6 +590,8 @@
  function renderListingsPage(categoryId) {
  const filteredProviders = categoryId ? providers.filter(p => p.categoryId === categoryId) : providers;
  const categoryName = categoryId ? categories.find(c => c.id === categoryId).name : 'All Services';
+ const locations = ['Rohini Sec-17, Delhi', 'Rohini Sec-18, Delhi', 'Rohini Sec-16, Delhi', 'Jor Bagh, Delhi', 'Shalimar Bagh, Delhi', 'Pitampura, Delhi', 'Model Town, Delhi', 'Sarita Vihar, Delhi', 'Saket, Delhi', 'Keshav Puram, Delhi', 'RK Puram, Delhi', 'Connaught Place, Delhi', 'South Extension, Delhi', 'Defence Colony, Delhi', 'Greater Kailash, Delhi', 'Vasant Kunj, Delhi', 'Dwarka, Delhi', 'Janakpuri, Delhi', 'Lajpat Nagar, Delhi', 'Karol Bagh, Delhi'];
+ const cityOptions = locations.map(loc => `<option>${loc}</option>`).join('');
  return `
  <h2 class="text-4xl font-bold text-gray-800 mb-8">${categoryName} Listings</h2>
  <div class="flex flex-col lg:flex-row gap-8">
@@ -599,10 +601,7 @@
  <div class="border-b pb-4">
  <p class="font-medium text-gray-700 mb-2">City</p>
  <select class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
- <option>Mumbai, Maharashtra</option>
- <option>Bangalore, Karnataka</option>
- <option>Delhi NCR</option>
- <option>Chennai, Tamil Nadu</option>
+ ${cityOptions}
  </select>
  </div>
  <div class="border-b pb-4">
