@@ -100,7 +100,7 @@
  <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('home')">Home</a>
  <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('listings')">Services</a>
  <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('howitworks')">Service Flow</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('testimonials')">People’s Words</a>
+ <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('testimonials')">Reviews</a>
  <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="handleAuthClick()">Your Order</a>
  <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('about')">About Us</a>
  <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('faq')">Help & FAQ</a>
@@ -113,12 +113,12 @@
  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
  <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('home'); toggleMobileMenu()">Home</a>
  <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('listings'); toggleMobileMenu()">Services</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('howitworks'); toggleMobileMenu()">How It Works</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('testimonials'); toggleMobileMenu()">Testimonials</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="handleAuthClick(); toggleMobileMenu()">Dashboard</a>
+ <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('howitworks'); toggleMobileMenu()">Service Flow</a>
+ <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('testimonials'); toggleMobileMenu()">Reviews</a>
+ <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="handleAuthClick(); toggleMobileMenu()">Your Order</a>
  <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('about'); toggleMobileMenu()">About Us</a>
  <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('faq'); toggleMobileMenu()">Help & FAQ</a>
- <button class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="toggleMobileMenu(); handleAuthClick()">My Account</button>
+ <button class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="toggleMobileMenu(); handleAuthClick()">User Panel</button>
  </div>
  </header>
  <main id="app-container" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"></main>
@@ -140,7 +140,7 @@
  <ul class="space-y-2 text-sm">
  <li><a href="#" onclick="navigateTo('home')" class="text-gray-300 hover:text-blue-400 transition duration-150">Home</a></li>
  <li><a href="#" onclick="navigateTo('listings')" class="text-gray-300 hover:text-blue-400 transition duration-150">Services</a></li>
- <li><a href="#" onclick="navigateTo('howitworks')" class="text-gray-300 hover:text-blue-400 transition duration-150">How It Works</a></li>
+ <li><a href="#" onclick="navigateTo('howitworks')" class="text-gray-300 hover:text-blue-400 transition duration-150">Service Flow</a></li>
  <li><a href="#" onclick="navigateTo('about')" class="text-gray-300 hover:text-blue-400 transition duration-150">About Us</a></li>
  </ul>
  </div>
@@ -155,15 +155,15 @@
  </div>
  </div>
  <div class="border-t border-gray-700 pt-8 mb-8">
- <h4 class="text-lg font-semibold mb-4">Get in Touch</h4>
+ <h4 class="text-lg font-semibold mb-4">Get in Touch</h4
  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
  <div>
- <p class="text-gray-300 mb-2"><i class="fas fa-phone mr-2"></i> +91 22-1234-5678</p>
- <p class="text-gray-300"><i class="fas fa-envelope mr-2"></i> support@oneservc.in</p>
+ <p class="text-gray-300 mb-2"><i class="fas fa-phone mr-2"></i> +91-8882648433</p>
+ <p class="text-gray-300"><i class="fas fa-envelope mr-2"></i> team.oneserviice@gmail.com.in</p>
  </div>
  <div>
- <p class="text-gray-300 mb-2"><i class="fas fa-map-marker-alt mr-2"></i> Mumbai, Maharashtra</p>
- <p class="text-gray-300">Serving 50+ cities across India</p>
+ <p class="text-gray-300 mb-2"><i class="fas fa-map-marker-alt mr-2"></i> NCR, Delhi</p>
+ <p class="text-gray-300">Serving 5+ cities across India</p>
  </div>
  <div>
  <p class="text-gray-300 mb-2">Mon-Sun: 9AM - 9PM IST</p>
@@ -172,7 +172,7 @@
  </div>
  </div>
  <div class="text-center border-t border-gray-700 pt-6">
- <p>&copy; 2025 One Servc. All rights reserved.</p>
+ <p>&copy; 2025 One Serviice. All rights reserved.</p>
  <p class="text-sm text-gray-400 mt-2">Designed with love for Indian homes | GSTIN: 27AAFCU1234Q1Z5</p>
  </div>
  </div>
@@ -229,10 +229,10 @@
 
  // Mock Service Providers with Indian names and realistic Indian pricing
  const providers = [
- { id: 1, name: 'Electrical services', categoryId: 'app_elec', rating: 4.9, price: 80, reviews: 100, bio: 'Certified electricians specializing in residential wiring and fault diagnostics across Mumbai and Pune.' },
- { id: 11, name: 'General mechanics', categoryId: 'app_elec', rating: 4.9, price: 80, reviews: 300, bio: 'Repair of washing machines, refrigerators, and microwaves at home.' },
- { id: 2, name: 'Plumber service', categoryId: 'plumb', rating: 4.7, price: 80, reviews: 80, bio: 'Fast, reliable plumbing service for leaks, clogs, and installations. 10 years experience.' },
- { id: 4, name: 'Cleaning Services', categoryId: 'clean', rating: 4.5, price: 80, reviews: 32, bio: 'Eco-friendly house cleaning services. Weekly, bi-weekly, or deep cleaning options.' },
+ { id: 1, name: 'Electrical services', categoryId: 'app_elec', price: 80, bio: 'Certified electricians specializing in residential wiring and fault diagnostics across NCR and Delhi.' },
+ { id: 11, name: 'General mechanics', categoryId: 'app_elec', price: 80, bio: 'Repair of washing machines, refrigerators, and microwaves at home.' },
+ { id: 2, name: 'Plumber service', categoryId: 'plumb', price: 80, bio: 'Fast, reliable plumbing service for leaks, clogs, and installations. 10 years experience.' },
+ { id: 4, name: 'Cleaning Services', categoryId: 'clean', price: 80, bio: 'Eco-friendly house cleaning services. Weekly, bi-weekly, or deep cleaning options.' },
  { id: 5, name: 'Pests control', categoryId: 'pest', rating: 4.8, price: 80, reviews: 15, bio: 'Residential and commercial pest control. Guaranteed removal of all common pests.' },
  { id: 6, name: 'Carpenter service', categoryId: 'carp', rating: 4.6, price: 80, reviews: 50, bio: 'Custom carpentry, repairs, and furniture assembly. Serving Delhi Rohini.' },
  { id: 3, name: 'Haircut', categoryId: 'salon_mass', rating: 5.0, price: 80, reviews: 62, bio: 'Modern and classic haircuts for men and women. Home service available in Rohini Delhi.' },
