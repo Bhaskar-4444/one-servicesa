@@ -58,13 +58,10 @@
  // Import all required auth functions
  import { getAuth, signInAnonymously, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
  import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
- // Import Realtime Database functions
- import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
- // Firebase Configuration - ADDED: databaseURL
+ // Firebase Configuration - FIXED: Removed space in messagingSenderId
  const firebaseConfig = {
  apiKey: "AIzaSyAOO9_ql_cl5r3pIT-ljWKMwIzeTAPHZiM",
  authDomain: "oneserviice-cceb7.firebaseapp.com",
- databaseURL: "https://oneserviice-cceb7-default-rtdb.firebaseio.com/",
  projectId: "oneserviice-cceb7",
  storageBucket: "oneserviice-cceb7.firebasestorage.app",
  messagingSenderId: "784214000337",
@@ -74,8 +71,6 @@
  window.firebaseApp = initializeApp(firebaseConfig);
  window.db = getFirestore(window.firebaseApp);
  window.auth = getAuth(window.firebaseApp);
- // ADDED: Initialize Realtime Database
- window.database = getDatabase(window.firebaseApp);
  // FIX 1: Expose necessary Firebase auth functions to the global window object.
  window.signInWithEmailAndPassword = signInWithEmailAndPassword;
  window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
@@ -97,8 +92,6 @@
  if (appState.currentPage === 'login' || appState.currentPage === 'signup') {
  navigateTo('dashboard');
  }
- // ADDED: Load user bookings from RTDB when signed in
- loadUserBookings();
  } else {
  appState.isLoggedIn = false;
  appState.user = null;
@@ -107,8 +100,6 @@
  if (appState.currentPage === 'dashboard') {
  navigateTo('home');
  }
- // ADDED: Clear bookings on sign out
- userBookings = [];
  }
  });
  </script>
@@ -223,32 +214,9 @@
  time: '',
  location: '',
  instructions: '',
- phone: '', // ADDED: For contact number
  },
  user: null // Now populated by Firebase Auth
  };
- // ADDED: Real-time bookings array (replaces mockBookings)
- let userBookings = [];
- // Function to load user bookings from RTDB
- function loadUserBookings() {
- if (!appState.user || !appState.user.uid) return;
- const bookingsRef = ref(window.database, `users/${appState.user.uid}/bookings`);
- onValue(bookingsRef, (snapshot) => {
-   const data = snapshot.val();
-   userBookings = data ? Object.values(data).map(booking => ({
-     ...booking,
-     id: booking.id || Object.keys(data).find(key => data[key] === booking) // Ensure ID
-   })) : [];
-   console.log('Loaded bookings:', userBookings);
-   // Re-render dashboard if on it
-   if (appState.currentPage === 'dashboard') {
-     navigateTo('dashboard');
-   }
- }, (error) => {
-   console.error('Error loading bookings:', error);
-   showModal('Error', 'Failed to load bookings. Please try again.');
- });
- }
  // Mock Service Categories
  const categories = [
  { id: 'app_elec', name: 'Appliance & Electrical Repair', icon: 'plug' },
@@ -284,11 +252,16 @@
  { id: 9, name: 'AC Experts', categoryId: 'ac', price: 80, bio: 'Specialized AC installation, repair, and maintenance in major cities.' },
  { id: 10, name: 'Painting service', categoryId: 'paint', price: 80, bio: 'Professional interior and exterior painting with paints.' },
  ];
- // REMOVED: mockBookings - now using userBookings from RTDB
+ // Mock Bookings Data with Rupee prices
+ const mockBookings = [
+ { id: 101, providerName: 'Electrical services', serviceName: 'Appliance & Electrical Repair', date: '2025-10-25', time: '10:00 AM', status: 'Confirmed', price: 280, rating: 5 },
+ { id: 102, providerName: 'Cleaning Services', serviceName: 'Deep House Cleaning', date: '2025-11-05', time: '02:00 PM', status: 'Pending', price: 280, rating: null },
+ { id: 103, providerName: 'Plumber service', serviceName: 'Plumbing & Leaks', date: '2025-09-15', time: '09:00 AM', status: 'Completed', price: 280, rating: 4 },
+ ];
  // Function to generate mock testimonials
  function generateMockTestimonials(count = 120) {
  const firstNames = ['Ravi', 'Priya', 'Amit', 'Neha', 'Suresh', 'Lata', 'Vikram', 'Meera', 'Rajesh', 'Sunita', 'Karan', 'Anita', 'Arjun', 'Deepa', 'Vikas', 'Shalini', 'Rahul', 'Pooja', 'Sanjay', 'Ritu'];
- const lastNames = ['Kumar', 'Singh', 'Patel', 'Reddy', 'Menon', 'Desai', 'Joshi', 'Nair', 'Gupta', 'Bose', 'Malhotra', 'Sharma', 'Verma', 'Yadav', 'Chopra', 'Das', 'Roy', 'Mishra', 'Agarwal'];
+ const lastNames = ['Kumar', 'Singh', 'Patel', 'Reddy', 'Menon', 'Desai', 'Joshi', 'Nair', 'Gupta', 'Bose', 'Malhotra', 'Sharma', 'Verma', 'Yadav', 'Chopra', 'Das', 'Roy', 'Mishra', 'Agarwal', 'Khan'];
  const services = categories.map(c => c.name);
  const locations = ['Rohini Sec-17, Delhi', 'Rohini Sec-18, Delhi', 'Rohini Sec-16, Delhi', 'Jor Bagh, Delhi', 'Shalimar Bagh, Delhi', 'Pitampura, Delhi', 'Model Town, Delhi', 'Sarita Vihar, Delhi', 'Saket, Delhi', 'Keshav Puram, Delhi', 'RK Puram, Delhi', 'Connaught Place, Delhi', 'South Extension, Delhi', 'Defence Colony, Delhi', 'Greater Kailash, Delhi', 'Vasant Kunj, Delhi', 'Dwarka, Delhi', 'Janakpuri, Delhi', 'Lajpat Nagar, Delhi', 'Karol Bagh, Delhi'];
  const textTemplates = [
@@ -416,52 +389,6 @@
  navigateTo('login');
  }
  }
- // ADDED: Function to save booking to RTDB
- async function saveBookingToDatabase(bookingData) {
- if (!appState.user || !appState.user.uid) {
-   showModal('Error', 'User not authenticated. Please log in again.');
-   return;
- }
- try {
-   const bookingsRef = ref(window.database, `users/${appState.user.uid}/bookings`);
-   const newBookingRef = push(bookingsRef);
-   const bookingId = newBookingRef.key;
-   const fullBookingData = {
-     ...bookingData,
-     id: bookingId,
-     timestamp: new Date().toISOString()
-   };
-   await set(newBookingRef, fullBookingData);
-   console.log('Booking saved:', fullBookingData);
-   showModal('Success', 'Booking saved to database!');
- } catch (error) {
-   console.error('Error saving booking:', error);
-   showModal('Error', 'Failed to save booking. Please try again.');
- }
- }
- // Booking management functions - UPDATED: Use RTDB for updates (e.g., cancel/reschedule would update status)
- async function cancelBooking(id) {
- if (!appState.user || !appState.user.uid) return;
- try {
-   const bookingRef = ref(window.database, `users/${appState.user.uid}/bookings/${id}`);
-   await set(bookingRef, { ...userBookings.find(b => b.id === id), status: 'Cancelled' });
-   showModal('Cancelled', 'Booking cancelled successfully. No fees applied.', () => navigateTo('dashboard'));
- } catch (error) {
-   console.error('Error cancelling booking:', error);
-   showModal('Error', 'Failed to cancel booking.');
- }
- }
- async function rescheduleBooking(id) {
- if (!appState.user || !appState.user.uid) return;
- try {
-   const bookingRef = ref(window.database, `users/${appState.user.uid}/bookings/${id}`);
-   await set(bookingRef, { ...userBookings.find(b => b.id === id), status: 'Rescheduled' });
-   showModal('Rescheduled', 'Booking rescheduled successfully without any fees. Provider will confirm the new time.', () => navigateTo('dashboard'));
- } catch (error) {
-   console.error('Error rescheduling booking:', error);
-   showModal('Error', 'Failed to reschedule booking.');
- }
- }
  // --- Routing and View Rendering ---
  function navigateTo(page, data = {}) {
  appState.currentPage = page;
@@ -475,7 +402,6 @@
  time: '',
  location: '',
  instructions: '',
- phone: '',
  };
  }
  const container = document.getElementById('app-container');
@@ -617,15 +543,15 @@
  </div>
  `).join('');
  return `
- <section class="hero-bg text-white rounded-xl p-12 md:p-20 mb-12 shadow-xl professional-card relative overflow-hidden">
+ <section class="hero-bg text-white rounded-xl p-8 md:p-16 mb-12 shadow-xl professional-card relative overflow-hidden">
  <div class="absolute inset-0 bg-black bg-opacity-20"></div>
  <div class="max-w-4xl mx-auto text-center relative z-10">
  <h2 class="text-4xl sm:text-5xl font-extrabold mb-4">Find Your Professional Service, Instantly.</h2>
  <p class="text-xl mb-8 opacity-90">Vetted professionals for every home need, from plumbing to therapy, across India.</p>
- <div class="w-full max-w-5xl mx-auto bg-white p-6 rounded-full shadow-2xl flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 search-overlay">
- <input type="text" placeholder="I need a service like 'Plumbing' or 'Cleaning'..." class="flex-grow p-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg" />
- <input type="text" placeholder="Enter Location / Pincode" class="flex-grow p-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg sm:max-w-xs" />
- <button onclick="navigateTo('listings')" class="bg-blue-500 text-white px-10 py-4 rounded-full font-bold hover:bg-blue-600 transition duration-300 shadow-lg text-lg whitespace-nowrap">Search Services</button>
+ <div class="bg-white p-2 rounded-full shadow-2xl flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 search-overlay">
+ <input type="text" placeholder="I need a service like 'Plumbing' or 'Cleaning'..." class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+ <input type="text" placeholder="Enter Location / Pincode" class="flex-grow p-3 sm:py-3 sm:px-5 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 sm:max-w-xs" />
+ <button onclick="navigateTo('listings')" class="bg-blue-500 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-600 transition duration-300 shadow-lg">Search</button>
  </div>
  </div>
  </section>
@@ -760,7 +686,6 @@
  </div>
  </div>
  </div>
- </div>
  <div class="bg-white p-6 rounded-xl shadow-lg professional-card">
  <h3 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">About the Provider</h3>
  <p class="text-gray-700 leading-relaxed mb-4">${provider.bio} We are committed to punctuality, quality workmanship, and transparent pricing.</p>
@@ -827,7 +752,6 @@
  time: '',
  location: '',
  instructions: '',
- phone: '',
  };
  navigateTo('booking');
  }
@@ -858,8 +782,6 @@
  <h4 class="text-2xl font-semibold mb-4 text-gray-800">2. Enter Location & Details</h4>
  <label for="booking-location" class="block text-sm font-medium text-gray-700 mb-1">Service Address (Flat No, Society/Area, Pincode)</label>
  <input type="text" id="booking-location" placeholder="A-402, Shiv Shanti Towers, 400001" value="${appState.currentBooking.location}" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500"/>
- <label for="booking-phone" class="block text-sm font-medium text-gray-700 mb-1">Contact Phone Number (+91)</label>
- <input type="tel" id="booking-phone" placeholder="+91-9876543210" value="${appState.currentBooking.phone}" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500"/>
  <label for="booking-instructions" class="block text-sm font-medium text-gray-700 mb-1">Special Instructions (e.g., gate code, dog warning)</label>
  <textarea id="booking-instructions" rows="4" class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-blue-500 focus:border-blue-500">${appState.currentBooking.instructions}</textarea>
  <div class="flex space-x-4">
@@ -881,8 +803,7 @@
  <p class="text-lg text-gray-800 mb-1">**Provider:** ${provider.name}</p>
  <p class="text-lg text-gray-800 mb-1">**Service:** ${appState.currentBooking.serviceName}</p>
  <p class="text-lg text-gray-800 mb-1">**When:** ${appState.currentBooking.date} at ${appState.currentBooking.time}</p>
- <p class="text-lg text-gray-800 mb-1">**Where:** ${appState.currentBooking.location}</p>
- <p class="text-lg text-gray-800 mb-1">**Phone:** ${appState.currentBooking.phone}</p>
+ <p class="text-lg text-gray-800 mb-4">**Where:** ${appState.currentBooking.location}</p>
  <div class="border-t pt-3 space-y-1">
  <div class="flex justify-between text-gray-700"><span>Visiting Charge:</span><span>₹${visitingCharge.toFixed(2)}</span></div>
  <div class="flex justify-between text-gray-700"><span>Problem Based Charge:</span><span>₹${problemCharge.toFixed(2)}</span></div>
@@ -908,29 +829,23 @@
  break;
  case 4:
  const newBooking = {
- providerId: appState.currentBooking.providerId,
+ id: mockBookings.length + 101,
  providerName: provider.name,
  serviceName: appState.currentBooking.serviceName,
  date: appState.currentBooking.date,
  time: appState.currentBooking.time,
- location: appState.currentBooking.location,
- phone: appState.currentBooking.phone,
- instructions: appState.currentBooking.instructions,
  status: 'Confirmed',
- price: 280.00,
+ price: 280,
  rating: null
  };
- // ADDED: Save to RTDB instead of local array
- saveBookingToDatabase(newBooking);
+ mockBookings.push(newBooking);
  stepContent = `
  <div class="text-center p-8 bg-green-50 rounded-xl border border-green-300 professional-card">
  <div class="text-6xl text-green-600 mb-4">Success</div>
  <h4 class="text-3xl font-bold text-green-800 mb-4">Booking Confirmed!</h4>
- <p class="text-gray-700 text-lg mb-6">You will receive an SMS and email confirmation shortly. Your booking has been saved securely.</p>
+ <p class="text-gray-700 text-lg mb-6">You will receive an SMS and email confirmation shortly.</p>
  <p class="text-xl font-semibold mb-2">${newBooking.serviceName} with ${newBooking.providerName}</p>
- <p class="text-lg text-gray-600 mb-2">${newBooking.date} at ${newBooking.time}</p>
- <p class="text-lg text-gray-600 mb-2">Location: ${newBooking.location}</p>
- <p class="text-lg text-gray-600 mb-2">Phone: ${newBooking.phone}</p>
+ <p class="text-lg text-gray-600 mb-8">${newBooking.date} at ${newBooking.time}</p>
  <button onclick="navigateTo('dashboard')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Go to Dashboard</button>
  </div>
  `;
@@ -969,11 +884,9 @@
  appState.currentBooking.time = time;
  } else if (currentStep === 2) {
  const location = document.getElementById('booking-location').value;
- const phone = document.getElementById('booking-phone').value;
  const instructions = document.getElementById('booking-instructions').value;
- if (!location || !phone) return showModal('Input Required', 'Please enter the complete service address, phone number, and any instructions.');
+ if (!location) return showModal('Input Required', 'Please enter the complete service address (including Pincode).');
  appState.currentBooking.location = location;
- appState.currentBooking.phone = phone;
  appState.currentBooking.instructions = instructions;
  } else if (currentStep === 3) {
  const agreed = document.getElementById('policy-agree').checked;
@@ -987,29 +900,27 @@
  navigateTo('booking');
  }
  function renderCustomerDashboard() {
- const upcoming = userBookings.filter(b => ['Confirmed', 'Pending'].includes(b.status));
- const past = userBookings.filter(b => ['Completed', 'Cancelled', 'Rescheduled'].includes(b.status));
+ const upcoming = mockBookings.filter(b => b.status === 'Confirmed' || b.status === 'Pending');
+ const past = mockBookings.filter(b => b.status === 'Completed');
  const renderBookingCard = (b) => `
  <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center professional-card fade-in">
  <div class="flex-grow mb-4 md:mb-0">
- <p class="text-xs font-semibold uppercase ${b.status === 'Confirmed' ? 'text-green-600' : b.status === 'Pending' ? 'text-yellow-600' : b.status === 'Cancelled' ? 'text-red-600' : b.status === 'Rescheduled' ? 'text-orange-600' : 'text-gray-600'} mb-1">${b.status}</p>
+ <p class="text-xs font-semibold uppercase ${b.status === 'Confirmed' ? 'text-green-600' : 'text-yellow-600'} mb-1">${b.status}</p>
  <h4 class="text-xl font-bold text-gray-800 mb-1">${b.serviceName}</h4>
  <p class="text-gray-600 mb-2">with <span class="font-semibold text-blue-600">${b.providerName}</span></p>
  <p class="text-gray-500 text-sm">${b.date} at ${b.time}</p>
- <p class="text-gray-500 text-sm">Location: ${b.location}</p>
- <p class="text-gray-500 text-sm">Phone: ${b.phone}</p>
  </div>
  <div class="flex flex-col items-start md:items-end space-y-2">
  <p class="text-2xl font-bold text-gray-800">₹${b.price.toFixed(2)}</p>
- ${['Confirmed', 'Pending'].includes(b.status) ? `
+ ${b.status !== 'Completed' ? `
  <div class="flex space-x-2">
- <button onclick="cancelBooking('${b.id}')" class="text-red-500 hover:text-red-700 text-sm font-medium">Cancel (Free)</button>
- <button onclick="rescheduleBooking('${b.id}')" class="text-blue-500 hover:text-blue-700 text-sm font-medium">Reschedule (Free)</button>
+ <button onclick="showModal('Cancel Booking', 'Are you sure you want to cancel booking #${b.id}? Cancellation fees (max ₹800) may apply.', () => console.log('Booking Cancelled'), true)" class="text-red-500 hover:text-red-700 text-sm font-medium">Cancel</button>
+ <button onclick="showModal('Reschedule Booking', 'Rescheduling booking #${b.id} requires provider approval.', () => {}, false)" class="text-blue-500 hover:text-blue-700 text-sm font-medium">Reschedule</button>
  </div>
- ` : (b.status === 'Completed' && !b.rating ? `
- <button onclick="showModal('Rate Service', 'Thank you for your business! Give ${b.providerName} a 5-star rating.', () => console.log('Rated Service'), false)" class="bg-yellow-400 text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-500 transition duration-300">Rate Service</button>
+ ` : (b.rating ? `
+ <div class="flex items-center text-sm text-gray-600">Your Rating: ${getRatingStars(b.rating)}</div>
  ` : `
- <div class="flex items-center text-sm text-gray-600">Status: ${b.status}</div>
+ <button onclick="showModal('Rate Service', 'Thank you for your business! Give ${b.providerName} a 5-star rating.', () => console.log('Rated Service'), false)" class="bg-yellow-400 text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-500 transition duration-300">Rate Service</button>
  `)}
  </div>
  </div>
@@ -1028,7 +939,7 @@
  <section class="mb-10">
  <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Past Services (${past.length})</h3>
  <div class="space-y-4">
- ${past.length > 0 ? past.map(renderBookingCard).join('') : '<p class="text-gray-500 p-4 bg-white rounded-xl">No completed or cancelled services yet.</p>'}
+ ${past.length > 0 ? past.map(renderBookingCard).join('') : '<p class="text-gray-500 p-4 bg-white rounded-xl">No completed services yet.</p>'}
  </div>
  </section>
  <section>
