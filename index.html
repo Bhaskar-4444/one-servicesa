@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>One Servc - Professional Service Marketplace (India)</title>
+ <title>OneServiice - Professional Service Marketplace (India)</title>
  <script src="https://cdn.tailwindcss.com"></script>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
  <style>
@@ -58,15 +58,15 @@
  // Import all required auth functions
  import { getAuth, signInAnonymously, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
  import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
- // Firebase Configuration - FIXED: Removed space in messagingSenderId
+ // Firebase Configuration
  const firebaseConfig = {
- apiKey: "AIzaSyAOO9_ql_cl5r3pIT-ljWKMwIzeTAPHZiM",
- authDomain: "oneserviice-cceb7.firebaseapp.com",
- projectId: "oneserviice-cceb7",
- storageBucket: "oneserviice-cceb7.firebasestorage.app",
- messagingSenderId: "784214000337",
- appId: "1:784214000337:web:0ace63723d190a2199fbf0",
- measurementId: "G-SEYP1SPXYW"
+  apiKey: "AIzaSyDbCpfja4Ly7kjNNNqy1L7i81CeAFtCDzU",
+  authDomain: "oneserviice-d0270.firebaseapp.com",
+  projectId: "oneserviice-d0270",
+  storageBucket: "oneserviice-d0270.firebasestorage.app",
+  messagingSenderId: "591308815657",
+  appId: "1:591308815657:web:aacb2188b2b94c92d24b38",
+  measurementId: "G-K3KKG8R8KN"
  };
  window.firebaseApp = initializeApp(firebaseConfig);
  window.db = getFirestore(window.firebaseApp);
@@ -107,7 +107,7 @@
 <body class="min-h-screen flex flex-col">
  <header class="bg-white shadow-lg sticky top-0 z-40">
  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
- <h1 class="text-3xl font-extrabold text-blue-600">One Servc</h1>
+ <h1 class="text-3xl font-extrabold text-blue-600">OneServiice</h1>
  <div class="hidden md:flex space-x-8 text-gray-700 font-medium">
  <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('home')">Home</a>
  <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('listings')">Services</a>
@@ -138,7 +138,7 @@
  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
  <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
  <div class="md:col-span-2">
- <h3 class="text-2xl font-bold mb-4 text-blue-400">One Servc</h3>
+ <h3 class="text-2xl font-bold mb-4 text-blue-400">OneServiice</h3>
  <p class="text-gray-300 mb-4 leading-relaxed">Connecting you with the best local professionals across India. From plumbing to therapy, we make home services simple, reliable, and affordable.</p>
  <div class="flex space-x-4">
  <a href="#" class="text-gray-400 hover:text-blue-400 transition duration-150"><i class="fab fa-facebook-f text-xl"></i></a>
@@ -184,7 +184,7 @@
  </div>
  </div>
  <div class="text-center border-t border-gray-700 pt-6">
- <p>&copy; 2025 One Serviice. All rights reserved.</p>
+ <p>&copy; 2025 OneServiice. All rights reserved.</p>
  <p class="text-sm text-gray-400 mt-2">Designed with love for Indian homes | GSTIN: 27AAFCU1234Q1Z5</p>
  </div>
  </div>
@@ -492,7 +492,7 @@
  return `
  <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-100 professional-card">
  <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Create Account</h2>
- <p class="text-center text-gray-600 mb-8">Join One Servc today</p>
+ <p class="text-center text-gray-600 mb-8">Join OneServiice today</p>
  <div class="space-y-4">
  <div>
  <label for="signup-name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
@@ -954,7 +954,7 @@
  </ul>
  </div>
  <div class="bg-white p-6 rounded-xl shadow-md professional-card">
- <h4 class="text-lg font-semibold mb-2">Why Choose One Servc?</h4>
+ <h4 class="text-lg font-semibold mb-2">Why Choose OneServiice?</h4>
  <p class="text-gray-600">100% vetted pros, no hidden fees, and easy rescheduling.</p>
  </div>
  </div>
@@ -1000,13 +1000,13 @@
  <p class="text-xl text-gray-600">Simplifying home and personal services across the nation.</p>
  </header>
  <section class="bg-white p-8 rounded-xl shadow-2xl border-l-4 border-blue-600 professional-card">
- <h3 class="text-3xl font-bold text-gray-800 mb-4">The One Servc Vision</h3>
+ <h3 class="text-3xl font-bold text-gray-800 mb-4">The OneServiice Vision</h3>
  <p class="text-gray-700 leading-relaxed mb-4">
- We founded One Servc to address the complexity of finding reliable, skilled, and fairly-priced local professionals in India. Our mission is to bridge the trust gap between customers and service providers.
+ We founded OneServiice to address the complexity of finding reliable, skilled, and fairly-priced local professionals in India. Our mission is to bridge the trust gap between customers and service providers.
  From the bustling lanes of **Mumbai** to the tech hubs of **Bangalore** and the heritage cities of **Delhi**, we ensure that high-quality, trustworthy help is just a tap away. We are proud to support local Indian businesses and create opportunities for skilled individuals.
  </p>
  <p class="text-gray-700 leading-relaxed">
- Our platform is built with the Indian user in mind—supporting regional languages, UPI payments, and hyper-local service matching. Join thousands of satisfied customers who have transformed their homes and lives with One Servc.
+ Our platform is built with the Indian user in mind—supporting regional languages, UPI payments, and hyper-local service matching. Join thousands of satisfied customers who have transformed their homes and lives with OneServiice.
  </p>
  </section>
  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
@@ -1064,7 +1064,7 @@
  return `
  <div class="max-w-4xl mx-auto space-y-10">
  <header class="text-center">
- <h2 class="text-5xl font-extrabold text-gray-800 mb-4">How One Servc Works</h2>
+ <h2 class="text-5xl font-extrabold text-gray-800 mb-4">How OneServiice Works</h2>
  <p class="text-xl text-gray-600">Booking home services has never been easier in India.</p>
  </header>
  <div class="relative flex flex-col items-center mb-12">
@@ -1160,7 +1160,7 @@
  <div class="max-w-xl mx-auto space-y-8">
  <header class="text-center">
  <h2 class="text-4xl font-bold text-gray-800 mb-4">Contact Our Support Team</h2>
- <p class="text-gray-600 mb-8">Fill out the form below or email us directly at support@oneservc.in. We're here to help!</p>
+ <p class="text-gray-600 mb-8">Fill out the form below or email us directly at support@oneserviice.in. We're here to help!</p>
  </header>
  <div class="bg-white p-8 rounded-xl shadow-2xl border border-gray-100 professional-card">
  <form onsubmit="event.preventDefault(); showModal('Message Sent!', 'Thank you for reaching out. We will respond to your query within 24 hours.', () => {});">
