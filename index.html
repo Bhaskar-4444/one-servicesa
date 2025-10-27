@@ -3,6 +3,10 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta name="description" content="OneServiice - Book trusted home and personal services across India, from plumbing to therapy, with vetted professionals.">
+ <meta name="keywords" content="home services, professional services, India, plumbing, cleaning, pest control, carpentry, salon, AC repair, painting">
+ <meta name="author" content="OneServiice Team">
+ <meta name="robots" content="index, follow">
  <title>OneServiice - Professional Service Marketplace (India)</title>
  <script src="https://cdn.tailwindcss.com"></script>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -111,31 +115,31 @@
 </head>
 <body class="min-h-screen flex flex-col">
  <header class="bg-white shadow-lg sticky top-0 z-40">
- <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+ <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center" aria-label="Main navigation">
  <h1 class="text-3xl font-extrabold text-blue-600">OneServiice</h1>
  <div class="hidden md:flex space-x-8 text-gray-700 font-medium">
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('home')">Home</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('listings')">Services</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('howitworks')">Service Flow</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('testimonials')">Reviews</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="handleAuthClick()">Your Order</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('about')">About Us</a>
- <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('faq')">Help & FAQ</a>
- <button id="auth-button" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-150 font-semibold text-lg" onclick="handleAuthClick()">User Panel</button>
+ <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('home')" aria-label="Home page">Home</a>
+ <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('listings')" aria-label="Services page">Services</a>
+ <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('howitworks')" aria-label="How it works page">Service Flow</a>
+ <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('testimonials')" aria-label="Customer reviews page">Reviews</a>
+ <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="handleAuthClick()" aria-label="Your order page">Your Order</a>
+ <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('about')" aria-label="About us page">About Us</a>
+ <a href="#" class="hover:text-blue-600 transition duration-150 text-lg" onclick="navigateTo('faq')" aria-label="Help and FAQ page">Help & FAQ</a>
+ <button id="auth-button" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-150 font-semibold text-lg" onclick="handleAuthClick()" aria-label="User panel">User Panel</button>
  </div>
- <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100">
+ <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100" aria-label="Toggle mobile menu" aria-expanded="false">
  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
  </button>
  </nav>
- <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('home'); toggleMobileMenu()">Home</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('listings'); toggleMobileMenu()">Services</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('howitworks'); toggleMobileMenu()">Service Flow</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('testimonials'); toggleMobileMenu()">Reviews</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="handleAuthClick(); toggleMobileMenu()">Your Order</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('about'); toggleMobileMenu()">About Us</a>
- <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('faq'); toggleMobileMenu()">Help & FAQ</a>
- <button class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="toggleMobileMenu(); handleAuthClick()">User Panel</button>
+ <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100" role="menu">
+ <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('home'); toggleMobileMenu()" role="menuitem">Home</a>
+ <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('listings'); toggleMobileMenu()" role="menuitem">Services</a>
+ <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('howitworks'); toggleMobileMenu()" role="menuitem">Service Flow</a>
+ <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('testimonials'); toggleMobileMenu()" role="menuitem">Reviews</a>
+ <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="handleAuthClick(); toggleMobileMenu()" role="menuitem">Your Order</a>
+ <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('about'); toggleMobileMenu()" role="menuitem">About Us</a>
+ <a href="#" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="navigateTo('faq'); toggleMobileMenu()" role="menuitem">Help & FAQ</a>
+ <button class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 text-lg" onclick="toggleMobileMenu(); handleAuthClick()" role="menuitem">User Panel</button>
  </div>
  </header>
  <main id="app-container" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"></main>
@@ -281,8 +285,7 @@ async function initializeDatabase() {
     console.log('Database initialized successfully');
   } catch (error) {
     console.error('Error initializing database:', error);
-    // Fallback to mock data, no modal error
-    console.log('Using mock data as fallback');
+    showModal('Error', 'Failed to initialize database. Using local data.', () => {});
   }
 }
 
@@ -370,8 +373,7 @@ async function saveBooking(booking) {
     return true;
   } catch (error) {
     console.error('Error saving booking:', error);
-    showModal('Save Failed', `Booking not saved: ${error.message}. Please try logging in again.`, () => navigateTo('login'));
-    throw error; // Re-throw to halt UI success
+    throw new Error(`Failed to save booking: ${error.message}`);
   }
 }
 // --- Utility Functions ---
@@ -514,72 +516,79 @@ function handleAuthClick() {
 
 // --- Routing and View Rendering ---
 async function navigateTo(page, data = {}) {
-  appState.currentPage = page;
-  if (page !== 'booking') {
-    appState.currentBooking = {
-      providerId: null,
-      serviceName: '',
-      step: 1,
-      date: '',
-      time: '',
-      location: '',
-      instructions: '',
-    };
+  try {
+    appState.currentPage = page;
+    // Close mobile menu if open
+    document.getElementById('mobile-menu').classList.add('hidden');
+    if (page !== 'booking') {
+      appState.currentBooking = {
+        providerId: null,
+        serviceName: '',
+        step: 1,
+        date: '',
+        time: '',
+        location: '',
+        instructions: '',
+      };
+    }
+    const container = document.getElementById('app-container');
+    container.innerHTML = '';
+    window.scrollTo(0, 0);
+    switch (page) {
+      case 'home':
+        container.innerHTML = await renderHomePage();
+        break;
+      case 'listings':
+        container.innerHTML = await renderListingsPage(data.categoryId);
+        break;
+      case 'profile':
+        const provider = (await fetchProviders()).find(p => p.id === data.providerId);
+        appState.currentProvider = provider;
+        container.innerHTML = renderProviderProfile(provider);
+        break;
+      case 'booking':
+        if (!appState.isLoggedIn) {
+          showModal('Login Required', 'Please sign in to book a service.', () => navigateTo('login'));
+          return;
+        }
+        container.innerHTML = await renderBookingSystem();
+        break;
+      case 'dashboard':
+        if (!appState.isLoggedIn) {
+          navigateTo('login');
+          return;
+        }
+        container.innerHTML = await renderCustomerDashboard();
+        break;
+      case 'login':
+        container.innerHTML = renderLoginPage();
+        break;
+      case 'signup':
+        container.innerHTML = renderSignupPage();
+        break;
+      case 'about':
+        container.innerHTML = renderAboutPage();
+        break;
+      case 'howitworks':
+        container.innerHTML = renderHowItWorksPage();
+        break;
+      case 'faq':
+        container.innerHTML = renderFAQPage();
+        break;
+      case 'contact':
+        container.innerHTML = renderContactPage();
+        break;
+      case 'testimonials':
+        container.innerHTML = await renderTestimonialsPage();
+        break;
+      default:
+        container.innerHTML = '<h2 class="text-center text-red-500">404 Page Not Found</h2><p class="text-center text-gray-600 mt-4">The page you requested does not exist. <a href="#" onclick="navigateTo(\'home\')" class="text-blue-600 hover:underline">Return to Home</a></p>';
+    }
+    container.classList.add('fade-in');
+  } catch (error) {
+    console.error('Navigation error:', error);
+    showModal('Error', 'Failed to load page. Please try again.', () => navigateTo('home'));
   }
-  const container = document.getElementById('app-container');
-  container.innerHTML = '';
-  window.scrollTo(0, 0);
-  switch (page) {
-    case 'home':
-      container.innerHTML = await renderHomePage();
-      break;
-    case 'listings':
-      container.innerHTML = await renderListingsPage(data.categoryId);
-      break;
-    case 'profile':
-      const provider = (await fetchProviders()).find(p => p.id === data.providerId);
-      appState.currentProvider = provider;
-      container.innerHTML = renderProviderProfile(provider);
-      break;
-    case 'booking':
-      if (!appState.isLoggedIn) {
-        showModal('Login Required', 'Please sign in to book a service.', () => navigateTo('login'));
-        return;
-      }
-      container.innerHTML = renderBookingSystem();
-      break;
-    case 'dashboard':
-      if (!appState.isLoggedIn) {
-        navigateTo('login');
-        return;
-      }
-      container.innerHTML = await renderCustomerDashboard();
-      break;
-    case 'login':
-      container.innerHTML = renderLoginPage();
-      break;
-    case 'signup':
-      container.innerHTML = renderSignupPage();
-      break;
-    case 'about':
-      container.innerHTML = renderAboutPage();
-      break;
-    case 'howitworks':
-      container.innerHTML = renderHowItWorksPage();
-      break;
-    case 'faq':
-      container.innerHTML = renderFAQPage();
-      break;
-    case 'contact':
-      container.innerHTML = renderContactPage();
-      break;
-    case 'testimonials':
-      container.innerHTML = await renderTestimonialsPage();
-      break;
-    default:
-      container.innerHTML = '<h2>404 Page Not Found</h2>';
-  }
-  container.classList.add('fade-in');
 }
 
 // --- Page Render Functions ---
@@ -686,7 +695,7 @@ async function renderHomePage() {
                 src="${c.image}" 
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                 alt="${c.name}" 
-                onerror="this.src='https://via.placeholder.com/192?text=${c.name.slice(0,2).toUpperCase()}'; this.onerror=null;"
+                onerror="this.src='https://via.placeholder.com/192/3b82f6/ffffff?text=${c.name.slice(0,2).toUpperCase()}'; this.onerror=null;"
               >
             </div>
             <p class="text-base sm:text-lg font-semibold text-gray-800 leading-tight">${c.name}</p>
@@ -862,7 +871,7 @@ function renderProviderProfile(provider) {
   `;
 }
 
-function startBooking(providerId, serviceName) {
+async function startBooking(providerId, serviceName) {
   if (!appState.isLoggedIn) {
     showModal('Login Required', 'Please sign in to book a service.', () => navigateTo('login'));
     return;
@@ -876,17 +885,15 @@ function startBooking(providerId, serviceName) {
     location: '',
     instructions: '',
   };
-  navigateTo('booking');
+  await navigateTo('booking');
 }
 
-function renderBookingSystem() {
+async function renderBookingSystem() {
   const step = appState.currentBooking.step;
-  const providers = fetchProviders(); // Make sync for simplicity, but since async, use await in render
-  const providerPromise = providers.then(providers => providers.find(p => p.id === appState.currentBooking.providerId));
-  // For simplicity, since mock, use sync mock
-  const provider = mockProviders.find(p => p.id === appState.currentBooking.providerId);
+  const providers = await fetchProviders();
+  const provider = providers.find(p => p.id === appState.currentBooking.providerId);
   const stepTitles = ["Choose Date & Time", "Enter Location & Details", "Review & Payment", "Confirmation"];
-  if (!provider) return '<div class="text-center text-red-500">Booking error: Provider not selected.</div>';
+  if (!provider) return '<div class="text-center text-red-500">Booking error: Provider not found. <button onclick="navigateTo(\'home\')" class="text-blue-600 hover:underline">Return to Home</button></div>';
   let stepContent = '';
   switch (step) {
     case 1:
@@ -954,42 +961,42 @@ function renderBookingSystem() {
         </div>
       `;
       break;
-   case 4:
-  try {
-    const newBooking = {
-      id: Date.now(), // Unique ID based on timestamp
-      providerName: provider.name,
-      serviceName: appState.currentBooking.serviceName,
-      date: appState.currentBooking.date,
-      time: appState.currentBooking.time,
-      location: appState.currentBooking.location,
-      instructions: appState.currentBooking.instructions,
-      status: 'Confirmed',
-      price: 280,
-      rating: null
-    };
-    await saveBooking(newBooking); // Now awaits and errors if fails
-    stepContent = `
-      <div class="text-center p-8 bg-green-50 rounded-xl border border-green-300 professional-card">
-        <div class="text-6xl text-green-600 mb-4">Success</div>
-        <h4 class="text-3xl font-bold text-green-800 mb-4">Booking Confirmed!</h4>
-        <p class="text-gray-700 text-lg mb-6">You will receive an SMS and email confirmation shortly.</p>
-        <p class="text-xl font-semibold mb-2">${newBooking.serviceName} with ${newBooking.providerName}</p>
-        <p class="text-lg text-gray-600 mb-8">${newBooking.date} at ${newBooking.time}</p>
-        <button onclick="navigateTo('dashboard')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Go to Dashboard</button>
-      </div>
-    `;
-  } catch (error) {
-    stepContent = `
-      <div class="text-center p-8 bg-red-50 rounded-xl border border-red-300">
-        <div class="text-6xl text-red-600 mb-4">Error</div>
-        <h4 class="text-3xl font-bold text-red-800 mb-4">Booking Failed</h4>
-        <p class="text-gray-700 text-lg mb-6">Could not save to database. ${error.message}</p>
-        <button onclick="navigateTo('login')" class="bg-red-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700">Re-login & Retry</button>
-      </div>
-    `;
-  }
-  break;
+    case 4:
+      try {
+        const newBooking = {
+          id: Date.now(),
+          providerName: provider.name,
+          serviceName: appState.currentBooking.serviceName,
+          date: appState.currentBooking.date,
+          time: appState.currentBooking.time,
+          location: appState.currentBooking.location,
+          instructions: appState.currentBooking.instructions,
+          status: 'Confirmed',
+          price: 280,
+          rating: null
+        };
+        await saveBooking(newBooking);
+        stepContent = `
+          <div class="text-center p-8 bg-green-50 rounded-xl border border-green-300 professional-card">
+            <div class="text-6xl text-green-600 mb-4">Success</div>
+            <h4 class="text-3xl font-bold text-green-800 mb-4">Booking Confirmed!</h4>
+            <p class="text-gray-700 text-lg mb-6">You will receive an SMS and email confirmation shortly.</p>
+            <p class="text-xl font-semibold mb-2">${newBooking.serviceName} with ${newBooking.providerName}</p>
+            <p class="text-lg text-gray-600 mb-8">${newBooking.date} at ${newBooking.time}</p>
+            <button onclick="navigateTo('dashboard')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Go to Dashboard</button>
+          </div>
+        `;
+      } catch (error) {
+        stepContent = `
+          <div class="text-center p-8 bg-red-50 rounded-xl border border-red-300">
+            <div class="text-6xl text-red-600 mb-4">Error</div>
+            <h4 class="text-3xl font-bold text-red-800 mb-4">Booking Failed</h4>
+            <p class="text-gray-700 text-lg mb-6">Could not save booking: ${error.message}</p>
+            <button onclick="navigateTo('login')" class="bg-red-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700">Re-login & Retry</button>
+          </div>
+        `;
+      }
+      break;
   }
   return `
     <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-100 professional-card">
@@ -1021,17 +1028,30 @@ function nextBookingStep() {
     const date = document.getElementById('booking-date').value;
     const time = document.getElementById('booking-time').value;
     if (!date || !time) return showModal('Input Required', 'Please select a date and time for your booking.');
+    const selectedDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (selectedDate < today) return showModal('Invalid Date', 'Please select a future date for your booking.');
     appState.currentBooking.date = date;
     appState.currentBooking.time = time;
   } else if (currentStep === 2) {
     const location = document.getElementById('booking-location').value;
     const instructions = document.getElementById('booking-instructions').value;
     if (!location) return showModal('Input Required', 'Please enter the complete service address (including Pincode).');
+    const pincodeMatch = location.match(/\b\d{6}\b/);
+    if (!pincodeMatch) return showModal('Invalid Location', 'Please include a valid 6-digit Indian pincode in the address.');
     appState.currentBooking.location = location;
     appState.currentBooking.instructions = instructions;
   } else if (currentStep === 3) {
     const agreed = document.getElementById('policy-agree').checked;
+    const paymentMethod = document.getElementById('payment-method').value;
     if (!agreed) return showModal('Action Required', 'You must agree to the cancellation policy and terms to proceed.');
+    if (!paymentMethod) return showModal('Input Required', 'Please select a payment method.');
+    showModal('Processing Payment', `Simulating payment via ${paymentMethod}...`, () => {
+      appState.currentBooking.step = currentStep + 1;
+      navigateTo('booking');
+    });
+    return;
   }
   appState.currentBooking.step = currentStep + 1;
   navigateTo('booking');
