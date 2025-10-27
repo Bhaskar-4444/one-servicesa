@@ -355,22 +355,25 @@ async function fetchTestimonials(limit = null) {
     return testimonials;
   }
 }
-
-// Save Booking to Firebase with fallback
+// Updated saveBooking - No silent fails
 async function saveBooking(booking) {
+  if (!appState.user || !appState.user.uid) {
+    throw new Error('Not authenticated - cannot save booking');
+  }
   try {
     const db = window.realtimeDb;
     const userId = appState.user.uid;
+    console.log('Saving booking for UID:', userId, 'Data:', booking); // Debug log
     const bookingRef = ref(db, `bookings/${userId}/${booking.id}`);
     await set(bookingRef, booking);
+    console.log('Booking saved successfully to Firebase!');
     return true;
   } catch (error) {
     console.error('Error saving booking:', error);
-    console.log('Booking saved locally as fallback');
-    return true; // Assume success for demo
+    showModal('Save Failed', `Booking not saved: ${error.message}. Please try logging in again.`, () => navigateTo('login'));
+    throw error; // Re-throw to halt UI success
   }
 }
-
 // --- Utility Functions ---
 
 // Generate Mock Testimonials (used for mock data)
