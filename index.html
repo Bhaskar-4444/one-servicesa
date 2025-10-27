@@ -486,10 +486,11 @@ window.signUpUser = async () => {
   }
 };
 
+// Updated anonymous sign-in - Force email for bookings
 window.signInAnonymouslyFunc = async () => {
   try {
     await window.signInAnonymously(window.auth);
-    navigateTo('home');
+    showModal('Guest Mode', 'Guest mode enabled, but bookings require full login. Please sign up/in for persistence.', () => navigateTo('login'));
   } catch (error) {
     showModal('Error', error.message);
   }
@@ -918,7 +919,7 @@ function renderBookingSystem() {
       break;
     case 3:
       const visitingCharge = 80;
-      const problemCharge = 200;
+      const problemCharge = 0;
       const price = visitingCharge + problemCharge;
       const taxes = price * 0.18;
       const total = price + taxes;
@@ -953,31 +954,42 @@ function renderBookingSystem() {
         </div>
       `;
       break;
-    case 4:
-      const newBooking = {
-        id: Date.now(), // Unique ID based on timestamp
-        providerName: provider.name,
-        serviceName: appState.currentBooking.serviceName,
-        date: appState.currentBooking.date,
-        time: appState.currentBooking.time,
-        location: appState.currentBooking.location,
-        instructions: appState.currentBooking.instructions,
-        status: 'Confirmed',
-        price: 280,
-        rating: null
-      };
-      saveBooking(newBooking);
-      stepContent = `
-        <div class="text-center p-8 bg-green-50 rounded-xl border border-green-300 professional-card">
-          <div class="text-6xl text-green-600 mb-4">Success</div>
-          <h4 class="text-3xl font-bold text-green-800 mb-4">Booking Confirmed!</h4>
-          <p class="text-gray-700 text-lg mb-6">You will receive an SMS and email confirmation shortly.</p>
-          <p class="text-xl font-semibold mb-2">${newBooking.serviceName} with ${newBooking.providerName}</p>
-          <p class="text-lg text-gray-600 mb-8">${newBooking.date} at ${newBooking.time}</p>
-          <button onclick="navigateTo('dashboard')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Go to Dashboard</button>
-        </div>
-      `;
-      break;
+   case 4:
+  try {
+    const newBooking = {
+      id: Date.now(), // Unique ID based on timestamp
+      providerName: provider.name,
+      serviceName: appState.currentBooking.serviceName,
+      date: appState.currentBooking.date,
+      time: appState.currentBooking.time,
+      location: appState.currentBooking.location,
+      instructions: appState.currentBooking.instructions,
+      status: 'Confirmed',
+      price: 280,
+      rating: null
+    };
+    await saveBooking(newBooking); // Now awaits and errors if fails
+    stepContent = `
+      <div class="text-center p-8 bg-green-50 rounded-xl border border-green-300 professional-card">
+        <div class="text-6xl text-green-600 mb-4">Success</div>
+        <h4 class="text-3xl font-bold text-green-800 mb-4">Booking Confirmed!</h4>
+        <p class="text-gray-700 text-lg mb-6">You will receive an SMS and email confirmation shortly.</p>
+        <p class="text-xl font-semibold mb-2">${newBooking.serviceName} with ${newBooking.providerName}</p>
+        <p class="text-lg text-gray-600 mb-8">${newBooking.date} at ${newBooking.time}</p>
+        <button onclick="navigateTo('dashboard')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Go to Dashboard</button>
+      </div>
+    `;
+  } catch (error) {
+    stepContent = `
+      <div class="text-center p-8 bg-red-50 rounded-xl border border-red-300">
+        <div class="text-6xl text-red-600 mb-4">Error</div>
+        <h4 class="text-3xl font-bold text-red-800 mb-4">Booking Failed</h4>
+        <p class="text-gray-700 text-lg mb-6">Could not save to database. ${error.message}</p>
+        <button onclick="navigateTo('login')" class="bg-red-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700">Re-login & Retry</button>
+      </div>
+    `;
+  }
+  break;
   }
   return `
     <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-100 professional-card">
