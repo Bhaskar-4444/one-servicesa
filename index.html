@@ -73,19 +73,16 @@
       appId: "1:591308815657:web:aacb2188b2b94c92d24b38",
       measurementId: "G-K3KKG8R8KN"
     };
-
     // Initialize Firebase
     window.firebaseApp = firebase.initializeApp(firebaseConfig);
     window.auth = firebase.auth();
     window.realtimeDb = firebase.database();
-
     // Expose Firebase auth functions to the global window object
     window.signInWithEmailAndPassword = (email, password) => window.auth.signInWithEmailAndPassword(email, password);
     window.createUserWithEmailAndPassword = (email, password) => window.auth.createUserWithEmailAndPassword(email, password);
     window.updateProfile = (user, profile) => user.updateProfile(profile);
     window.signOut = () => window.auth.signOut();
     window.signInAnonymously = () => window.auth.signInAnonymously();
-
     // Auth State Listener
     window.auth.onAuthStateChanged((user) => {
       if (user) {
@@ -209,7 +206,6 @@
 <script>
 // Navigation History Stack for Back Button
 let navHistory = ['home']; // Initialize with home
-
 // Update history on navigation
 function updateNavHistory(page) {
   navHistory.push(page);
@@ -217,14 +213,12 @@ function updateNavHistory(page) {
     navHistory.shift();
   }
 }
-
 // Go back function
 function goBack() {
   navHistory.pop(); // Remove current page
   const previousPage = navHistory[navHistory.length - 1] || 'home';
   navigateTo(previousPage);
 }
-
 // --- Mock Data for Fallback ---
 const mockCategories = [
   { id: 'app_elec', name: 'Appliance & Electrical Repair', icon: 'plug', image: 'https://5.imimg.com/data5/JC/HA/YA/SELLER-41468555/electrical-wiring-and-services-500x500.jpeg' },
@@ -236,7 +230,6 @@ const mockCategories = [
   { id: 'ac', name: 'AC Repair & Service', icon: 'snowflake', image: 'https://4.imimg.com/data4/EV/PQ/MY-25507092/ac-repair-in-agra.jpg' },
   { id: 'paint', name: 'House Painting', icon: 'paint', image: 'https://blog.75services.com/wp-content/uploads/2023/09/residential-painting-in-visakhapatnam.jpg' },
 ];
-
 const mockProviders = [
   { id: 1, name: 'Electrical Services', categoryId: 'app_elec', price: 80, bio: 'Certified electricians specializing in residential wiring and fault diagnostics across NCR and Delhi.', rating: 4.5, reviews: 120 },
   { id: 11, name: 'General Mechanics', categoryId: 'app_elec', price: 80, bio: 'Repair of washing machines, refrigerators, and microwaves at home.', rating: 4.2, reviews: 80 },
@@ -249,9 +242,7 @@ const mockProviders = [
   { id: 9, name: 'AC Experts', categoryId: 'ac', price: 80, bio: 'Specialized AC installation, repair, and maintenance in major cities.', rating: 4.7, reviews: 140 },
   { id: 10, name: 'Painting Service', categoryId: 'paint', price: 80, bio: 'Professional interior and exterior painting with paints.', rating: 4.5, reviews: 95 },
 ];
-
 const mockTestimonials = generateMockTestimonials(120);
-
 // --- Global State ---
 let appState = {
   isLoggedIn: false, // Managed by Firebase Auth
@@ -263,48 +254,41 @@ let appState = {
     step: 1,
     date: '',
     time: '',
+    phone: '',
     location: '',
     instructions: '',
   },
   user: null // Populated by Firebase Auth
 };
-
 // --- Firebase Realtime Database Functions ---
-
 // Initialize Database with Sample Data (Run ONCE during setup)
 async function initializeDatabase() {
   try {
     const db = window.realtimeDb;
-
     // Check if categories already exist to avoid re-initialization
     const categorySnapshot = await db.ref('categories').once('value');
     if (categorySnapshot.exists()) {
       console.log('Database already initialized');
       return;
     }
-
     // Initialize Categories
-    await Promise.all(mockCategories.map(category => 
+    await Promise.all(mockCategories.map(category =>
       db.ref(`categories/${category.id}`).set(category)
     ));
-
     // Initialize Providers
-    await Promise.all(mockProviders.map(provider => 
+    await Promise.all(mockProviders.map(provider =>
       db.ref(`providers/${provider.id}`).set(provider)
     ));
-
     // Initialize Testimonials
-    await Promise.all(mockTestimonials.map(testimonial => 
+    await Promise.all(mockTestimonials.map(testimonial =>
       db.ref(`testimonials/${testimonial.id}`).set(testimonial)
     ));
-
     console.log('Database initialized successfully');
   } catch (error) {
     console.error('Error initializing database:', error);
     showModal('Error', 'Failed to initialize database. Using local data.', () => {});
   }
 }
-
 // Fetch Categories from Firebase with fallback
 async function fetchCategories() {
   try {
@@ -321,7 +305,6 @@ async function fetchCategories() {
     return mockCategories;
   }
 }
-
 // Fetch Providers from Firebase with fallback
 async function fetchProviders(categoryId = null) {
   try {
@@ -341,7 +324,6 @@ async function fetchProviders(categoryId = null) {
     return providers;
   }
 }
-
 // Fetch User Bookings from Firebase with fallback
 async function fetchBookings(userId) {
   try {
@@ -354,7 +336,6 @@ async function fetchBookings(userId) {
     return [];
   }
 }
-
 // Fetch Testimonials from Firebase with fallback
 async function fetchTestimonials(limit = null) {
   try {
@@ -374,7 +355,6 @@ async function fetchTestimonials(limit = null) {
     return testimonials;
   }
 }
-
 // Updated saveBooking - No silent fails
 async function saveBooking(booking) {
   if (!appState.user || !appState.user.uid) {
@@ -396,7 +376,6 @@ async function saveBooking(booking) {
   }
 }
 // --- Utility Functions ---
-
 // Generate Mock Testimonials (used for mock data)
 function generateMockTestimonials(count = 120) {
   const firstNames = ['Ravi', 'Priya', 'Amit', 'Neha', 'Suresh', 'Lata', 'Vikram', 'Meera', 'Rajesh', 'Sunita', 'Karan', 'Anita', 'Arjun', 'Deepa', 'Vikas', 'Shalini', 'Rahul', 'Pooja', 'Sanjay', 'Ritu'];
@@ -441,7 +420,6 @@ function generateMockTestimonials(count = 120) {
   }
   return testimonials;
 }
-
 // Simple star rating HTML generator
 function getRatingStars(rating) {
   const fullStars = Math.floor(rating);
@@ -459,7 +437,6 @@ function getRatingStars(rating) {
   }
   return stars;
 }
-
 // Custom Modal for alerts
 function showModal(title, body, onConfirm, showCancel = false) {
   const modalContainer = document.getElementById('modal-container');
@@ -479,7 +456,6 @@ function showModal(title, body, onConfirm, showCancel = false) {
   }
   modalContainer.classList.remove('hidden');
 }
-
 // Authentication Functions
 window.signInUser = async () => {
   const email = document.getElementById('login-email').value;
@@ -492,7 +468,6 @@ window.signInUser = async () => {
     showModal('Login Failed', error.message);
   }
 };
-
 window.signUpUser = async () => {
   const name = document.getElementById('signup-name').value;
   const email = document.getElementById('signup-email').value;
@@ -508,7 +483,6 @@ window.signUpUser = async () => {
     showModal('Signup Failed', error.message);
   }
 };
-
 // Updated anonymous sign-in - Force email for bookings
 window.signInAnonymouslyFunc = async () => {
   try {
@@ -519,7 +493,6 @@ window.signInAnonymouslyFunc = async () => {
     showModal('Error', error.message);
   }
 };
-
 window.signOutUser = async () => {
   try {
     await window.signOut();
@@ -528,7 +501,6 @@ window.signOutUser = async () => {
     showModal('Error', error.message);
   }
 };
-
 function handleAuthClick() {
   if (appState.isLoggedIn) {
     navigateTo('dashboard');
@@ -536,7 +508,6 @@ function handleAuthClick() {
     navigateTo('login');
   }
 }
-
 // --- Routing and View Rendering ---
 async function navigateTo(page, data = {}) {
   try {
@@ -551,6 +522,7 @@ async function navigateTo(page, data = {}) {
         step: 1,
         date: '',
         time: '',
+        phone: '',
         location: '',
         instructions: '',
       };
@@ -614,7 +586,6 @@ async function navigateTo(page, data = {}) {
     showModal('Error', 'Failed to load page. Please try again.', () => navigateTo('home'));
   }
 }
-
 // --- Page Render Functions ---
 function renderLoginPage() {
   return `
@@ -644,7 +615,6 @@ function renderLoginPage() {
     </div>
   `;
 }
-
 function renderSignupPage() {
   return `
     <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-100 professional-card">
@@ -678,7 +648,6 @@ function renderSignupPage() {
     </div>
   `;
 }
-
 async function renderHomePage() {
   const categories = await fetchCategories();
   const testimonials = await fetchTestimonials(6);
@@ -715,10 +684,10 @@ async function renderHomePage() {
         ${categories.map(c => `
           <div onclick="navigateTo('listings', {categoryId: '${c.id}'})" class="text-center p-4 sm:p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl hover:border-blue-500 border-2 border-transparent transition-all duration-300 cursor-pointer group transform hover:-translate-y-2 professional-card fade-in">
             <div class="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 mx-auto mb-4 overflow-hidden rounded-2xl shadow-lg">
-              <img 
-                src="${c.image}" 
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                alt="${c.name}" 
+              <img
+                src="${c.image}"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                alt="${c.name}"
                 onerror="this.src='https://via.placeholder.com/192/3b82f6/ffffff?text=${c.name.slice(0,2).toUpperCase()}'; this.onerror=null;"
               >
             </div>
@@ -754,7 +723,6 @@ async function renderHomePage() {
     </section>
   `;
 }
-
 async function renderListingsPage(categoryId) {
   const providers = await fetchProviders(categoryId);
   const categories = await fetchCategories();
@@ -821,7 +789,6 @@ async function renderListingsPage(categoryId) {
     </div>
   `;
 }
-
 function renderProviderProfile(provider) {
   if (!provider) return '<div class="text-center text-red-500">Provider not found.</div>';
   const mockReviews = [
@@ -900,7 +867,6 @@ function renderProviderProfile(provider) {
     </div>
   `;
 }
-
 async function startBooking(providerId, serviceName) {
   if (!appState.isLoggedIn || !appState.user || appState.user.isAnonymous) {
     showModal('Login Required', 'Please sign in with an email account to book a service.', () => navigateTo('login'));
@@ -912,12 +878,12 @@ async function startBooking(providerId, serviceName) {
     step: 1,
     date: '',
     time: '',
+    phone: '',
     location: '',
     instructions: '',
   };
   await navigateTo('booking');
 }
-
 async function renderBookingSystem() {
   const step = appState.currentBooking.step;
   const providers = await fetchProviders();
@@ -944,6 +910,8 @@ async function renderBookingSystem() {
     case 2:
       stepContent = `
         <h4 class="text-2xl font-semibold mb-4 text-gray-800">2. Enter Location & Details</h4>
+        <label for="booking-phone" class="block text-sm font-medium text-gray-700 mb-1">Contact Number (+91)</label>
+        <input type="tel" id="booking-phone" placeholder="+91 98xxx xxx xx" value="${appState.currentBooking.phone}" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500"/>
         <label for="booking-location" class="block text-sm font-medium text-gray-700 mb-1">Service Address (Flat No, Society/Area, Pincode)</label>
         <input type="text" id="booking-location" placeholder="A-402, Shiv Shanti Towers, 400001" value="${appState.currentBooking.location}" required class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-blue-500 focus:border-blue-500"/>
         <label for="booking-instructions" class="block text-sm font-medium text-gray-700 mb-1">Special Instructions (e.g., gate code, dog warning)</label>
@@ -956,7 +924,7 @@ async function renderBookingSystem() {
       break;
     case 3:
       const visitingCharge = 80;
-      const problemCharge = 200;
+      const problemCharge = 00;
       const price = visitingCharge + problemCharge;
       const taxes = price * 0.18;
       const total = price + taxes;
@@ -967,6 +935,7 @@ async function renderBookingSystem() {
           <p class="text-lg text-gray-800 mb-1">**Provider:** ${provider.name}</p>
           <p class="text-lg text-gray-800 mb-1">**Service:** ${appState.currentBooking.serviceName}</p>
           <p class="text-lg text-gray-800 mb-1">**When:** ${appState.currentBooking.date} at ${appState.currentBooking.time}</p>
+          <p class="text-lg text-gray-800 mb-1">**Contact:** ${appState.currentBooking.phone}</p>
           <p class="text-lg text-gray-800 mb-4">**Where:** ${appState.currentBooking.location}</p>
           <div class="border-t pt-3 space-y-1">
             <div class="flex justify-between text-gray-700"><span>Visiting Charge:</span><span>₹${visitingCharge.toFixed(2)}</span></div>
@@ -1002,10 +971,11 @@ async function renderBookingSystem() {
           serviceName: appState.currentBooking.serviceName,
           date: appState.currentBooking.date,
           time: appState.currentBooking.time,
+          phone: appState.currentBooking.phone,
           location: appState.currentBooking.location,
           instructions: appState.currentBooking.instructions,
           status: 'Confirmed',
-          price: 280,
+          price: 80,
           rating: null
         };
         await saveBooking(newBooking);
@@ -1015,7 +985,8 @@ async function renderBookingSystem() {
             <h4 class="text-3xl font-bold text-green-800 mb-4">Booking Confirmed!</h4>
             <p class="text-gray-700 text-lg mb-6">You will receive an SMS and email confirmation shortly.</p>
             <p class="text-xl font-semibold mb-2">${newBooking.serviceName} with ${newBooking.providerName}</p>
-            <p class="text-lg text-gray-600 mb-8">${newBooking.date} at ${newBooking.time}</p>
+            <p class="text-lg text-gray-600 mb-2">${newBooking.date} at ${newBooking.time}</p>
+            <p class="text-lg text-gray-600 mb-2">Contact: ${newBooking.phone}</p>
             <button onclick="navigateTo('dashboard')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">Go to Dashboard</button>
           </div>
         `;
@@ -1057,7 +1028,6 @@ async function renderBookingSystem() {
     </div>
   `;
 }
-
 function nextBookingStep() {
   const currentStep = appState.currentBooking.step;
   if (currentStep === 1) {
@@ -1071,11 +1041,15 @@ function nextBookingStep() {
     appState.currentBooking.date = date;
     appState.currentBooking.time = time;
   } else if (currentStep === 2) {
+    const phone = document.getElementById('booking-phone').value;
     const location = document.getElementById('booking-location').value;
     const instructions = document.getElementById('booking-instructions').value;
+    if (!phone) return showModal('Input Required', 'Please enter your contact number.');
+    if (!/^\+91[6-9]\d{9}$/.test(phone.replace(/\s/g, ''))) return showModal('Invalid Phone', 'Please enter a valid Indian mobile number starting with +91.');
     if (!location) return showModal('Input Required', 'Please enter the complete service address (including Pincode).');
     const pincodeMatch = location.match(/\b\d{6}\b/);
     if (!pincodeMatch) return showModal('Invalid Location', 'Please include a valid 6-digit Indian pincode in the address.');
+    appState.currentBooking.phone = phone;
     appState.currentBooking.location = location;
     appState.currentBooking.instructions = instructions;
   } else if (currentStep === 3) {
@@ -1092,12 +1066,10 @@ function nextBookingStep() {
   appState.currentBooking.step = currentStep + 1;
   navigateTo('booking');
 }
-
 function prevBookingStep() {
   appState.currentBooking.step = appState.currentBooking.step - 1;
   navigateTo('booking');
 }
-
 async function renderCustomerDashboard() {
   const bookings = await fetchBookings(appState.user.uid);
   const upcoming = bookings.filter(b => b.status === 'Confirmed' || b.status === 'Pending');
@@ -1161,7 +1133,6 @@ async function renderCustomerDashboard() {
     </section>
   `;
 }
-
 async function renderTestimonialsPage() {
   const testimonials = await fetchTestimonials();
   return `
@@ -1197,7 +1168,6 @@ async function renderTestimonialsPage() {
     </div>
   `;
 }
-
 function renderAboutPage() {
   return `
     <div class="flex items-center mb-6">
@@ -1249,7 +1219,7 @@ function renderAboutPage() {
             <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
             <div>
               <h4 class="font-semibold">Expansion 2025</h4>
-              <p class="text-gray-600">Added 50+ cities and new categories like therapy.</p>
+              <p class="text-gray-600">Added 5+ cities and new categories like therapy.</p>
             </div>
           </div>
           <div class="flex items-center space-x-4">
@@ -1264,7 +1234,6 @@ function renderAboutPage() {
     </div>
   `;
 }
-
 function renderHowItWorksPage() {
   const steps = [
     { icon: 'Search', title: 'Search & Select', detail: 'Enter your service need and Pincode. Browse profiles, check ratings, and select the professional that fits your requirements and budget.' },
@@ -1329,7 +1298,6 @@ function renderHowItWorksPage() {
     </div>
   `;
 }
-
 function renderFAQPage() {
   const faqs = [
     { question: "How are providers vetted?", answer: "All providers undergo a background check, license verification, and continuous performance review based on customer ratings." },
@@ -1372,7 +1340,6 @@ function renderFAQPage() {
     </div>
   `;
 }
-
 function renderContactPage() {
   return `
     <div class="flex items-center mb-6">
@@ -1415,14 +1382,12 @@ function renderContactPage() {
     </div>
   `;
 }
-
 // --- Event Listeners and Initial Load ---
 document.addEventListener('DOMContentLoaded', async () => {
   await initializeDatabase();
   document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenu);
   navigateTo('home');
 });
-
 function toggleMobileMenu() {
   document.getElementById('mobile-menu').classList.toggle('hidden');
 }
